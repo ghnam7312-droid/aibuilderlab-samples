@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>한마디함 · 행사 피드백</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='2' y='12' width='36' height='26' rx='7' fill='%231F6F55'/%3E%3Crect x='13' y='2' width='14' height='20' rx='2.5' fill='%23FFE27A' transform='rotate(-8 20 12)'/%3E%3C/svg%3E">
-<meta name="description" content="행사가 끝나면 링크 하나로 익명 의견을 받고, 들어오는 즉시 칭찬·개선 요청·질문으로 나눠 보여 주는 피드백 보드">
+<meta name="description" content="행사 화면의 QR을 찍어 폰으로 한마디를 남기면, 벽에 실시간으로 붙고 Claude가 칭찬·개선 요청·질문으로 나눠 운영진이 할 일까지 정리해 주는 피드백 보드">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
@@ -15,6 +15,43 @@
 <!-- AI 빌더랩 예시 서비스 안내 (실서비스가 아님을 밝힌다) -->
 <div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/maker.html">← 포트폴리오로</a></div>
 
+<!-- ───────── 참가자 화면 (?room=코드&join=1) ───────── -->
+<main class="join" id="joinView" hidden>
+  <div class="join-brand">
+    <svg class="mark" viewBox="0 0 40 40" aria-hidden="true">
+      <rect x="2" y="12" width="36" height="26" rx="7" fill="#1F6F55"/>
+      <rect x="11" y="20" width="18" height="3.2" rx="1.6" fill="#0E3B2C"/>
+      <rect x="13" y="2" width="14" height="20" rx="2.5" fill="#FFE27A" transform="rotate(-8 20 12)"/>
+      <path d="M16 8.5h8M16 12.5h6" stroke="#1D2A24" stroke-width="1.6" stroke-linecap="round" transform="rotate(-8 20 12)"/>
+    </svg>
+    <div><strong>한마디함</strong><span class="event">2026 가을 해커톤 밋업</span></div>
+  </div>
+
+  <section id="joinForm">
+    <h1>오늘 행사, 한마디만 남겨 주세요</h1>
+    <p class="hint">이름은 받지 않아요. 남기면 행사장 화면에 바로 붙어요.</p>
+    <form id="jForm" novalidate>
+      <div class="slip live" id="jLive" data-cat="기타">
+        <label class="sr" for="jText">의견</label>
+        <textarea id="jText" maxlength="300" rows="5" placeholder="예) 발표 시간이 짧아서 아쉬웠어요. 질의응답을 늘려 주세요."></textarea>
+        <div class="slip-foot"><span class="cat-pill" id="jCat">아직 비어 있어요</span><span class="count" id="jCount">0/300</span></div>
+      </div>
+      <p class="err" id="jErr" role="alert" hidden></p>
+      <button class="primary" type="submit" id="jSubmit">익명으로 남기기</button>
+    </form>
+    <p class="room-note">방 <b id="jRoom"></b> · 같은 방 화면에만 보여요</p>
+  </section>
+
+  <section class="sent" id="joinDone" hidden aria-live="polite">
+    <div class="sent-slip slip" id="sentSlip" data-cat="기타"><p id="sentText"></p></div>
+    <h2>벽에 붙었어요</h2>
+    <p id="sentWhy"></p>
+    <button class="primary" type="button" id="jMore">한마디 더 남기기</button>
+  </section>
+</main>
+
+<!-- ───────── 운영진 화면 (벽) ───────── -->
+<div id="hostView">
 <header class="top">
   <div class="brand">
     <svg class="mark" viewBox="0 0 40 40" aria-hidden="true">
@@ -28,14 +65,17 @@
       <span class="event" id="eventName">2026 가을 해커톤 밋업 · 10월 18일(토)</span>
     </div>
   </div>
+  <!-- AI 연결 상태: 서버가 Claude 를 쓸 수 있는지 그대로 보여 준다 -->
+  <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
   <div class="top-actions">
+    <button class="ghost" id="present" type="button">행사 진행 모드</button>
     <button class="ghost" id="share" type="button">참가자 링크 복사</button>
     <button class="ghost" id="reset" type="button">샘플로 되돌리기</button>
   </div>
 </header>
 
 <main class="layout">
-  <!-- 왼쪽: 의견 쓰기 + 요약 -->
+  <!-- 왼쪽: 의견 쓰기 + QR + 요약 -->
   <aside class="side">
     <section class="compose" aria-labelledby="composeTitle">
       <h1 id="composeTitle">오늘 행사, 한마디만 남겨 주세요</h1>
@@ -51,41 +91,66 @@
             <span class="count" id="count">0/300</span>
           </div>
         </div>
-        <p class="why" id="why" aria-live="polite">단어를 보고 칭찬·개선 요청·질문 중 하나로 나눠요.</p>
+        <p class="why" id="why" aria-live="polite">단어를 보고 미리 나누고, 남기면 Claude가 다시 읽어요.</p>
         <p class="err" id="err" role="alert" hidden></p>
         <button class="primary" type="submit" id="submit">익명으로 남기기</button>
       </form>
     </section>
 
+    <!-- 폰으로 참여: QR → 참가자 화면 → 실시간으로 벽에 -->
+    <section class="joincard" aria-labelledby="joinTitle">
+      <div class="qr" id="qr" aria-hidden="true"></div>
+      <div class="joincard-b">
+        <h2 id="joinTitle">폰으로 남겨 보기</h2>
+        <p>카메라로 QR을 찍고 한마디 남기면 3초 안에 이 벽에 붙어요.</p>
+        <p class="room">방 <b id="roomCode"></b> <button type="button" class="link" id="newRoom">새 방</button></p>
+        <p class="live-state" id="liveState" data-on="wait"><i></i><span>연결 중</span></p>
+      </div>
+    </section>
+
     <section class="digest" aria-labelledby="digestTitle">
       <div class="digest-h">
         <h2 id="digestTitle">AI 요약</h2>
-        <span class="tech" title="이 데모는 단어 사전으로 분류합니다. 실제 버전은 Claude API를 씁니다.">브라우저 규칙 기반 데모</span>
+        <span class="mode" id="sumMode" data-mode="rule">규칙 기반</span>
       </div>
       <!-- 분류 비율 막대: 누르면 해당 분류만 보기 -->
       <div class="dist" id="dist" role="group" aria-label="분류별 비율"></div>
       <ol class="lines" id="lines"></ol>
       <div class="todo">
-        <h3>운영진이 손볼 것</h3>
-        <ul id="topics"></ul>
+        <h3>운영진이 할 일</h3>
+        <ul id="actions"></ul>
       </div>
+      <button type="button" class="resum" id="resum">Claude로 다시 요약</button>
     </section>
   </aside>
 
   <!-- 오른쪽: 쪽지 벽 -->
   <section class="wall-wrap" aria-labelledby="wallTitle">
+    <!-- 행사 진행 모드에서만 보이는 큰 QR -->
+    <div class="stage" id="stage" aria-hidden="true">
+      <div class="stage-qr" id="stageQr"></div>
+      <div class="stage-b">
+        <strong>한마디 남겨 주세요</strong>
+        <span>카메라로 찍으면 바로 열려요 · 이름은 받지 않아요</span>
+        <em><b id="stageCount">0</b>개의 한마디</em>
+      </div>
+      <button type="button" class="stage-x" id="presentOff">진행 모드 끝내기</button>
+    </div>
     <div class="wall-h">
       <h2 id="wallTitle">들어온 의견 <span id="total"></span></h2>
       <div class="filters" id="filters" role="group" aria-label="분류 고르기"></div>
     </div>
-    <div class="wall" id="wall"></div>
+    <div class="wall" id="wall" aria-live="polite"></div>
   </section>
 </main>
 
-<footer class="foot">AI 빌더랩 커리어 트랙 · 새벽기획자 목표 모델 · 실제 버전: Next.js · Supabase · Claude API</footer>
+<footer class="foot">AI 빌더랩 커리어 트랙 · 새벽기획자 목표 모델 · 화면 HTML/CSS/JS · 분류·요약 Claude API (실패 시 규칙) · 실시간 방 Supabase</footer>
+</div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
 
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

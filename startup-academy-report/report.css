@@ -1,0 +1,101 @@
+/* 학부모 리포트 화면 — 휴대폰으로 카톡 링크를 열었을 때가 기준
+   남색 머리 + 형광펜 노랑. 선생님 한마디만 손편지처럼 고운바탕. */
+:root {
+  --navy: #17213B; --ink: #17213B; --sub: #56627E; --mute: #8A95AE; --line: #E2E7F0;
+  --paper: #FFFFFF; --bg: #F3F5FA; --hi: #FFD84D; --hi-soft: #FFF3C2;
+  --ok: #1F9D7A; --weak: #E5534B; --mid: #E79A2B;
+  --ui: "SUIT Variable", "SUIT", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  --letter: "Gowun Batang", "Noto Serif KR", serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { font-family: var(--ui); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; line-height: 1.55; word-break: keep-all; overflow-wrap: anywhere; }
+:focus-visible { outline: 3px solid #4F7BFF; outline-offset: 2px; border-radius: 6px; }
+.demo-strip { background: var(--hi); color: var(--navy); font-size: 12px; text-align: center; padding: 6px 12px; }
+
+.rp { max-width: 480px; margin: 0 auto; padding: 0 0 12px; }
+.loading { padding: 80px 20px; text-align: center; color: var(--mute); }
+
+/* 머리: 학원 이름과 학생 */
+.hd { background: var(--navy); color: #fff; padding: 22px 22px 54px; border-radius: 0 0 28px 28px; }
+.ac { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; color: #D6DDEF; }
+.ac-mark { width: 28px; height: 28px; border-radius: 9px; background: var(--hi); color: var(--navy); font-weight: 800; display: grid; place-items: center; font-size: 13px; }
+.when { margin: 18px 0 2px; font-size: 13px; color: #AEB9D6; }
+.hd h1 { margin: 0; font-size: 30px; letter-spacing: -.03em; font-weight: 800; }
+.hd h1 span { background: linear-gradient(transparent 62%, rgba(255, 216, 77, .55) 62%); padding: 0 2px; }
+.cls { margin: 2px 0 0; color: #AEB9D6; font-size: 14px; }
+
+.hello { margin: -32px 16px 0; background: #fff; border-radius: 18px; padding: 16px 18px; font-size: 15.5px; line-height: 1.6; box-shadow: 0 14px 30px -20px rgba(23, 33, 59, .45); position: relative; }
+
+/* 점수 카드 */
+.score-card { margin: 14px 16px 0; background: var(--paper); border-radius: 22px; padding: 20px; display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; align-items: center; box-shadow: 0 1px 0 var(--line); }
+.hello + .score-card { margin-top: 12px; }
+.hd + .score-card { margin-top: -32px; position: relative; box-shadow: 0 14px 30px -20px rgba(23, 33, 59, .45); }
+.big { display: flex; align-items: baseline; }
+.big b { font-size: 64px; line-height: 1; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+.big span { font-size: 22px; font-weight: 800; color: var(--sub); margin-left: 2px; }
+.sc-side p { margin: 0; font-size: 13.5px; color: var(--sub); }
+.sc-side .delta { font-weight: 800; margin-top: 2px; }
+.sc-side .best { margin-top: 6px; font-size: 13px; }
+.sc-side .best b { color: var(--ink); }
+.up { color: var(--ok) !important; } .down { color: var(--weak) !important; }
+.tr { grid-column: 1 / -1; display: flex; gap: 14px; align-items: flex-end; margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--line); }
+.tb { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+.tb i { display: block; width: 100%; max-width: 54px; height: var(--h); background: #D6DDEA; border-radius: 8px 8px 4px 4px; animation: up .7s cubic-bezier(.3, .8, .3, 1) both; }
+.tb.now i { background: var(--navy); }
+.tb em { font-style: normal; font-size: 12.5px; font-weight: 800; color: var(--sub); font-variant-numeric: tabular-nums; }
+.tb.now em { color: var(--ink); }
+.tb small { font-size: 12px; color: var(--mute); }
+@keyframes up { from { height: 0; } }
+
+/* 블록 */
+.blk { margin: 14px 16px 0; background: var(--paper); border-radius: 22px; padding: 20px; }
+.blk h2 { margin: 0; font-size: 18px; letter-spacing: -.02em; }
+.lead { margin: 4px 0 14px; color: var(--mute); font-size: 13.5px; }
+.units { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.units li { display: grid; grid-template-columns: minmax(0, 1fr) 30% 44px; gap: 10px; align-items: center; font-size: 14.5px; }
+.units .nm { min-width: 0; }
+.units mark { background: linear-gradient(transparent 50%, var(--hi) 50%); color: inherit; font-weight: 800; padding: 0 2px; }
+.units b { text-align: right; font-variant-numeric: tabular-nums; }
+.bar { height: 10px; background: #EDF1F7; border-radius: 99px; overflow: hidden; }
+.bar i { display: block; height: 100%; width: var(--w); background: var(--navy); border-radius: 99px; animation: grow .8s .15s cubic-bezier(.3, .8, .3, 1) both; }
+.bar i.low { background: var(--weak); } .bar i.mid { background: var(--mid); }
+@keyframes grow { from { width: 0; } }
+
+/* 다음 주 계획: 아이와 함께 체크 */
+.plan { border: 2px solid var(--navy); }
+.todo { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.todo label { display: grid; grid-template-columns: 28px 1fr; gap: 12px; align-items: start; background: #F6F8FC; border-radius: 14px; padding: 14px; cursor: pointer; font-size: 15px; line-height: 1.5; }
+.todo input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.todo .box { width: 26px; height: 26px; border-radius: 8px; border: 2px solid #B9C4D8; background: #fff; display: grid; place-items: center; transition: background .15s, border-color .15s; }
+.todo input:checked + .box { background: var(--navy); border-color: var(--navy); }
+.todo input:checked + .box::after { content: ""; width: 7px; height: 13px; border: solid var(--hi); border-width: 0 3px 3px 0; transform: rotate(45deg) translate(-1px, -1px); }
+.todo input:focus-visible + .box { outline: 3px solid #4F7BFF; outline-offset: 2px; }
+.todo input:checked ~ .tx { color: var(--mute); text-decoration: line-through; text-decoration-color: rgba(23, 33, 59, .35); }
+.done-msg { margin: 12px 0 0; background: var(--hi-soft); border-radius: 12px; padding: 10px 12px; font-weight: 700; font-size: 14px; text-align: center; }
+.who-wrote { margin: 12px 0 0; font-size: 12px; color: var(--mute); }
+
+/* 선생님 한마디 */
+.letter { margin: 14px 16px 0; background: #FBF8EE; border-radius: 22px; padding: 22px 22px 18px; position: relative; }
+.letter::before { content: "“"; position: absolute; top: 2px; left: 16px; font-family: var(--letter); font-size: 48px; color: #E5D7A8; line-height: 1; }
+.letter p { margin: 10px 0 8px; font-family: var(--letter); font-size: 16.5px; line-height: 1.75; }
+.letter span { font-size: 13px; color: var(--sub); font-weight: 700; }
+
+.ask { margin: 14px 16px 0; text-align: center; color: var(--sub); font-size: 13.5px; }
+.bad { margin: 40px 16px; background: #fff; border-radius: 22px; padding: 28px 22px; text-align: center; }
+.bad h1 { font-size: 20px; margin: 0 0 8px; }
+.bad p { color: var(--sub); margin: 0 0 8px; }
+.bad .sm { font-size: 13px; color: var(--mute); }
+
+.rp-foot { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 18px 16px 30px; font-size: 12px; color: var(--mute); max-width: 480px; margin: 0 auto; text-align: left; }
+.rp-foot svg { width: 22px; height: 22px; flex: none; }
+.rp-foot b { color: var(--ink); }
+
+@media (min-width: 600px) {
+  body { padding-top: 0; }
+  .rp { padding-top: 24px; }
+  .hd { border-radius: 28px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "daeumju-academy-report",
+  "version": "1.0.0",
+  "private": true,
+  "description": "다음주 — 학원 학부모 리포트 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  },
+  "license": "MIT"
+}

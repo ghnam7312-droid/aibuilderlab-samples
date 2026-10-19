@@ -34,6 +34,7 @@
     <div class="hot"><dt>견적 요청</dt><dd id="s-quote">0</dd></div>
     <div class="amber"><dt>확인 필요</dt><dd id="s-need">0</dd></div>
   </dl>
+  <span class="ai-ind" id="ai-ind" data-on="wait"><i aria-hidden="true"></i><span id="ai-ind-t">AI 확인 중</span></span>
   <button class="btn ghost" id="reset" type="button">샘플 데이터로 되돌리기</button>
 </header>
 
@@ -66,7 +67,10 @@
   <section class="sorter" aria-labelledby="sorter-h">
     <div class="sorter-h">
       <h2 id="sorter-h">분류함</h2>
-      <p class="ai-note">AI 분류 <span>데모: 브라우저 규칙 기반 · 단어 점수가 비슷하면 사람에게 넘깁니다</span></p>
+      <div class="sorter-r">
+        <p class="ai-note" id="ai-note" aria-live="polite"></p>
+        <button class="keyhelp" id="help-open" type="button" aria-label="단축키 보기"><kbd>?</kbd> 단축키</button>
+      </div>
     </div>
     <div class="lane-tabs" role="tablist" aria-label="분류함 고르기" id="lane-tabs"></div>
     <div class="lanes" id="lanes"></div>
@@ -77,7 +81,7 @@
     <div class="ledger-h">
       <div>
         <h2 id="ledger-h">견적 진행표</h2>
-        <p class="sub">품목·수량·납기는 본문에서 뽑았어요. 칸을 눌러 고칠 수 있습니다.</p>
+        <p class="sub">품목·수량·납기는 본문에서 뽑았어요. 칸을 눌러 고칠 수 있습니다. <span id="ledger-sum" class="ledger-sum"></span></p>
       </div>
       <button class="btn ghost" id="dl" type="button">CSV 내려받기</button>
     </div>
@@ -94,9 +98,25 @@
   <div class="d-body" id="d-body"></div>
 </aside>
 
+<!-- 단축키 도움말 -->
+<div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="help-h" hidden>
+  <div class="help-top"><h3 id="help-h">키보드로 분류하기</h3><button class="icon" type="button" id="help-close" aria-label="닫기">✕</button></div>
+  <p class="sub">마우스 없이 아침 메일을 정리합니다. 입력 칸에 있을 때는 동작하지 않아요.</p>
+  <dl class="keys-list">
+    <div><dt><kbd>J</kbd> <kbd>K</kbd></dt><dd>다음 · 이전 메일로 이동</dd></div>
+    <div><dt><kbd>Enter</kbd></dt><dd>메일 자세히 보기 (분류 전에는 분류 시작)</dd></div>
+    <div><dt><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd></dt><dd>견적 요청 · 발주·주문 · 문의 · 기타로 정하기</dd></div>
+    <div><dt><kbd>E</kbd></dt><dd>확인 필요 메일을 추천대로 확정</dd></div>
+    <div><dt><kbd>R</kbd></dt><dd>견적 요청에 회신 초안 쓰기</dd></div>
+    <div><dt><kbd>Esc</kbd></dt><dd>닫기</dd></div>
+  </dl>
+</div>
+
 <footer class="foot">AI 빌더랩 직장인 AX 트랙 · 엑셀탈출 목표 모델 · 등장하는 회사와 사람은 모두 가상입니다</footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="toast-t"></span><button type="button" id="toast-undo" hidden>되돌리기</button></div>
+<script src="logic.js"></script>
+<script src="ai-client.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

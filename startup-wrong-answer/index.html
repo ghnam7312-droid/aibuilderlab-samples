@@ -34,12 +34,14 @@
       <span class="exam-name" id="examName">중2 B반 · 3월 단원 평가</span>
       <span class="exam-meta" id="examMeta"></span>
     </div>
+    <div class="ai-status" id="aiStatus" role="status" aria-live="polite"><i></i><span>AI 확인 중…</span></div>
     <button type="button" class="btn primary" id="grade">채점하기</button>
   </div>
   <nav class="tabs" role="tablist" aria-label="화면">
     <button role="tab" aria-selected="true" aria-controls="v-map" id="t-map" data-v="map">오답 지도</button>
-    <button role="tab" aria-selected="false" aria-controls="v-review" id="t-review" data-v="review">AI 분류 검수</button>
-    <button role="tab" aria-selected="false" aria-controls="v-msg" id="t-msg" data-v="msg">학부모 문구</button>
+    <button role="tab" aria-selected="false" aria-controls="v-trend" id="t-trend" data-v="trend">3회 추이</button>
+    <button role="tab" aria-selected="false" aria-controls="v-review" id="t-review" data-v="review">분류 검수</button>
+    <button role="tab" aria-selected="false" aria-controls="v-msg" id="t-msg" data-v="msg">학부모 문구·오답 노트</button>
     <button role="tab" aria-selected="false" aria-controls="v-ans" id="t-ans" data-v="ans">답 입력</button>
     <button role="tab" aria-selected="false" aria-controls="v-q" id="t-q" data-v="q">문항표</button>
   </nav>
@@ -78,38 +80,52 @@
     </div>
   </section>
 
-  <!-- ② AI 분류 검수 -->
+  <!-- ② 3회 추이 -->
+  <section id="v-trend" role="tabpanel" aria-labelledby="t-trend" class="view" hidden>
+    <div class="sheet-h bare"><div><h1>3회 시험 추이</h1><p class="lead">1월 진단 평가 → 2월 단원 평가 → 이번 3월 단원 평가</p></div></div>
+    <div id="trendBody"></div>
+  </section>
+
+  <!-- ③ 분류 검수 -->
   <section id="v-review" role="tabpanel" aria-labelledby="t-review" class="view" hidden>
     <div class="review-layout">
       <div class="sheet">
         <div class="sheet-h">
-          <div><h1>AI 분류 검수</h1><p class="lead">AI가 나눈 오답 유형이 맞는지 한 건씩 확인해요. 확인한 건만 일치율에 들어갑니다.</p></div>
+          <div><h1>분류 검수</h1><p class="lead">규칙이 나눈 오답 유형이 맞는지 한 건씩 확인해요. 틀렸으면 진짜 유형을 골라 주세요. 확인한 건만 일치율에 들어갑니다.</p></div>
         </div>
         <div id="queue"></div>
-        <p class="keys">키보드 <kbd>Y</kbd> 맞음 · <kbd>N</kbd> 틀림 · <kbd>S</kbd> 건너뛰기 · <kbd>Z</kbd> 방금 것 취소</p>
+        <p class="keys">키보드 <kbd>Y</kbd> 맞음 · <kbd>N</kbd> 틀림(이어서 <kbd>1</kbd> <kbd>2</kbd>로 진짜 유형) · <kbd>S</kbd> 건너뛰기 · <kbd>Z</kbd> 방금 것 취소</p>
       </div>
       <aside class="sheet gauge-box" aria-live="polite">
-        <h2>AI 분류 일치율</h2>
+        <h2>분류 일치율</h2>
         <div class="gauge" id="gauge"></div>
         <div class="gauge-meta" id="gaugeMeta"></div>
+        <h3>Claude 학생 진단 일치율</h3>
+        <div class="coach-agree" id="coachAgree"></div>
         <h3>최근 검수</h3>
         <ul class="recent" id="recent"></ul>
       </aside>
     </div>
   </section>
 
-  <!-- ③ 학부모 문구 -->
+  <!-- ④ 학부모 문구 · 오답 노트 -->
   <section id="v-msg" role="tabpanel" aria-labelledby="t-msg" class="view" hidden>
     <div class="msg-layout">
       <div class="sheet">
         <h1>학부모 문구</h1>
-        <p class="lead">검수에서 ‘틀림’으로 표시한 분류는 빼고 씁니다.</p>
+        <p class="lead">검수에서 선생님이 고친 유형으로 쓰고, Claude 진단을 덧붙여요.</p>
         <label class="lbl" for="msgStu">학생</label>
         <select id="msgStu" class="field"></select>
         <div class="mini-map" id="msgMini" aria-hidden="true"></div>
+        <div id="msgCoach"></div>
         <div class="row" style="margin-top:16px">
           <button type="button" class="btn primary" id="msgCopy">문구 복사</button>
           <button type="button" class="btn" id="msgNext">다음 학생</button>
+        </div>
+        <div class="print-box">
+          <b>오답 노트 인쇄</b>
+          <p class="lead">틀린 문항, 진단, ‘다시 풀기’ 칸이 들어간 A4 한 장이에요.</p>
+          <div class="row"><button type="button" class="btn" id="printOne">이 학생 인쇄</button><button type="button" class="btn" id="printAll">반 전체 인쇄 (학생마다 한 장)</button></div>
         </div>
       </div>
       <article class="note-paper" aria-live="polite">
@@ -119,25 +135,32 @@
     </div>
   </section>
 
-  <!-- ④ 답 입력 -->
+  <!-- ⑤ 답 입력 -->
   <section id="v-ans" role="tabpanel" aria-labelledby="t-ans" class="view" hidden>
     <div class="sheet">
       <div class="sheet-h">
         <div><h1>학생 답 입력</h1><p class="lead">손글씨 풀이 대신 학생이 고른 번호(1~5)만 넣어요. 화살표 키로 칸을 옮기고, 고치면 바로 다시 채점합니다.</p></div>
         <span class="pill" id="ansMsg" role="status"></span>
       </div>
+      <details class="paste">
+        <summary>엑셀·메모에서 한꺼번에 붙여 넣기</summary>
+        <p class="lead">한 줄에 한 명, <code>이름 3 5 2 …</code> 또는 <code>이름,3,5,2,…</code> 또는 엑셀에서 복사한 칸 그대로. 명단에 있는 이름만 바뀌어요.</p>
+        <textarea class="field" id="pasteBox" rows="4" placeholder="김서연 3 5 2 4 1 3 2 4 5 1 3 2"></textarea>
+        <div class="row"><button type="button" class="btn primary" id="pasteApply">붙여 넣고 다시 채점</button><p class="err" id="pasteErr" hidden></p></div>
+      </details>
       <div class="map-scroll"><table class="grid" id="ansGrid"></table></div>
     </div>
   </section>
 
-  <!-- ⑤ 문항표 -->
+  <!-- ⑥ 문항표 -->
   <section id="v-q" role="tabpanel" aria-labelledby="t-q" class="view" hidden>
     <div class="sheet">
       <div class="sheet-h"><div><h1>문항표</h1><p class="lead">문항마다 단원, 유형 태그, 정답, ‘계산 실수 보기’를 적어 두면 학생이 고른 보기로 오답 유형을 판단해요.</p></div></div>
       <div class="map-scroll"><table class="qt"><thead><tr><th>문항</th><th>단원</th><th>유형 태그</th><th>정답</th><th>계산 실수 보기</th></tr></thead><tbody id="qRows"></tbody></table></div>
       <div class="rulebox">
-        <b>판단 규칙</b> (데모: 브라우저 규칙 기반)
+        <b>문항 단위 판단 규칙</b> (logic.js · 테스트로 검사)
         <ol><li>정답이면 통과</li><li>‘계산 실수 보기’를 골랐으면 계산 실수</li><li>아니면 문항 태그로 판단: 개념형 → 개념 부족, 계산형 → 계산 실수, 서술·활용형 → 문제 이해</li></ol>
+        <p class="sm">학생 단위 진단과 학부모 코멘트는 Claude가 오답 목록을 읽고 씁니다. 연결할 수 없을 때는 위 규칙의 결과로 정해진 문장을 씁니다.</p>
       </div>
     </div>
   </section>
@@ -146,6 +169,10 @@
 </main>
 
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button type="button" id="toastUndo" hidden>되돌리기</button></div>
+<!-- 인쇄할 때만 보이는 오답 노트 -->
+<div id="print" class="print-area" aria-hidden="true"></div>
+<script src="logic.js"></script>
+<script src="ai-client.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

@@ -33,6 +33,8 @@
       <span><b>다음주</b><small>학부모 리포트</small></span>
     </a>
     <div class="nav" role="tablist" aria-label="화면">
+      <button role="tab" id="t-start" aria-controls="v-start" aria-selected="false" data-view="start">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5l3.5 3.5L16 5.5"/></svg>시작하기<span class="nav-badge" id="obBadge"></span></button>
       <button role="tab" id="t-report" aria-controls="v-report" aria-selected="true" data-view="report">
         <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 2.5h7l3.5 3.5v11.5H5z M12 2.5V6h3.5 M8 10h5 M8 13.5h5"/></svg>리포트 작업대</button>
       <button role="tab" id="t-dash" aria-controls="v-dash" aria-selected="false" data-view="dash">
@@ -42,6 +44,8 @@
       <button role="tab" id="t-plan" aria-controls="v-plan" aria-selected="false" data-view="plan">
         <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 6h14v10H3z M3 9h14 M6 13h3"/></svg>요금제</button>
     </div>
+    <!-- Claude 연결 상태: AI.probe() 결과로 바뀐다 -->
+    <div class="ai-status" id="aiStatus" role="status" aria-live="polite"><i></i><span>AI 확인 중…</span></div>
     <div class="side-foot">
       <label class="acad">
         <span>학원</span>
@@ -52,6 +56,18 @@
   </nav>
 
   <main class="main">
+    <!-- ⓪ 시작하기: 새 학원이 첫 리포트를 보내기까지 -->
+    <section id="v-start" role="tabpanel" aria-labelledby="t-start" class="view" hidden>
+      <header class="vh">
+        <div><h1 id="obTitle">시작하기</h1><p class="sub" id="obSub"></p></div>
+        <button type="button" class="btn ghost" id="newAcad">새 학원으로 처음부터 해 보기</button>
+      </header>
+      <div class="ob-wrap">
+        <div class="ob-progress" id="obProgress"></div>
+        <ol class="ob-steps" id="obSteps"></ol>
+      </div>
+    </section>
+
     <!-- ① 리포트 작업대 -->
     <section id="v-report" role="tabpanel" aria-labelledby="t-report" class="view report-view">
       <header class="vh">
@@ -93,6 +109,13 @@
     <section id="v-dash" role="tabpanel" aria-labelledby="t-dash" class="view" hidden>
       <header class="vh"><div><h1>원장 대시보드</h1><p class="sub" id="dSub"></p></div></header>
       <div class="stats" id="stats"></div>
+      <article class="panel trend-panel">
+        <div class="tp-h">
+          <div><h2>월별 평균 정답률</h2><p class="hint">최근 6개월 단원 평가 기준이에요. 반을 누르면 그 반만 강조해요.</p></div>
+          <div class="legend" id="trendLegend" role="group" aria-label="반 강조"></div>
+        </div>
+        <div class="chart" id="trendChart"></div>
+      </article>
       <div class="dgrid">
         <article class="panel">
           <h2>반별 평균 정답률</h2>
@@ -101,7 +124,7 @@
         </article>
         <article class="panel">
           <h2>아직 보내지 않은 학부모</h2>
-          <p class="hint">리포트 문구를 복사하면 발송 완료로 바뀌어요.</p>
+          <p class="hint">학부모 링크나 카톡 문구를 보내면 발송 완료로 바뀌어요.</p>
           <ul id="pending" class="pending"></ul>
         </article>
         <article class="panel wide">
@@ -123,24 +146,64 @@
           <button type="button" class="btn" id="addUnit">단원 추가</button>
         </div>
       </header>
-      <div class="panel">
+      <div class="panel drop" id="unitDrop">
         <div class="scroll"><table class="units"><thead><tr><th class="n">순서</th><th>교재</th><th>단원명</th><th class="n"><span class="sr">삭제</span></th></tr></thead><tbody id="unitRows"></tbody></table></div>
-        <p class="hint csv-hint">CSV는 <code>교재,단원명</code> 두 칸이면 됩니다. 첫 줄 제목은 있어도 없어도 괜찮아요.</p>
+        <p class="hint csv-hint">CSV는 <code>교재,단원명</code> 두 칸이면 됩니다. 첫 줄 제목은 있어도 없어도 괜찮아요. 파일을 이 표 위로 끌어다 놓아도 돼요.</p>
       </div>
     </section>
 
     <!-- ④ 요금제 -->
     <section id="v-plan" role="tabpanel" aria-labelledby="t-plan" class="view" hidden>
-      <header class="vh"><div><h1>요금제</h1><p class="sub">학생 수에 맞춰 고르세요. 아래 가격은 예시입니다.</p></div></header>
+      <header class="vh">
+        <div><h1>요금제</h1><p class="sub" id="planSub">학생 수에 맞춰 고르세요. 아래 가격은 예시입니다.</p></div>
+        <div class="seg" role="group" aria-label="결제 주기">
+          <button type="button" data-cycle="m" aria-pressed="true">월 결제</button>
+          <button type="button" data-cycle="y" aria-pressed="false">연 결제 <em>2개월 무료</em></button>
+        </div>
+      </header>
       <div class="plans" id="plans"></div>
+      <article class="panel">
+        <h2>기능 비교</h2>
+        <div class="scroll"><table class="cmp" id="cmp"></table></div>
+      </article>
+      <div class="faq" id="faq">
+        <details><summary>학부모가 앱을 깔아야 하나요?</summary><p>아니요. 학부모는 카카오톡으로 받은 링크를 누르면 바로 리포트를 봅니다. 데모의 학부모 링크는 주소 안에 리포트 내용을 담아서, 서버에 학생 정보가 남지 않아요.</p></details>
+        <details><summary>다음 주 계획은 누가 쓰나요?</summary><p>Claude가 단원별 정답률로 초안을 쓰고, 선생님이 고친 다음 보냅니다. AI에 연결할 수 없을 때는 정답률이 낮은 단원 3개로 정해 둔 틀에 맞춰 계획을 만듭니다.</p></details>
+        <details><summary>교재가 학원마다 다른데요?</summary><p>교재 단원표를 직접 고치거나 CSV로 한 번에 올리면, 리포트가 그 순서대로 만들어집니다.</p></details>
+      </div>
       <p class="hint">예시 가격 · 부가세 별도 · 실제 판매 조건이 아닙니다.</p>
     </section>
     <button type="button" class="link mobile-reset" data-reset>샘플 데이터로 되돌리기</button>
   </main>
 </div>
 
+<!-- 학부모 링크 · QR -->
+<dialog class="share" id="share" aria-labelledby="shareTitle">
+  <form method="dialog" class="share-in">
+    <header>
+      <div><h2 id="shareTitle">학부모 링크</h2><p class="sub" id="shareSub"></p></div>
+      <button class="x" value="close" aria-label="닫기">✕</button>
+    </header>
+    <div class="share-body">
+      <div class="qr" id="qr" aria-label="학부모 리포트 QR 코드"></div>
+      <div class="share-side">
+        <p class="share-how">휴대폰 카메라로 QR을 비추면 학부모가 받는 리포트가 그대로 열려요.</p>
+        <label class="f" for="shareUrl">링크</label>
+        <div class="url-row"><input id="shareUrl" class="field" readonly><button type="button" class="btn" id="copyLink">링크 복사</button></div>
+        <div class="share-actions">
+          <button type="button" class="btn hi" id="copyKakao">카톡 문구 복사</button>
+          <a class="btn ghost" id="openLink" target="_blank" rel="noopener">새 탭에서 열기</a>
+        </div>
+        <p class="hint privacy">리포트 내용은 링크 주소 안에만 들어 있어요. 서버에 학생 정보를 저장하지 않습니다.</p>
+      </div>
+    </div>
+  </form>
+</dialog>
+
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button type="button" id="toastUndo" hidden>되돌리기</button></div>
 
+<script src="logic.js"></script>
+<script src="ai-client.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

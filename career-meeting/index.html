@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>회의끝 · 회의록 정리</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Cpath d='M6 5h24a4 4 0 0 1 4 4v14a4 4 0 0 1-4 4H15l-7 6v-6H6a4 4 0 0 1-4-4V9a4 4 0 0 1 4-4z' fill='%232F5BFF'/%3E%3Cpath d='M11 16.5l4.2 4.2L25 11' fill='none' stroke='%23fff' stroke-width='3.2' stroke-linecap='round'/%3E%3C/svg%3E">
-<meta name="description" content="회의록을 붙여 넣으면 결정사항과 할 일(담당자·마감)을 찾아 업무판에 올려 주는 도구">
+<meta name="description" content="받아 적은 그대로의 회의록을 붙여 넣으면 Claude가 결정사항과 할 일(담당자·마감)을 찾아 업무판에 올리고, 캘린더와 Notion으로 내보내는 도구">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -21,7 +21,11 @@
     </svg>
     <div><strong>회의끝</strong><span>회의가 끝나면 할 일이 바로 정리돼요</span></div>
   </div>
-  <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  <div class="bar-r">
+    <!-- AI 연결 상태: 서버가 Claude 를 쓸 수 있는지 그대로 보여 준다 -->
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
 </header>
 
 <main class="page">
@@ -35,7 +39,12 @@
           <button type="button" id="modeMark" aria-pressed="true">표시 보기</button>
         </div>
       </div>
-      <p class="tip">담당자는 <code>@이름</code>, 마감은 <code>10/24</code>나 <code>금요일까지</code>, 결정은 <code>결정:</code>으로 쓰면 찾아요.</p>
+      <div class="samples" role="group" aria-label="예시 회의록">
+        <span>예시</span>
+        <button type="button" data-sample="free" aria-pressed="false">받아 적은 그대로</button>
+        <button type="button" data-sample="format" aria-pressed="false">형식 맞춘 회의록</button>
+      </div>
+      <p class="tip" id="tip">받아 적은 그대로 붙여 넣으세요. Claude가 문맥으로 담당자와 마감을 찾아요. AI가 꺼져 있으면 <code>@이름</code>·<code>10/24까지</code>·<code>결정:</code> 표시만 읽어요.</p>
       <label class="sr" for="src">회의록 내용</label>
       <textarea id="src" spellcheck="false" hidden></textarea>
       <ol class="marked" id="marked" aria-label="분류된 회의록"></ol>
@@ -53,24 +62,29 @@
     <div class="board-h">
       <div>
         <h2 id="boardTitle">업무판</h2>
-        <p>카드를 끌어 옮기거나 화살표 버튼으로 단계를 바꿔요.</p>
+        <p>카드를 끌어 옮기거나 화살표 버튼으로 단계를 바꿔요. 카드에 올리면 나온 줄이 밝혀져요.</p>
       </div>
       <div class="board-tools">
         <div class="people" id="people" role="group" aria-label="담당자 고르기"></div>
+        <button class="ghost-btn" id="ics" type="button">캘린더로 내보내기 (.ics)</button>
         <button class="dark" id="notion" type="button">Notion용으로 복사</button>
       </div>
     </div>
+    <!-- 마감 알림: 지났거나 2일 안에 마감인 일 -->
+    <div class="remind" id="remind" role="region" aria-label="마감 알림" hidden></div>
     <div class="board" id="board"></div>
     <details class="md" id="mdBox" hidden>
       <summary>복사한 내용 보기</summary>
       <pre id="mdOut"></pre>
     </details>
-    <p class="fine">이 데모는 Notion에 직접 연결하지 않고, Notion에 붙여 넣으면 체크리스트가 되는 형식으로 복사해요. 실제 버전은 Notion API로 바로 등록합니다.</p>
+    <p class="fine">캘린더 파일은 구글·애플·아웃룩 캘린더에서 열면 마감일에 종일 일정과 하루 전 알림으로 들어가요. Notion은 이 데모에서 직접 연결하지 않고, 붙여 넣으면 체크리스트가 되는 형식으로 복사해요.</p>
   </section>
 </main>
 
-<footer class="foot">AI 빌더랩 커리어 트랙 · 새벽기획자 목표 모델 · 실제 버전: AI 요약 · Notion API</footer>
+<footer class="foot">AI 빌더랩 커리어 트랙 · 새벽기획자 목표 모델 · 정리 Claude API (실패 시 규칙) · 캘린더 iCalendar · Notion 마크다운</footer>
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

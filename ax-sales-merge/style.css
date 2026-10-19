@@ -217,3 +217,105 @@ table.grid { border-collapse: separate; border-spacing: 0; width: 100%; font-siz
   .tape.printing .ln, .tape.printing .cut, .tape.printing .stamp { opacity: 1; }
 }
 .ledger thead tr.cols th { top: 0; }
+
+/* ───────── v1.0: 여러 파일 · 열 맞추기 · 검산 기록 · 지난주 비교 ───────── */
+.rule-ind { font-size: 12px; font-weight: 600; color: var(--green); background: var(--green-l); border-radius: 99px; padding: 5px 11px; white-space: nowrap; }
+.week + .rule-ind { margin-left: 4px; }
+.try { display: block; width: 100%; margin-top: 8px; border: 0; background: transparent; color: var(--green-2); font-weight: 600; font-size: 12.5px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; padding: 6px; }
+.try:hover { color: var(--green); }
+.okm { color: var(--green); font-weight: 700; }
+.fn .mapped { font-style: normal; font-size: 10.5px; font-weight: 700; color: #6B5A00; background: var(--marker-l); border-radius: 4px; padding: 0 5px; margin-left: 5px; vertical-align: 1px; }
+.sheet-tabs { overflow-x: auto; scrollbar-width: none; }
+.sheet-tabs::-webkit-scrollbar { display: none; }
+.badge { display: inline-grid; place-items: center; min-width: 18px; height: 18px; padding: 0 5px; margin-left: 3px; border-radius: 99px; background: var(--green); color: #fff; font-size: 11px; font-weight: 700; vertical-align: 1px; }
+.badge:empty { display: none; }
+.row-act { margin-left: 6px; }
+
+/* 지난주 비교 */
+.wow { padding: 16px 18px 20px; }
+.wow-head { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
+.wow-kpi { padding: 12px 14px; background: var(--sheet); }
+.wow-kpi + .wow-kpi { border-left: 1px solid var(--rule); }
+.wow-kpi small { display: block; font-size: 11.5px; color: var(--ink-3); }
+.wow-kpi b { font-size: 19px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.wow-kpi b.up { color: var(--green); } .wow-kpi b.down { color: var(--pencil); }
+.wow-kpi.flag { background: var(--marker-l); }
+.wow-note { font-size: 12.5px; color: var(--ink-2); margin: 12px 2px 10px; }
+.wow-note .warn { color: var(--pencil); font-weight: 600; }
+.wow-list { display: flex; flex-direction: column; }
+.wow-row { display: grid; grid-template-columns: 96px minmax(0, 1.2fr) minmax(0, 1fr) 70px; align-items: center; gap: 12px; padding: 9px 4px; border-bottom: 1px solid var(--rule-2); font-size: 13.5px; }
+.wow-row .d { font-weight: 600; }
+.wow-row .nums { display: flex; gap: 6px; align-items: baseline; justify-content: flex-end; font-variant-numeric: tabular-nums; color: var(--ink-3); }
+.wow-row .nums b { color: var(--ink); font-weight: 600; }
+.wow-row .ar { color: #A8B2AC; }
+.wow-row .dv { position: relative; height: 14px; background: linear-gradient(90deg, transparent calc(50% - .5px), #B9C6BE calc(50% - .5px), #B9C6BE calc(50% + .5px), transparent calc(50% + .5px)); }
+.wow-row .dv i { position: absolute; top: 2px; bottom: 2px; border-radius: 3px; }
+.wow-row .dv i.pos { background: var(--green-2); }
+.wow-row .dv i.neg { background: var(--pencil); }
+.wow-row .rt { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+.wow-row .rt.up { color: var(--green); } .wow-row .rt.down { color: var(--pencil); }
+.wow-row.flag { background: var(--marker-l); border-radius: 8px; border-bottom-color: transparent; margin: 3px 0; padding: 10px 10px; }
+.wow-row .why { grid-column: 1 / -1; background: var(--sheet); border-radius: 8px; padding: 9px 12px; box-shadow: 0 0 0 1px #EADF8C; }
+.wow-row .why p { margin: 3px 0 0; font-size: 13px; color: var(--ink); }
+.rtag { display: inline-block; font-size: 11px; font-weight: 700; color: var(--green); background: var(--green-l); border-radius: 4px; padding: 0 6px; }
+
+/* 검산 기록 */
+.who { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--ink-2); }
+.who input { border: 1.5px solid var(--rule); border-radius: 8px; padding: 6px 10px; font: inherit; font-weight: 500; color: var(--ink); width: 200px; background: #fff; }
+.who input:focus { outline: none; border-color: var(--green-2); }
+.log-note { margin: 0; padding: 0 16px 10px; font-size: 12.5px; color: var(--ink-3); }
+.audit td, .audit th { font-size: 12.5px; }
+.audit td.t { white-space: nowrap; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.audit td.b4 { color: var(--ink-3); text-decoration: line-through; text-decoration-color: rgba(201, 58, 43, .5); }
+.audit td.af { font-weight: 600; }
+.audit td.empty { padding: 40px; text-align: center; color: var(--ink-3); }
+.act { display: inline-block; font-size: 11.5px; font-weight: 700; border-radius: 99px; padding: 1px 8px; background: var(--rule-2); color: var(--ink-2); white-space: nowrap; }
+.act.a-오타\ 고침, .act.a-칸\ 수정 { background: var(--pencil-l); color: var(--pencil); }
+.act.a-행\ 제외 { background: var(--marker-l); color: #6B5A00; }
+.act.a-취합, .act.a-열\ 맞춤, .act.a-파일\ 추가 { background: var(--green-l); color: var(--green); }
+
+/* 열 맞추기 창 */
+.scrim { position: fixed; inset: 0; background: rgba(23, 32, 27, .4); z-index: 40; }
+.mapper { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(620px, calc(100vw - 24px)); max-height: calc(100vh - 32px); overflow: auto; background: var(--sheet); border-radius: 14px; padding: 22px 24px; z-index: 41; box-shadow: 0 40px 80px -30px rgba(23, 32, 27, .55); }
+.mapper h3 { margin: 0 0 4px; font-size: 19px; }
+.mapper .sub { margin: 0 0 14px; font-size: 13px; color: var(--ink-2); }
+.map-cols { display: flex; flex-direction: column; gap: 6px; }
+.mc { display: grid; grid-template-columns: minmax(0, 1fr) 18px 120px minmax(0, 1fr) 40px; gap: 8px; align-items: center; padding: 8px 10px; border-radius: 8px; background: var(--paper); font-size: 13px; }
+.mc.guess { background: var(--marker-l); }
+.mc .src-h { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mc .arw { color: var(--ink-3); }
+.mc select { font: inherit; border: 1.5px solid var(--rule); border-radius: 7px; padding: 4px 6px; background: #fff; }
+.mc .ex { color: var(--ink-3); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gtag { font-size: 10.5px; font-weight: 700; color: #6B5A00; background: var(--marker); border-radius: 4px; padding: 0 5px; }
+.map-dept { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-top: 14px; font-size: 13px; font-weight: 600; }
+.map-dept input { border: 1.5px solid var(--rule); border-radius: 8px; padding: 6px 10px; font: inherit; width: 180px; }
+.map-dept small { flex-basis: 100%; font-weight: 400; color: var(--ink-3); font-size: 12px; }
+.map-rem { display: flex; gap: 6px; align-items: center; margin-top: 10px; font-size: 13px; }
+.map-act { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+
+/* 화면 어디에 놓아도 받기 */
+.drag-veil { position: fixed; inset: 0; z-index: 45; display: none; place-items: center; background: rgba(31, 92, 69, .16); border: 3px dashed var(--green-2); pointer-events: none; }
+.drag-veil span { background: var(--green); color: #fff; font-weight: 700; padding: 14px 22px; border-radius: 12px; font-size: 16px; }
+body.dragging .drag-veil { display: grid; }
+
+@media (max-width: 760px) {
+  .rule-ind { order: 4; }
+  .wow-head { grid-template-columns: 1fr 1fr; }
+  .wow-kpi:nth-child(3) { border-left: 0; }
+  .wow-kpi:nth-child(n + 3) { border-top: 1px solid var(--rule); }
+  .wow-row { grid-template-columns: minmax(0, 1fr) 64px; row-gap: 4px; }
+  .wow-row .nums { grid-column: 1 / -1; justify-content: flex-start; order: 3; }
+  .wow-row .dv { display: none; }
+  .mc { grid-template-columns: minmax(0, 1fr) 120px; }
+  .mc .arw, .mc .ex { display: none; }
+  .who input { width: 100%; }
+  .led-tools { flex-wrap: wrap; }
+}
+.audit { table-layout: fixed; min-width: 640px; }
+.audit th:nth-child(1) { width: 92px; } .audit th:nth-child(2) { width: 150px; } .audit th:nth-child(3) { width: 82px; }
+.audit td { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.audit td.info { color: var(--ink-3); }
+@media (max-width: 760px) {
+  .wow-row .why { order: 4; }
+  .mc .gtag { justify-self: start; }
+}

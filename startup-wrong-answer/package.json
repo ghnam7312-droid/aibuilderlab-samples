@@ -1,0 +1,10 @@
+{
+  "name": "odapjido-wrong-answer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "오답지도 — 내 반 오답 분석 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  },
+  "license": "MIT"
+}

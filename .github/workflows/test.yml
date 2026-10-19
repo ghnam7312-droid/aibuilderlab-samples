@@ -1,0 +1,32 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  logic:
+    name: 로직 테스트 (${{ matrix.service }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        service:
+          - career-guestbook
+          - career-meeting
+          - career-study-prd
+          - ax-sales-merge
+          - ax-quote-mail
+          - ax-weekly-report
+          - startup-academy-report
+          - startup-wrong-answer
+          - startup-interview-board
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: npm test
+        working-directory: ${{ matrix.service }}
+        run: npm test

@@ -1,0 +1,8 @@
+{
+  "name": "geumyobogo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "금요보고 — 주간 성과 보고서 자동 생성 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": { "test": "node --test" },
+  "license": "MIT"
+}

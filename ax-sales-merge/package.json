@@ -1,0 +1,8 @@
+{
+  "name": "hanjang",
+  "version": "1.0.0",
+  "private": true,
+  "description": "한장 — 부서 실적 취합·검산 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": { "test": "node --test" },
+  "license": "MIT"
+}
