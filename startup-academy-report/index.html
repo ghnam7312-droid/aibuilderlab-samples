@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다음주 · 학부모 리포트</title>
+<meta name="description" content="학원 단원 평가 결과를 학부모가 바로 읽는 '다음 주 계획' 리포트로 만들어 주는 서비스 (AI 빌더랩 1기 목표 모델 예시)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22%3E%3Crect width=%2240%22 height=%2240%22 rx=%2211%22 fill=%22%23FFD84D%22/%3E%3Crect x=%229%22 y=%2211%22 width=%2222%22 height=%2220%22 rx=%224%22 fill=%22%2317213B%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2.0.5/fonts/variable/woff2/SUIT-Variable.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- 예시 서비스라는 사실을 늘 위에 밝혀 둔다 -->
+<div class="demo-strip">
+  <span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span>
+  <a href="/home/maker-startup.html">← 포트폴리오로</a>
+</div>
+
+<div class="shell">
+  <!-- 왼쪽 메뉴 (모바일에서는 위쪽 가로 메뉴) -->
+  <nav class="side" aria-label="메뉴">
+    <a class="brand" href="./" aria-label="다음주 처음으로">
+      <svg class="mark" viewBox="0 0 40 40" aria-hidden="true">
+        <rect width="40" height="40" rx="11" fill="#FFD84D"/>
+        <rect x="9" y="11" width="22" height="20" rx="4" fill="#17213B"/>
+        <rect x="13" y="8" width="3" height="6" rx="1.5" fill="#17213B"/>
+        <rect x="24" y="8" width="3" height="6" rx="1.5" fill="#17213B"/>
+        <path d="M14.5 22.5h9m0 0-3.2-3.2m3.2 3.2-3.2 3.2" stroke="#FFD84D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+      <span><b>다음주</b><small>학부모 리포트</small></span>
+    </a>
+    <div class="nav" role="tablist" aria-label="화면">
+      <button role="tab" id="t-report" aria-controls="v-report" aria-selected="true" data-view="report">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 2.5h7l3.5 3.5v11.5H5z M12 2.5V6h3.5 M8 10h5 M8 13.5h5"/></svg>리포트 작업대</button>
+      <button role="tab" id="t-dash" aria-controls="v-dash" aria-selected="false" data-view="dash">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 17V9 M8 17V4 M13 17v-6 M18 17H2"/></svg>원장 대시보드</button>
+      <button role="tab" id="t-units" aria-controls="v-units" aria-selected="false" data-view="units">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4.5h14 M3 10h14 M3 15.5h14 M6.5 2v16"/></svg>교재 단원표</button>
+      <button role="tab" id="t-plan" aria-controls="v-plan" aria-selected="false" data-view="plan">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 6h14v10H3z M3 9h14 M6 13h3"/></svg>요금제</button>
+    </div>
+    <div class="side-foot">
+      <label class="acad">
+        <span>학원</span>
+        <select id="acad" aria-label="학원 고르기"></select>
+      </label>
+      <button type="button" class="link" id="reset">샘플 데이터로 되돌리기</button>
+    </div>
+  </nav>
+
+  <main class="main">
+    <!-- ① 리포트 작업대 -->
+    <section id="v-report" role="tabpanel" aria-labelledby="t-report" class="view report-view">
+      <header class="vh">
+        <div>
+          <h1 id="rTitle">10월 학부모 리포트</h1>
+          <p class="sub" id="rSub"></p>
+        </div>
+        <div class="progress" aria-live="polite">
+          <span id="sentTxt"></span>
+          <span class="pbar"><i id="sentBar"></i></span>
+        </div>
+      </header>
+
+      <div class="work">
+        <!-- 학생 목록 -->
+        <aside class="roster" aria-label="학생 목록">
+          <div class="roster-h">
+            <input id="q" type="search" placeholder="학생 이름 검색" aria-label="학생 이름 검색" autocomplete="off">
+            <div class="chips" id="clsChips" role="group" aria-label="반 고르기"></div>
+          </div>
+          <ul id="stuList" class="stu-list"></ul>
+        </aside>
+
+        <!-- 작업대: 선택한 학생의 리포트 재료 -->
+        <section class="bench" id="bench" aria-label="리포트 재료"></section>
+
+        <!-- 학부모가 받는 화면 미리보기 -->
+        <section class="preview" aria-label="학부모가 받는 화면">
+          <p class="pv-label">학부모가 받는 화면</p>
+          <div class="phone">
+            <div class="phone-top"><span id="chatName">하늘수학학원</span><small>카카오톡 채팅방 미리보기</small></div>
+            <div class="chat" id="chat"></div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- ② 원장 대시보드 -->
+    <section id="v-dash" role="tabpanel" aria-labelledby="t-dash" class="view" hidden>
+      <header class="vh"><div><h1>원장 대시보드</h1><p class="sub" id="dSub"></p></div></header>
+      <div class="stats" id="stats"></div>
+      <div class="dgrid">
+        <article class="panel">
+          <h2>반별 평균 정답률</h2>
+          <p class="hint">이번 달 단원 평가 기준이에요.</p>
+          <div id="clsAvg"></div>
+        </article>
+        <article class="panel">
+          <h2>아직 보내지 않은 학부모</h2>
+          <p class="hint">리포트 문구를 복사하면 발송 완료로 바뀌어요.</p>
+          <ul id="pending" class="pending"></ul>
+        </article>
+        <article class="panel wide">
+          <h2>단원 × 반 정답률</h2>
+          <p class="hint">색이 진할수록 많이 틀린 단원이에요. 다음 달 수업 순서를 정할 때 보세요.</p>
+          <div class="scroll"><table class="heat" id="heat"></table></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ③ 교재 단원표 -->
+    <section id="v-units" role="tabpanel" aria-labelledby="t-units" class="view" hidden>
+      <header class="vh">
+        <div><h1>교재 단원표</h1><p class="sub">학원마다 교재가 달라요. 단원표 순서대로 리포트가 만들어집니다.</p></div>
+        <div class="row">
+          <label class="btn ghost" for="csv">CSV 올리기</label>
+          <input type="file" id="csv" accept=".csv,text/csv" class="sr">
+          <button type="button" class="btn ghost" id="csvSample">CSV 예시 받기</button>
+          <button type="button" class="btn" id="addUnit">단원 추가</button>
+        </div>
+      </header>
+      <div class="panel">
+        <div class="scroll"><table class="units"><thead><tr><th class="n">순서</th><th>교재</th><th>단원명</th><th class="n"><span class="sr">삭제</span></th></tr></thead><tbody id="unitRows"></tbody></table></div>
+        <p class="hint csv-hint">CSV는 <code>교재,단원명</code> 두 칸이면 됩니다. 첫 줄 제목은 있어도 없어도 괜찮아요.</p>
+      </div>
+    </section>
+
+    <!-- ④ 요금제 -->
+    <section id="v-plan" role="tabpanel" aria-labelledby="t-plan" class="view" hidden>
+      <header class="vh"><div><h1>요금제</h1><p class="sub">학생 수에 맞춰 고르세요. 아래 가격은 예시입니다.</p></div></header>
+      <div class="plans" id="plans"></div>
+      <p class="hint">예시 가격 · 부가세 별도 · 실제 판매 조건이 아닙니다.</p>
+    </section>
+    <button type="button" class="link mobile-reset" data-reset>샘플 데이터로 되돌리기</button>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button type="button" id="toastUndo" hidden>되돌리기</button></div>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,219 @@
+/* 한장 — 부서 실적 취합·검산
+   장부(ledger) 종이와 계산기 영수증 테이프에서 가져온 색과 질감 */
+:root {
+  --paper: #F1F4EE;      /* 바탕: 서늘한 장부 종이 */
+  --sheet: #FFFFFF;
+  --ink: #17201B;        /* 글자 */
+  --ink-2: #4A5650;
+  --ink-3: #7C8781;
+  --rule: #DCE3DA;       /* 칸 선 */
+  --rule-2: #EBF0E9;
+  --green: #1F5C45;      /* 장부 초록 (주 색) */
+  --green-2: #2E7A5D;
+  --green-l: #E2EEE7;
+  --pencil: #C93A2B;     /* 빨간 펜 (오류) */
+  --pencil-l: #FBE9E6;
+  --marker: #F5E663;     /* 형광펜 (중복 표시) */
+  --marker-l: #FCF6C9;
+  --font: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { font-family: var(--font); color: var(--ink); background: var(--paper); font-size: 14.5px; line-height: 1.55; -webkit-font-smoothing: antialiased; word-break: keep-all; overflow-wrap: anywhere; }
+button, input { font: inherit; color: inherit; }
+:focus-visible { outline: 2.5px solid var(--green-2); outline-offset: 2px; border-radius: 4px; }
+[hidden] { display: none !important; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.num, td.n, th.n { font-variant-numeric: tabular-nums; }
+
+/* 예시 서비스 안내 띠 */
+.lab-strip { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; padding: 7px 16px; font-size: 12.5px; background: var(--ink); color: #C9D3CD; text-align: center; }
+.lab-strip b { color: #fff; font-weight: 600; }
+.lab-strip a { color: var(--marker); font-weight: 600; text-decoration: none; }
+.lab-strip a:hover { text-decoration: underline; }
+
+/* 머리글 */
+.top { display: flex; align-items: center; gap: 20px; padding: 14px 24px; background: var(--sheet); border-bottom: 1px solid var(--rule); }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+.mark { width: 38px; height: 38px; flex: none; }
+.name { font-size: 21px; font-weight: 700; letter-spacing: -.02em; line-height: 1.1; display: flex; flex-direction: column; }
+.name small { font-size: 12px; font-weight: 500; color: var(--ink-3); letter-spacing: 0; margin-top: 3px; }
+.week { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; line-height: 1.3; }
+.week .lbl { font-size: 11.5px; color: var(--ink-3); }
+.week b { font-size: 14px; font-weight: 600; }
+
+/* 버튼 */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 0; border-radius: 8px; padding: 10px 16px; font-weight: 600; font-size: 14px; cursor: pointer; background: var(--green); color: #fff; white-space: nowrap; }
+.btn:hover { background: var(--green-2); }
+.btn.ghost { background: transparent; color: var(--ink-2); box-shadow: inset 0 0 0 1px var(--rule); }
+.btn.ghost:hover { background: var(--rule-2); color: var(--ink); }
+.btn.sm { padding: 7px 12px; font-size: 13px; }
+.btn.big { padding: 14px 22px; font-size: 15.5px; border-radius: 10px; }
+.btn:disabled { opacity: .45; cursor: default; }
+
+/* 3단 책상 배치 */
+.desk { display: grid; grid-template-columns: 272px minmax(0, 1fr) 286px; gap: 20px; max-width: 1360px; margin: 0 auto; padding: 22px 24px 8px; align-items: start; }
+
+/* 받은 파일 */
+.tray-h { display: flex; align-items: baseline; gap: 8px; }
+.tray h2, .sheet-area h2 { font-size: 15px; margin: 0; font-weight: 700; }
+.count { font-size: 13px; font-weight: 700; color: var(--green); background: var(--green-l); border-radius: 99px; padding: 0 8px; }
+.hint { margin: 2px 0 12px; font-size: 12.5px; color: var(--ink-3); }
+.files { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.file { position: relative; }
+.file > .open { width: 100%; display: grid; grid-template-columns: 22px 1fr auto; gap: 2px 10px; align-items: center; text-align: left; border: 0; background: transparent; border-radius: 8px; padding: 8px 10px; cursor: pointer; }
+.file > .open:hover { background: var(--rule-2); }
+.file[aria-current="true"] > .open { background: var(--sheet); box-shadow: 0 0 0 1px var(--rule), 0 1px 0 var(--rule); }
+.file .xl { grid-row: span 2; width: 22px; height: 26px; }
+.file .fn { font-weight: 600; font-size: 13.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file .fs { font-size: 12px; color: var(--ink-3); grid-column: 2; }
+.file .fa { grid-row: span 2; font-size: 12px; color: var(--ink-2); text-align: right; line-height: 1.35; }
+.file .late { color: var(--pencil); font-weight: 600; }
+.file .del { position: absolute; right: -6px; top: -6px; width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--rule); background: var(--sheet); font-size: 12px; line-height: 1; cursor: pointer; color: var(--ink-3); display: none; }
+.file:hover .del, .file .del:focus-visible { display: block; }
+.file.merged .xl rect:first-child { fill: var(--green-l); }
+
+.drop { display: block; margin-top: 12px; border: 1.5px dashed #B9C6BE; border-radius: 10px; padding: 14px; text-align: center; cursor: pointer; background: transparent; transition: background .15s, border-color .15s; }
+.drop:hover, .drop.over { background: var(--green-l); border-color: var(--green-2); }
+.drop input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.drop:focus-within { outline: 2.5px solid var(--green-2); outline-offset: 2px; }
+.drop-t { display: block; font-weight: 700; color: var(--green); }
+.drop-s { display: block; font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+.field-err { margin: 8px 0 0; font-size: 12.5px; color: var(--pencil); line-height: 1.5; }
+
+/* 시트 영역 */
+.sheet-area { background: var(--sheet); border: 1px solid var(--rule); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; min-height: 560px; }
+.sheet-tabs { display: flex; align-items: flex-end; gap: 2px; padding: 10px 12px 0; background: #E7ECE5; border-bottom: 1px solid var(--rule); }
+.sheet-tabs button { white-space: nowrap; border: 0; background: transparent; padding: 8px 16px; border-radius: 8px 8px 0 0; font-weight: 600; font-size: 13.5px; color: var(--ink-2); cursor: pointer; }
+.sheet-tabs button[aria-selected="true"] { background: var(--sheet); color: var(--ink); box-shadow: 0 1px 0 var(--sheet), 0 0 0 1px var(--rule); }
+.sheet-tabs button:disabled { color: #A8B2AC; cursor: default; }
+.sheet-meta { margin-left: auto; padding: 0 4px 8px; font-size: 12.5px; color: var(--ink-3); }
+.sheet { flex: 1; }
+.grid-wrap { overflow: auto; max-height: 560px; }
+
+/* 엑셀 같은 격자 */
+table.grid { border-collapse: separate; border-spacing: 0; width: 100%; font-size: 13.5px; }
+.grid th, .grid td { border-right: 1px solid var(--rule-2); border-bottom: 1px solid var(--rule-2); padding: 7px 10px; white-space: nowrap; }
+.grid thead th { position: sticky; top: 0; z-index: 1; background: #F6F8F4; color: var(--ink-3); font-weight: 600; font-size: 12px; text-align: left; border-bottom: 1px solid var(--rule); }
+.grid thead tr.letters th { font-weight: 500; text-align: center; color: #9AA59F; font-size: 11px; padding: 3px 0; top: 0; }
+.grid thead tr.cols th { top: 23px; }
+.grid .rn { width: 38px; text-align: center; color: #9AA59F; background: #F6F8F4; font-size: 11.5px; position: sticky; left: 0; }
+.grid td.n, .grid th.n { text-align: right; }
+.grid tbody tr:hover td { background: #FAFBF8; }
+.grid tbody tr:hover td.rn { background: #EEF2EB; }
+
+/* 통합 장부 */
+.led-tools { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 12px; border-bottom: 1px solid var(--rule-2); }
+.filters { display: flex; gap: 4px; }
+.filters button { border: 0; background: transparent; padding: 6px 12px; border-radius: 99px; font-size: 13px; font-weight: 600; color: var(--ink-2); cursor: pointer; }
+.filters button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.filters button span { font-variant-numeric: tabular-nums; }
+.dl { display: flex; gap: 6px; }
+.ledger tr.grp td { background: #F6F8F4; font-weight: 700; color: var(--green); border-bottom-color: var(--rule); }
+.ledger tr.sub td { font-weight: 600; color: var(--ink-2); background: #FCFDFB; border-bottom: 1px solid var(--rule); }
+.ledger tr.total td { font-weight: 700; font-size: 14.5px; background: var(--green); color: #fff; border: 0; }
+.ledger tr.dup td { background: linear-gradient(transparent 22%, var(--marker-l) 22%, var(--marker-l) 82%, transparent 82%); }
+.ledger tr.dup td.n.amt { background: linear-gradient(transparent 22%, var(--marker) 22%, var(--marker) 82%, transparent 82%); }
+.ledger tr.off td:not(.st):not(.rn) { color: #A8B2AC; text-decoration: line-through; text-decoration-color: var(--pencil); }
+.ledger td.bad { color: var(--pencil); font-weight: 700; box-shadow: inset 0 -2px 0 var(--pencil); }
+.ledger td[contenteditable] { cursor: text; }
+.ledger td[contenteditable]:focus { outline: 2px solid var(--green-2); outline-offset: -2px; background: #fff; }
+.st { width: 1%; }
+.pill { display: inline-block; font-size: 11.5px; font-weight: 700; padding: 1px 8px; border-radius: 99px; }
+.pill.ok { color: var(--green); background: var(--green-l); }
+.pill.dup { color: #6B5A00; background: var(--marker); }
+.pill.bad { color: #fff; background: var(--pencil); }
+.pill.off { color: var(--ink-3); background: var(--rule-2); }
+.row-act { border: 0; background: transparent; color: var(--ink-2); font-size: 12px; text-decoration: underline; cursor: pointer; padding: 0 0 0 6px; }
+.ledger tr.flash td { animation: flash 1.4s ease-out; }
+@keyframes flash { 0%, 30% { background: var(--marker); } 100% { background: transparent; } }
+
+.merge-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 18px; border-top: 1px solid var(--rule); background: linear-gradient(#FBFCFA, #F3F6F1); margin-top: auto; }
+.merge-bar b { display: block; font-size: 15px; }
+.merge-bar span { font-size: 12.5px; color: var(--ink-3); }
+
+/* 검산 테이프: 계산기 영수증 종이 */
+.tape-col { position: sticky; top: 16px; }
+.tape { position: relative; background: #FFFEFA; color: #222; padding: 18px 18px 26px; min-height: 260px; box-shadow: 0 1px 0 #E3E0D3, 0 10px 24px -14px rgba(31, 52, 41, .45);
+  font-variant-numeric: tabular-nums; font-size: 13.5px;
+  /* 아래쪽 톱니 */
+  -webkit-mask: radial-gradient(7px 6px at 7px 100%, #0000 98%, #000) 0 0 / 14px 100% repeat-x;
+          mask: radial-gradient(7px 6px at 7px 100%, #0000 98%, #000) 0 0 / 14px 100% repeat-x; }
+.tape::before { content: ""; position: absolute; inset: 0 0 auto; height: 5px; background: repeating-linear-gradient(90deg, #E9E6DA 0 6px, transparent 6px 12px); }
+.tape-empty { display: grid; place-items: center; text-align: center; color: #A8ABA0; padding: 40px 0 20px; }
+.tape-empty svg { width: 40px; height: 40px; margin-bottom: 8px; }
+.tape-empty p { margin: 0; font-size: 13px; }
+.tape .hd { text-align: center; font-weight: 700; letter-spacing: .02em; margin-bottom: 2px; }
+.tape .sub { text-align: center; font-size: 11.5px; color: #8A8D83; margin-bottom: 10px; }
+.tape .ln { display: flex; gap: 6px; align-items: baseline; padding: 3px 0; }
+.tape .ln .k { flex: none; }
+.tape .ln .dots { flex: 1; border-bottom: 1px dotted #C9CBBF; transform: translateY(-4px); }
+.tape .ln .v { flex: none; font-weight: 600; }
+.tape .ln.minus .v { color: var(--pencil); }
+.tape .ln.note { font-size: 12px; color: #6E7268; padding-left: 10px; }
+.tape .cut { border: 0; border-top: 1.5px dashed #BFC2B5; margin: 8px 0; }
+.tape .ln.sum { font-size: 15px; }
+.tape .ln.sum .v { font-weight: 700; }
+.tape .ln button { border: 0; background: var(--ink); color: #fff; font-size: 11.5px; font-weight: 600; padding: 2px 8px; border-radius: 4px; cursor: pointer; margin-left: 4px; }
+.tape .ln .print { display: inline; }
+.stamp { margin: 16px auto 4px; width: max-content; padding: 6px 14px; border: 2.5px solid currentColor; border-radius: 6px; font-weight: 700; font-size: 16px; letter-spacing: .08em; transform: rotate(-6deg); opacity: .92; }
+.stamp.pass { color: var(--green); }
+.stamp.fail { color: var(--pencil); }
+.stamp small { display: block; font-size: 10.5px; letter-spacing: 0; font-weight: 600; text-align: center; }
+/* 테이프 줄이 하나씩 찍히는 효과 (사용자가 취합을 눌렀을 때만) */
+.tape.printing .ln, .tape.printing .cut, .tape.printing .stamp { opacity: 0; animation: print .22s ease-out forwards; }
+@keyframes print { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; transform: none; } }
+.tape.printing .stamp { animation: stamp .35s cubic-bezier(.3, 1.6, .5, 1) forwards; }
+@keyframes stamp { from { opacity: 0; transform: rotate(-6deg) scale(1.8); } to { opacity: .92; transform: rotate(-6deg) scale(1); } }
+
+.saved { margin-top: 16px; padding: 14px 16px; border-radius: 10px; background: var(--sheet); border: 1px solid var(--rule); display: flex; flex-direction: column; gap: 2px; }
+.saved-l { font-size: 12px; color: var(--ink-3); }
+.saved-v { display: flex; align-items: baseline; gap: 10px; }
+.saved-v s { color: var(--ink-3); font-size: 15px; text-decoration-color: var(--pencil); text-decoration-thickness: 2px; }
+.saved-v b { font-size: 28px; font-weight: 700; color: var(--green); letter-spacing: -.02em; }
+.saved-s { font-size: 12px; color: var(--ink-2); line-height: 1.5; }
+.rules { margin-top: 12px; font-size: 13px; color: var(--ink-2); }
+.rules summary { cursor: pointer; font-weight: 600; color: var(--ink); padding: 4px 0; }
+.rules ol { margin: 6px 0; padding-left: 18px; }
+.rules li { margin: 3px 0; }
+.rules p { margin: 6px 0 0; font-size: 12px; color: var(--ink-3); }
+
+/* 파일이 장부로 빨려 들어가는 효과 */
+.fly { position: fixed; z-index: 40; pointer-events: none; background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; padding: 6px 10px; font-size: 12.5px; font-weight: 600; box-shadow: 0 8px 18px -8px rgba(0,0,0,.25); transition: transform .55s cubic-bezier(.5, 0, .2, 1), opacity .55s ease-in; }
+
+.foot { text-align: center; font-size: 12px; color: var(--ink-3); padding: 28px 16px 36px; }
+
+/* 알림 */
+.toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 16px); display: flex; align-items: center; gap: 14px; background: var(--ink); color: #fff; padding: 11px 16px 11px 18px; border-radius: 10px; font-size: 14px; opacity: 0; pointer-events: none; transition: opacity .18s, transform .18s; z-index: 60; max-width: calc(100vw - 32px); }
+.toast.on { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.toast button { border: 0; background: transparent; color: var(--marker); font-weight: 700; cursor: pointer; padding: 2px 4px; }
+
+@media (max-width: 1120px) {
+  .desk { grid-template-columns: 240px minmax(0, 1fr); }
+  .tape-col { grid-column: 1 / -1; position: static; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+  .tape-col .saved { margin-top: 0; }
+  .tape-col .rules { grid-column: 2; margin-top: -4px; }
+}
+@media (max-width: 760px) {
+  .top { flex-wrap: wrap; gap: 10px 14px; padding: 12px 16px; }
+  .week { order: 3; margin-left: 0; align-items: flex-start; flex-direction: row; gap: 8px; width: 100%; }
+  #reset { margin-left: auto; padding: 7px 10px; font-size: 12.5px; }
+  .desk { grid-template-columns: minmax(0, 1fr); padding: 16px; gap: 16px; }
+  .files { flex-direction: row; overflow-x: auto; padding: 6px 2px 8px; gap: 6px; }
+  .file { flex: none; }
+  .file > .open { width: auto; min-width: 168px; background: var(--sheet); box-shadow: 0 0 0 1px var(--rule); }
+  .file .del { display: block; right: 4px; top: 4px; width: 20px; height: 20px; border: 0; background: transparent; }
+  .file .fa { padding-right: 14px; }
+  .sheet-meta { display: none; }
+  .sheet-tabs button { white-space: nowrap; }
+  .sheet-area { min-height: 0; }
+  .merge-bar { flex-direction: column; align-items: stretch; text-align: left; }
+  .tape-col { grid-template-columns: 1fr; }
+  .tape-col .rules { grid-column: auto; margin-top: 0; }
+  .grid-wrap { max-height: 460px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .tape.printing .ln, .tape.printing .cut, .tape.printing .stamp { opacity: 1; }
+}
+.ledger thead tr.cols th { top: 0; }

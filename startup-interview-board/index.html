@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>들어보니 · 인터뷰 보드</title>
+<meta name="description" content="고객 인터뷰를 카드로 모으고, 근거를 태그하면 가설이 검증·반증되는 보드 (AI 빌더랩 1기 목표 모델 예시)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%23241E3A%22/%3E%3Cpath d=%22M9 10h14v9h-7l-4 4v-4H9z%22 fill=%22%23F2C14E%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="demo-strip">
+  <span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span>
+  <a href="/home/maker-startup.html">← 포트폴리오로</a>
+</div>
+
+<header class="top">
+  <a class="brand" href="./" aria-label="들어보니 처음으로">
+    <!-- 로고: 말풍선 안의 따옴표 = 고객의 실제 말 -->
+    <svg viewBox="0 0 40 40" aria-hidden="true">
+      <rect width="40" height="40" rx="12" fill="#241E3A"/>
+      <path d="M10 11h20a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2h-9l-6 5v-5h-5a2 2 0 0 1-2-2V13a2 2 0 0 1 2-2z" fill="#F2C14E"/>
+      <path d="M15.5 16.5c-1.4.4-2.2 1.5-2.2 3v1.8h3v-3h-1.2c.1-.6.5-1 1-1.2zm6 0c-1.4.4-2.2 1.5-2.2 3v1.8h3v-3h-1.2c.1-.6.5-1 1-1.2z" fill="#241E3A"/>
+    </svg>
+    <span><b>들어보니</b><small>고객 인터뷰 보드</small></span>
+  </a>
+  <div class="proj">
+    <span class="proj-name">학원 리포트 문제 검증</span>
+    <span class="proj-meta" id="projMeta"></span>
+  </div>
+  <button type="button" class="btn primary" id="openAdd">인터뷰 기록하기</button>
+</header>
+
+<nav class="tabs" role="tablist" aria-label="화면">
+  <button role="tab" aria-selected="true" aria-controls="v-board" id="t-board" data-v="board">보드</button>
+  <button role="tab" aria-selected="false" aria-controls="v-insight" id="t-insight" data-v="insight">인사이트</button>
+  <button role="tab" aria-selected="false" aria-controls="v-qd" id="t-qd" data-v="qd">질문 설계</button>
+  <button role="tab" aria-selected="false" aria-controls="v-price" id="t-price" data-v="price">가격 응답</button>
+</nav>
+
+<main class="wrap">
+  <!-- ① 보드: 왼쪽 가설, 오른쪽 인터뷰 카드 -->
+  <section id="v-board" role="tabpanel" aria-labelledby="t-board" class="view">
+    <div class="board">
+      <aside class="hyps" aria-label="가설" id="hyps"></aside>
+      <div class="wall">
+        <div class="wall-h">
+          <div class="filters" id="roleF" role="group" aria-label="역할 고르기"></div>
+          <input type="search" id="find" placeholder="메모에서 찾기" aria-label="메모에서 찾기" autocomplete="off">
+        </div>
+        <p class="wall-tip">점선으로 된 <b>제안</b>은 기록된 숫자로 자동으로 만든 거예요. 눌러서 확정해야 가설의 근거로 셉니다. 확정한 표시를 다시 누르면 지지 → 반증 → 상관없음 순서로 바뀌어요.</p>
+        <div class="cards" id="cards"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ② 인사이트 -->
+  <section id="v-insight" role="tabpanel" aria-labelledby="t-insight" class="view" hidden>
+    <div class="two">
+      <article class="paper">
+        <h1>많이 나온 이야기</h1>
+        <p class="lead">AI 요약 · 데모에서는 브라우저 규칙 기반이에요. 정해 둔 말 사전으로 인터뷰마다 주제를 세고, 따옴표 안의 말을 인용으로 뽑습니다.</p>
+        <div id="kw"></div>
+      </article>
+      <article class="paper">
+        <h1>그대로 옮긴 말</h1>
+        <p class="lead">역할마다 두 마디씩, 메모 속 따옴표에서 뽑았어요.</p>
+        <div id="quotes"></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ③ 질문 설계 -->
+  <section id="v-qd" role="tabpanel" aria-labelledby="t-qd" class="view" hidden>
+    <div class="two">
+      <article class="paper">
+        <h1>질문을 이렇게 바꿨어요</h1>
+        <p class="lead">처음엔 ‘쓰시겠어요?’처럼 답을 유도했어요. 지난달 실제로 한 일을 묻자 숫자가 나오기 시작했습니다.</p>
+        <ul class="pairs" id="pairs"></ul>
+      </article>
+      <article class="paper">
+        <h1>질문 점검기</h1>
+        <p class="lead">새 질문을 넣으면 답을 유도하는 질문인지 바로 알려 줘요. (규칙 기반)</p>
+        <label class="lbl" for="qIn">질문</label>
+        <div class="q-in">
+          <input id="qIn" class="field" placeholder="예: 지난달 리포트는 누가 몇 시간 들여 만들었나요?" autocomplete="off" maxlength="80">
+          <button type="button" class="btn" id="qSave">목록에 담기</button>
+        </div>
+        <div id="qChk" aria-live="polite"></div>
+        <h2>인터뷰 질문 목록</h2>
+        <ol class="my-q" id="qList"></ol>
+      </article>
+    </div>
+  </section>
+
+  <!-- ④ 가격 응답 -->
+  <section id="v-price" role="tabpanel" aria-labelledby="t-price" class="view" hidden>
+    <div class="two">
+      <article class="paper">
+        <h1>원장님이 낼 수 있다고 한 금액</h1>
+        <p class="lead">“지금 이 일에 돈을 쓰고 있나요? 얼마까지 낼 수 있나요?”에 대한 원장 응답이에요.</p>
+        <div id="priceBars"></div>
+      </article>
+      <article class="paper">
+        <h1>가격 기준</h1>
+        <div id="priceSum"></div>
+      </article>
+    </div>
+  </section>
+
+  <p class="reset-line"><button type="button" class="link" id="reset">샘플 데이터로 되돌리기</button> 입력한 내용은 이 브라우저에만 저장됩니다. 인터뷰 대상은 모두 가상 인물입니다.</p>
+</main>
+
+<!-- 인터뷰 기록하기 -->
+<dialog id="addDlg" aria-labelledby="addH">
+  <form method="dialog" id="addForm" novalidate>
+    <h2 id="addH">인터뷰 기록하기</h2>
+    <p class="lead">생각이나 의견보다 <b>지난달 실제로 한 일</b>을 중심으로 적어 주세요.</p>
+    <fieldset class="roles">
+      <legend>누구를 만났나요</legend>
+      <label><input type="radio" name="role" value="원장" checked> 원장</label>
+      <label><input type="radio" name="role" value="강사"> 강사</label>
+      <label><input type="radio" name="role" value="학부모"> 학부모</label>
+    </fieldset>
+    <label class="lbl" for="fName">이름(가명)과 소속</label>
+    <input class="field" id="fName" placeholder="예: 원장 7 · 수학 · 학생 90명" maxlength="40">
+    <p class="err" id="eName" hidden>누구인지 알 수 있게 적어 주세요.</p>
+    <div class="nums">
+      <div><label class="lbl" for="fHours">지난달 리포트에 쓴 시간</label><div class="unit"><input class="field" id="fHours" type="number" min="0" max="200" value="0"><span>시간</span></div></div>
+      <div><label class="lbl" for="fPrice">낼 수 있다고 한 월 금액</label><div class="unit"><input class="field" id="fPrice" type="number" min="0" max="100" value="0"><span>만 원</span></div></div>
+    </div>
+    <label class="lbl" for="fMemo">메모 <small>큰따옴표 " " 안의 말은 인용으로 뽑혀요</small></label>
+    <textarea class="field" id="fMemo" rows="4" maxlength="400"></textarea>
+    <p class="err" id="eMemo" hidden>메모를 한 줄 이상 적어 주세요.</p>
+    <div class="dlg-acts">
+      <button type="button" class="btn" id="addCancel">취소</button>
+      <button type="submit" class="btn primary" id="addSave">보드에 붙이기</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button type="button" id="toastUndo" hidden>되돌리기</button></div>
+<script src="app.js"></script>
+</body>
+</html>

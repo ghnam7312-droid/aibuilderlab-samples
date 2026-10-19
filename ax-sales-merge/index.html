@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>한장 · 실적 취합</title>
+<meta name="description" content="10개 부서 실적 엑셀을 한 장으로 합치고, 원본과 대조해 검산까지 끝내는 도구">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='4' y='6' width='26' height='30' rx='4' fill='%231F5C45'/%3E%3Ccircle cx='29' cy='29' r='9' fill='%23F5E663' stroke='%2317201B' stroke-width='2'/%3E%3Cpath d='M25 29l3 3 5-6' fill='none' stroke='%2317201B' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- 예시 서비스 안내 띠 (AI 빌더랩 1기 목표 모델) -->
+<div class="lab-strip">
+  <span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span>
+  <a href="https://aibuilderlab.kr/home/maker-ax.html">← 포트폴리오로</a>
+</div>
+
+<header class="top">
+  <a class="brand" href="./" aria-label="한장 처음으로">
+    <svg class="mark" viewBox="0 0 40 40" aria-hidden="true">
+      <rect x="9" y="5" width="22" height="27" rx="3" fill="#CFE1D6"/>
+      <rect x="6" y="8" width="22" height="27" rx="3" fill="#8DB9A1"/>
+      <rect x="3" y="11" width="22" height="27" rx="3" fill="#1F5C45"/>
+      <path d="M8 19h12M8 24h12M8 29h7" stroke="#F4F6F1" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="31" cy="31" r="7.5" fill="#F5E663" stroke="#17201B" stroke-width="1.5"/>
+      <path d="M27.8 31.2l2.2 2.2 4.2-4.6" fill="none" stroke="#17201B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span class="name">한장<small>부서 실적 취합·검산</small></span>
+  </a>
+  <div class="week" aria-label="취합 기준">
+    <span class="lbl">취합 주차</span>
+    <b>10월 3주 · 10/12(월) – 10/16(금)</b>
+  </div>
+  <button class="btn ghost" id="reset" type="button">샘플 데이터로 되돌리기</button>
+</header>
+
+<main class="desk">
+  <!-- 왼쪽: 받은 부서 파일 -->
+  <aside class="tray" aria-labelledby="tray-h">
+    <div class="tray-h">
+      <h2 id="tray-h">받은 파일</h2>
+      <span class="count" id="file-count">0</span>
+    </div>
+    <p class="hint">월요일 09:00 마감 · 부서 담당자가 보낸 엑셀</p>
+    <ul class="files" id="files"></ul>
+
+    <label class="drop" id="drop" for="file">
+      <input id="file" type="file" accept=".csv,.xlsx,.xls">
+      <span class="drop-t">파일 추가</span>
+      <span class="drop-s">CSV·엑셀을 끌어다 놓거나 눌러서 고르기</span>
+      <span class="drop-s">열: 부서 · 담당 · 거래처 · 품목 · 수량 · 금액</span>
+    </label>
+    <p class="field-err" id="drop-err" role="alert" hidden></p>
+  </aside>
+
+  <!-- 가운데: 시트 / 통합 장부 -->
+  <section class="sheet-area" aria-label="시트">
+    <div class="sheet-tabs" role="tablist" aria-label="보기">
+      <button type="button" role="tab" id="tab-src" aria-selected="true">원본 시트</button>
+      <button type="button" role="tab" id="tab-led" aria-selected="false" disabled>통합 장부</button>
+      <span class="sheet-meta" id="sheet-meta"></span>
+    </div>
+
+    <div class="sheet" id="sheet-src" role="tabpanel" aria-labelledby="tab-src">
+      <div class="grid-wrap"><table class="grid" id="src"></table></div>
+    </div>
+
+    <div class="sheet" id="sheet-led" role="tabpanel" aria-labelledby="tab-led" hidden>
+      <div class="led-tools">
+        <div class="filters" role="group" aria-label="행 보기">
+          <button type="button" data-f="all" aria-pressed="true">전체</button>
+          <button type="button" data-f="issue" aria-pressed="false">확인할 행 <span id="issue-n">0</span></button>
+        </div>
+        <div class="dl">
+          <button class="btn ghost sm" id="dl-csv" type="button">CSV 내려받기</button>
+          <button class="btn sm" id="dl-xlsx" type="button">엑셀 내려받기</button>
+        </div>
+      </div>
+      <div class="grid-wrap"><table class="grid ledger" id="ledger"></table></div>
+    </div>
+
+    <div class="merge-bar" id="merge-bar">
+      <div>
+        <b id="merge-title">10개 파일을 한 장으로 합칩니다</b>
+        <span>합친 뒤 원본과 대조해 중복·형식 오류를 찾아요</span>
+      </div>
+      <button class="btn big" id="merge" type="button">취합하고 검산하기</button>
+    </div>
+  </section>
+
+  <!-- 오른쪽: 검산 테이프 -->
+  <aside class="tape-col" aria-labelledby="tape-h">
+    <h2 id="tape-h" class="sr">검산 결과</h2>
+    <div class="tape" id="tape" aria-live="polite">
+      <div class="tape-empty">
+        <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="10" y="6" width="28" height="36" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16h16M16 22h16M16 28h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <p>취합하면 이 종이에<br>검산 결과가 찍힙니다</p>
+      </div>
+    </div>
+    <div class="saved">
+      <span class="saved-l">매주 월요일 취합 시간</span>
+      <span class="saved-v"><s>2시간</s><b>15분</b></span>
+      <span class="saved-s">월 7시간 절감 · 파일 모으기 5분, 취합·검산 1분, 확인과 보고 9분</span>
+    </div>
+    <details class="rules">
+      <summary>검산 규칙 보기</summary>
+      <ol>
+        <li>원본 행 수와 취합 행 수를 맞춰 봅니다.</li>
+        <li>부서·담당·거래처·품목·수량·금액이 모두 같은 행은 중복 의심으로 표시합니다.</li>
+        <li>수량·금액에 숫자가 아닌 글자가 섞이면 형식 오류입니다.</li>
+        <li>원본 합계 − 제외한 금액 = 취합 합계가 되어야 통과입니다.</li>
+      </ol>
+      <p>정해 둔 규칙으로 판단합니다. 최종 확인은 사람이 해요.</p>
+    </details>
+  </aside>
+</main>
+
+<footer class="foot">AI 빌더랩 직장인 AX 트랙 · 엑셀탈출 목표 모델 · 가상의 회사 다온오피스(주) 데이터</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toast-t"></span><button type="button" id="toast-undo" hidden>되돌리기</button></div>
+
+<script src="app.js"></script>
+</body>
+</html>

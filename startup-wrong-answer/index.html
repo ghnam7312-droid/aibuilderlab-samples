@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>오답지도 · 내 반 오답 분석</title>
+<meta name="description" content="학생이 고른 번호만 입력하면 반 전체 오답 지도와 유형 분석, 학부모 문구를 만들어 주는 도구 (AI 빌더랩 1기 목표 모델 예시)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%231F2A33%22/%3E%3Crect x=%227%22 y=%227%22 width=%228%22 height=%228%22 rx=%222%22 fill=%22%234657CE%22/%3E%3Crect x=%2217%22 y=%2217%22 width=%228%22 height=%228%22 rx=%222%22 fill=%22%23D14468%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="demo-strip">
+  <span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span>
+  <a href="/home/maker-startup.html">← 포트폴리오로</a>
+</div>
+
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="./" aria-label="오답지도 처음으로">
+      <!-- 로고: 격자 위에 색 칸 두 개 = 오답이 칠해진 지도 -->
+      <svg viewBox="0 0 36 36" aria-hidden="true">
+        <rect width="36" height="36" rx="9" fill="#1F2A33"/>
+        <g fill="#3A4753"><rect x="7" y="7" width="6" height="6" rx="1.5"/><rect x="15" y="7" width="6" height="6" rx="1.5"/><rect x="7" y="15" width="6" height="6" rx="1.5"/><rect x="23" y="15" width="6" height="6" rx="1.5"/><rect x="15" y="23" width="6" height="6" rx="1.5"/><rect x="23" y="23" width="6" height="6" rx="1.5"/></g>
+        <rect x="23" y="7" width="6" height="6" rx="1.5" fill="#E39B2D"/>
+        <rect x="15" y="15" width="6" height="6" rx="1.5" fill="#4657CE"/>
+        <rect x="7" y="23" width="6" height="6" rx="1.5" fill="#D14468"/>
+      </svg>
+      <span><b>오답지도</b><small>내 반 오답 분석</small></span>
+    </a>
+    <div class="exam">
+      <span class="exam-name" id="examName">중2 B반 · 3월 단원 평가</span>
+      <span class="exam-meta" id="examMeta"></span>
+    </div>
+    <button type="button" class="btn primary" id="grade">채점하기</button>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="화면">
+    <button role="tab" aria-selected="true" aria-controls="v-map" id="t-map" data-v="map">오답 지도</button>
+    <button role="tab" aria-selected="false" aria-controls="v-review" id="t-review" data-v="review">AI 분류 검수</button>
+    <button role="tab" aria-selected="false" aria-controls="v-msg" id="t-msg" data-v="msg">학부모 문구</button>
+    <button role="tab" aria-selected="false" aria-controls="v-ans" id="t-ans" data-v="ans">답 입력</button>
+    <button role="tab" aria-selected="false" aria-controls="v-q" id="t-q" data-v="q">문항표</button>
+  </nav>
+</header>
+
+<main class="wrap">
+  <!-- ① 오답 지도 -->
+  <section id="v-map" role="tabpanel" aria-labelledby="t-map" class="view">
+    <div class="map-layout">
+      <div class="sheet map-sheet">
+        <div class="sheet-h">
+          <div>
+            <h1>반 전체 오답 지도</h1>
+            <p class="lead" id="mapLead"></p>
+          </div>
+          <ul class="legend" aria-label="색 설명">
+            <li><i class="sw ok"></i>정답</li><li><i class="sw k"></i>개념 부족</li><li><i class="sw s"></i>계산 실수</li><li><i class="sw m"></i>문제 이해</li>
+          </ul>
+        </div>
+        <div class="map-scroll" id="mapScroll">
+          <table class="map" id="map" aria-describedby="mapLead"></table>
+        </div>
+        <p class="foot-note">문항 번호를 누르면 그 문항에서 학생들이 고른 보기가, 학생 이름을 누르면 그 학생의 오답이 분석 칸에 나와요.</p>
+      </div>
+
+      <aside class="rail" aria-label="분석">
+        <div class="sheet stats" id="stats"></div>
+        <div class="sheet">
+          <h2>오답 유형</h2>
+          <div class="stack" id="typeBar" role="img"></div>
+          <ul class="type-list" id="typeList"></ul>
+          <div class="ai" id="aiSum"></div>
+        </div>
+        <div class="sheet focus" id="focus"></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ② AI 분류 검수 -->
+  <section id="v-review" role="tabpanel" aria-labelledby="t-review" class="view" hidden>
+    <div class="review-layout">
+      <div class="sheet">
+        <div class="sheet-h">
+          <div><h1>AI 분류 검수</h1><p class="lead">AI가 나눈 오답 유형이 맞는지 한 건씩 확인해요. 확인한 건만 일치율에 들어갑니다.</p></div>
+        </div>
+        <div id="queue"></div>
+        <p class="keys">키보드 <kbd>Y</kbd> 맞음 · <kbd>N</kbd> 틀림 · <kbd>S</kbd> 건너뛰기 · <kbd>Z</kbd> 방금 것 취소</p>
+      </div>
+      <aside class="sheet gauge-box" aria-live="polite">
+        <h2>AI 분류 일치율</h2>
+        <div class="gauge" id="gauge"></div>
+        <div class="gauge-meta" id="gaugeMeta"></div>
+        <h3>최근 검수</h3>
+        <ul class="recent" id="recent"></ul>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ③ 학부모 문구 -->
+  <section id="v-msg" role="tabpanel" aria-labelledby="t-msg" class="view" hidden>
+    <div class="msg-layout">
+      <div class="sheet">
+        <h1>학부모 문구</h1>
+        <p class="lead">검수에서 ‘틀림’으로 표시한 분류는 빼고 씁니다.</p>
+        <label class="lbl" for="msgStu">학생</label>
+        <select id="msgStu" class="field"></select>
+        <div class="mini-map" id="msgMini" aria-hidden="true"></div>
+        <div class="row" style="margin-top:16px">
+          <button type="button" class="btn primary" id="msgCopy">문구 복사</button>
+          <button type="button" class="btn" id="msgNext">다음 학생</button>
+        </div>
+      </div>
+      <article class="note-paper" aria-live="polite">
+        <div class="note-h">알림장</div>
+        <pre id="msgText"></pre>
+      </article>
+    </div>
+  </section>
+
+  <!-- ④ 답 입력 -->
+  <section id="v-ans" role="tabpanel" aria-labelledby="t-ans" class="view" hidden>
+    <div class="sheet">
+      <div class="sheet-h">
+        <div><h1>학생 답 입력</h1><p class="lead">손글씨 풀이 대신 학생이 고른 번호(1~5)만 넣어요. 화살표 키로 칸을 옮기고, 고치면 바로 다시 채점합니다.</p></div>
+        <span class="pill" id="ansMsg" role="status"></span>
+      </div>
+      <div class="map-scroll"><table class="grid" id="ansGrid"></table></div>
+    </div>
+  </section>
+
+  <!-- ⑤ 문항표 -->
+  <section id="v-q" role="tabpanel" aria-labelledby="t-q" class="view" hidden>
+    <div class="sheet">
+      <div class="sheet-h"><div><h1>문항표</h1><p class="lead">문항마다 단원, 유형 태그, 정답, ‘계산 실수 보기’를 적어 두면 학생이 고른 보기로 오답 유형을 판단해요.</p></div></div>
+      <div class="map-scroll"><table class="qt"><thead><tr><th>문항</th><th>단원</th><th>유형 태그</th><th>정답</th><th>계산 실수 보기</th></tr></thead><tbody id="qRows"></tbody></table></div>
+      <div class="rulebox">
+        <b>판단 규칙</b> (데모: 브라우저 규칙 기반)
+        <ol><li>정답이면 통과</li><li>‘계산 실수 보기’를 골랐으면 계산 실수</li><li>아니면 문항 태그로 판단: 개념형 → 개념 부족, 계산형 → 계산 실수, 서술·활용형 → 문제 이해</li></ol>
+      </div>
+    </div>
+  </section>
+
+  <p class="reset-line"><button type="button" class="link" id="reset">샘플 데이터로 되돌리기</button> 입력한 내용은 이 브라우저에만 저장됩니다. 학생 이름은 모두 가상입니다.</p>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button type="button" id="toastUndo" hidden>되돌리기</button></div>
+<script src="app.js"></script>
+</body>
+</html>

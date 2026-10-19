@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>하루치 · AI 공부 코치</title>
+<meta name="description" content="시험일과 하루 공부 시간을 넣으면 오늘 할 몫만 보여 주는 AI 공부 코치 — 기획서, 프로토타입, 프롬프트 평가표">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2313254A'/%3E%3Crect x='6' y='17' width='20' height='6' rx='2' fill='%23D8F36A'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/maker.html">← 포트폴리오로</a></div>
+
+<header class="head">
+  <div class="brand">
+    <!-- 로고: 하루 한 칸에 형광펜 한 줄 -->
+    <svg class="mark" viewBox="0 0 40 40" aria-hidden="true">
+      <rect x="3" y="3" width="34" height="34" rx="9" fill="#13254A"/>
+      <path d="M11 13h18M11 20h18M11 27h11" stroke="#7F8FB0" stroke-width="2" stroke-linecap="round"/>
+      <rect x="9" y="16.5" width="22" height="7" rx="2" fill="#D8F36A" opacity=".95"/>
+      <path d="M11 20h18" stroke="#13254A" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <div><strong>하루치</strong><span>오늘 할 몫만 알려 주는 AI 공부 코치</span></div>
+  </div>
+  <nav class="tabs" id="tabs" aria-label="문서 고르기">
+    <button type="button" data-t="proto" aria-pressed="true">프로토타입</button>
+    <button type="button" data-t="prd" aria-pressed="false">기획서</button>
+    <button type="button" data-t="eval" aria-pressed="false">프롬프트 평가</button>
+  </nav>
+</header>
+
+<main class="page">
+  <!-- ========== 프로토타입 ========== -->
+  <section data-p="proto" aria-labelledby="protoTitle">
+    <h1 class="sr" id="protoTitle">하루치 프로토타입</h1>
+    <div class="proto">
+      <!-- 왼쪽: 목표 + 남은 날 -->
+      <aside class="goal-card">
+        <div class="dday" id="dday" aria-live="polite"></div>
+        <button class="ghost edit-toggle" id="editToggle" type="button" aria-expanded="false" aria-controls="pf">목표·과목 고치기</button>
+        <form id="pf" novalidate>
+          <div class="field">
+            <label for="goal">목표</label>
+            <input id="goal" maxlength="40" placeholder="예) 정보처리기사 필기 합격">
+          </div>
+          <div class="field">
+            <label for="exam">시험일</label>
+            <input id="exam" type="date">
+          </div>
+          <div class="field">
+            <span class="lbl" id="hrsLbl">하루 공부 시간</span>
+            <div class="seg" id="hrs" role="radiogroup" aria-labelledby="hrsLbl"></div>
+          </div>
+          <div class="field">
+            <label for="subIn">과목 <small>Enter로 추가</small></label>
+            <div class="subs" id="subs"></div>
+            <input id="subIn" maxlength="20" placeholder="과목 이름">
+          </div>
+          <p class="err" id="err" role="alert" hidden></p>
+          <button class="primary" type="submit">이번 주 계획 만들기</button>
+        </form>
+      </aside>
+
+      <!-- 오른쪽: 주간 계획 -->
+      <section class="week-wrap" aria-labelledby="weekTitle">
+        <div class="week-h">
+          <div>
+            <h2 id="weekTitle">이번 주 계획</h2>
+            <p class="phase" id="phase"></p>
+          </div>
+          <div class="week-tools">
+            <button class="ghost" id="replan" type="button">밀린 일 다시 나누기</button>
+            <button class="ghost" id="reset" type="button">샘플로 되돌리기</button>
+          </div>
+        </div>
+        <div class="coach" id="coach" aria-live="polite"></div>
+        <div class="week" id="week"></div>
+        <div class="crew">
+          <h3>스터디 진행률 <small>이번 주</small></h3>
+          <ul id="crew"></ul>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- ========== 기획서 (PRD) ========== -->
+  <section data-p="prd" hidden aria-labelledby="prdTitle">
+    <div class="doc-layout">
+      <nav class="toc" aria-label="기획서 목차">
+        <a href="#p-problem">문제</a><a href="#p-user">대상</a><a href="#p-must">1차 기능</a><a href="#p-later">2차로 미룬 것</a><a href="#p-screens">화면 흐름</a><a href="#p-metric">성공 지표</a>
+      </nav>
+      <article class="doc">
+        <p class="doc-meta">PRD · v1.2 · 작성 새벽기획자 · 검토 리드 빌더 배포요정</p>
+        <h1 id="prdTitle">하루치 — 스터디원이 계획을 끝까지 지키게 돕는 AI 공부 코치</h1>
+        <p class="lead">계획을 잘 짜는 서비스가 아니라, 하루 밀려도 다시 따라잡게 해 주는 서비스를 만든다.</p>
+
+        <h2 id="p-problem">문제</h2>
+        <p>스터디원마다 계획이 따로 있어서 누가 어디까지 했는지 아무도 모른다. 계획을 짜는 데만 한 시간이 걸리고, 하루만 밀려도 전체 계획이 무너져 포기하게 된다.</p>
+        <blockquote>“계획표는 첫 주에 예쁘고, 둘째 주에 버려져요.” — 인터뷰한 스터디원 7명 중 5명이 비슷하게 말함</blockquote>
+
+        <h2 id="p-user">대상</h2>
+        <ul>
+          <li>자격증·시험을 준비하는 대학생 스터디 (3~6명)</li>
+          <li>하루 공부 시간이 1~3시간으로 들쭉날쭉한 사람</li>
+        </ul>
+
+        <h2 id="p-must">1차 기능 (5개)</h2>
+        <ol>
+          <li><b>계획 만들기</b> — 목표·시험일·하루 시간을 넣으면 7일 계획이 나온다</li>
+          <li><b>오늘 할 몫</b> — 체크하면 진행률이 바로 오른다</li>
+          <li><b>밀린 일 다시 나누기</b> — 지난 날의 못 한 일을 남은 날에 고르게 옮긴다</li>
+          <li><b>스터디 진행률</b> — 스터디원 진행률을 한 화면에서 본다</li>
+          <li><b>코치 한마디</b> — 진행 상황에 맞춘 한 줄 피드백</li>
+        </ol>
+
+        <h2 id="p-later">2차로 미룬 것</h2>
+        <p>캘린더 연동, 알림, 문제 채점, 스터디 채팅. ‘계획을 지키게 돕는가’에 직접 닿지 않는 기능은 모두 미뤘다. 처음에 12개였던 기능을 5개로 줄인 것이 이 기획의 핵심 결정이다.</p>
+
+        <h2 id="p-screens">화면 흐름</h2>
+        <ol class="flow" id="flow"></ol>
+
+        <h2 id="p-metric">성공 지표</h2>
+        <table class="metric">
+          <thead><tr><th>지표</th><th>목표</th><th>재는 방법</th></tr></thead>
+          <tbody>
+            <tr><td>계획을 만들기까지 걸린 시간</td><td>3분 이하</td><td>첫 화면 진입 → 계획 저장</td></tr>
+            <tr><td>주간 체크 완료율</td><td>60% 이상</td><td>체크한 할 일 ÷ 전체 할 일</td></tr>
+            <tr><td>4주 뒤에도 쓰는 비율</td><td>50% 이상</td><td>4주차 주 1회 이상 접속</td></tr>
+          </tbody>
+        </table>
+      </article>
+    </div>
+  </section>
+
+  <!-- ========== 프롬프트 평가 ========== -->
+  <section data-p="eval" hidden aria-labelledby="evalTitle">
+    <div class="eval-h">
+      <h1 id="evalTitle">계획을 짜 주는 프롬프트, 세 번 고쳤다</h1>
+      <p>같은 입력(정보처리기사 필기 · 시험 4주 전 · 하루 2시간 · 5과목)에 대한 답을 5개 기준, 5점 만점으로 매겼어요. 버전을 누르면 그 버전의 프롬프트와 실제 답 일부를 볼 수 있어요.</p>
+    </div>
+    <div class="eval">
+      <div class="score-table" id="scoreTable"></div>
+      <div class="ver" id="ver" aria-live="polite"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 커리어 트랙 · 새벽기획자 목표 모델 · 기획 산출물: PRD · 프롬프트 설계</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="app.js"></script>
+</body>
+</html>

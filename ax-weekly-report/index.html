@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>금요보고 · 주간 성과</title>
+<meta name="description" content="일별 숫자만 넣으면 차트·요약·메일 본문까지 만들어 주는 주간 성과 보고서 도구">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='5' y='3' width='30' height='34' rx='4' fill='%231B2340'/%3E%3Cpath d='M11 27l6-7 5 4 7-10' fill='none' stroke='%23F2A33A' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- 예시 서비스 안내 띠 (AI 빌더랩 1기 목표 모델) -->
+<div class="lab-strip">
+  <span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span>
+  <a href="https://aibuilderlab.kr/home/maker-ax.html">← 포트폴리오로</a>
+</div>
+
+<header class="top">
+  <a class="brand" href="./" aria-label="금요보고 처음으로">
+    <svg class="mark" viewBox="0 0 44 44" aria-hidden="true">
+      <rect x="6" y="4" width="32" height="37" rx="4" fill="#1B2340"/>
+      <rect x="6" y="4" width="32" height="10" rx="4" fill="#F2A33A"/>
+      <rect x="6" y="10" width="32" height="4" fill="#F2A33A"/>
+      <text x="22" y="12" text-anchor="middle" font-size="8" font-weight="800" fill="#1B2340" font-family="sans-serif">FRI</text>
+      <path d="M12 33l6-7 5 4 9-11" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span class="name">금요보고<small>주간 성과 보고서 자동 생성·발송</small></span>
+  </a>
+  <p class="saved" aria-label="절감 시간"><s>매주 1시간</s> <b>10분</b></p>
+  <button class="btn ghost" id="reset" type="button">샘플 데이터로 되돌리기</button>
+</header>
+
+<main class="desk">
+  <!-- 왼쪽: 입력·설정 -->
+  <section class="panel" aria-label="입력과 설정">
+    <div class="ptabs" role="tablist" aria-label="패널">
+      <button type="button" role="tab" id="pt-data" aria-selected="true" aria-controls="pp-data">숫자 입력</button>
+      <button type="button" role="tab" id="pt-send" aria-selected="false" aria-controls="pp-send">발송 설정</button>
+      <button type="button" role="tab" id="pt-guide" aria-selected="false" aria-controls="pp-guide">사용 안내서</button>
+    </div>
+
+    <div class="pp" id="pp-data" role="tabpanel" aria-labelledby="pt-data">
+      <p class="lead">판매 시스템의 일별 숫자를 옮겨 적으세요. 고치는 즉시 보고서에 반영됩니다.</p>
+      <div class="wk-switch" role="group" aria-label="주 고르기">
+        <button type="button" data-wk="now" aria-pressed="true">이번 주 <span>10/9–10/15</span></button>
+        <button type="button" data-wk="last" aria-pressed="false">지난주 <span>10/2–10/8</span></button>
+      </div>
+      <div class="dtable-wrap"><table class="dtable" id="data"></table></div>
+      <p class="err" id="data-err" role="alert" hidden></p>
+      <p class="tz">날짜는 한국 시간(KST) 기준입니다. 서버 시간(UTC)으로 두면 하루씩 밀려요.</p>
+    </div>
+
+    <div class="pp" id="pp-send" role="tabpanel" aria-labelledby="pt-send" hidden>
+      <div class="sched">
+        <div>
+          <b>매주 금요일 17:00 자동 발송</b>
+          <span id="sched-next">꺼져 있어요</span>
+        </div>
+        <button class="switch" id="sw" type="button" role="switch" aria-checked="false" aria-label="자동 발송"></button>
+      </div>
+      <label class="f" for="to-in">받는 사람</label>
+      <div class="chips" id="chips"></div>
+      <form class="to-form" id="to-form" novalidate>
+        <input id="to-in" type="email" placeholder="이메일 주소를 넣고 Enter" autocomplete="off" aria-describedby="to-err">
+        <button class="btn sm" type="submit">추가</button>
+      </form>
+      <p class="err" id="to-err" role="alert" hidden></p>
+      <button class="btn wide" id="send-now" type="button">지금 한 번 보내 보기</button>
+      <p class="sim">데모라 실제 메일은 나가지 않아요. 발송 기록에만 남습니다.</p>
+      <h3 class="h3">발송 기록</h3>
+      <ol class="log" id="log"></ol>
+    </div>
+
+    <div class="pp" id="pp-guide" role="tabpanel" aria-labelledby="pt-guide" hidden>
+      <ol class="guide">
+        <li><b>금요일 오후</b>에 판매 시스템에서 지난 금요일부터 어제(목)까지 7일 숫자를 확인합니다.</li>
+        <li><b>숫자 입력</b> 탭의 ‘이번 주’에 매출·주문·방문을 옮겨 적습니다. 지난주 숫자는 지난번 값이 남아 있어요.</li>
+        <li>오른쪽 보고서에서 <b>요약 문장</b>이 숫자와 맞는지 한 번 읽습니다. 휴일처럼 특별한 날은 메모 칸에 적어 두세요.</li>
+        <li><b>메일 본문 복사</b>로 팀 메일에 붙여 넣거나, 발송 설정에서 자동 발송을 켭니다.</li>
+        <li>다음 주 월요일, 이번 주 숫자는 자동으로 ‘지난주’로 넘어갑니다.</li>
+      </ol>
+      <p class="sim">처음 쓰는 동료도 5분이면 따라 할 수 있게 쓴 안내서입니다.</p>
+    </div>
+  </section>
+
+  <!-- 오른쪽: A4 보고서 -->
+  <section class="stage" aria-label="보고서 미리 보기">
+    <div class="stage-bar">
+      <button class="btn" id="gen" type="button">보고서 만들기</button>
+      <button class="btn ghost" id="copy" type="button" disabled>메일 본문 복사</button>
+      <button class="btn ghost" id="print" type="button" disabled>PDF로 저장</button>
+    </div>
+
+    <article class="page" id="page" aria-live="polite">
+      <div class="blank" id="blank">
+        <div class="blank-lines" aria-hidden="true"><i></i><i></i><i></i><i class="short"></i></div>
+        <p>숫자를 확인하고 <b>보고서 만들기</b>를 누르면<br>이 종이에 이번 주 보고서가 채워집니다.</p>
+      </div>
+      <div class="report" id="report" hidden></div>
+    </article>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 직장인 AX 트랙 · 엑셀탈출 목표 모델 · 가상의 회사 다온오피스 온라인몰 데이터</footer>
+
+<div class="tip" id="tip" role="tooltip" hidden></div>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toast-t"></span><button type="button" id="toast-undo" hidden>되돌리기</button></div>
+<script src="app.js"></script>
+</body>
+</html>

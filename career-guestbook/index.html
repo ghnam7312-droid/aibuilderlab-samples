@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>한마디함 · 행사 피드백</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='2' y='12' width='36' height='26' rx='7' fill='%231F6F55'/%3E%3Crect x='13' y='2' width='14' height='20' rx='2.5' fill='%23FFE27A' transform='rotate(-8 20 12)'/%3E%3C/svg%3E">
+<meta name="description" content="행사가 끝나면 링크 하나로 익명 의견을 받고, 들어오는 즉시 칭찬·개선 요청·질문으로 나눠 보여 주는 피드백 보드">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- AI 빌더랩 예시 서비스 안내 (실서비스가 아님을 밝힌다) -->
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/maker.html">← 포트폴리오로</a></div>
+
+<header class="top">
+  <div class="brand">
+    <svg class="mark" viewBox="0 0 40 40" aria-hidden="true">
+      <rect x="2" y="12" width="36" height="26" rx="7" fill="#1F6F55"/>
+      <rect x="11" y="20" width="18" height="3.2" rx="1.6" fill="#0E3B2C"/>
+      <rect x="13" y="2" width="14" height="20" rx="2.5" fill="#FFE27A" transform="rotate(-8 20 12)"/>
+      <path d="M16 8.5h8M16 12.5h6" stroke="#1D2A24" stroke-width="1.6" stroke-linecap="round" transform="rotate(-8 20 12)"/>
+    </svg>
+    <div>
+      <strong>한마디함</strong>
+      <span class="event" id="eventName">2026 가을 해커톤 밋업 · 10월 18일(토)</span>
+    </div>
+  </div>
+  <div class="top-actions">
+    <button class="ghost" id="share" type="button">참가자 링크 복사</button>
+    <button class="ghost" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="layout">
+  <!-- 왼쪽: 의견 쓰기 + 요약 -->
+  <aside class="side">
+    <section class="compose" aria-labelledby="composeTitle">
+      <h1 id="composeTitle">오늘 행사, 한마디만 남겨 주세요</h1>
+      <p class="hint">이름은 받지 않아요. 쓰는 동안 분류를 미리 보여 드려요.</p>
+
+      <form id="form" novalidate>
+        <!-- 쓰는 중인 쪽지: 글자를 칠 때마다 분류·색이 바뀐다 -->
+        <div class="slip live" id="live" data-cat="기타">
+          <label class="sr" for="text">의견</label>
+          <textarea id="text" maxlength="300" rows="4" placeholder="예) 발표 시간이 짧아서 아쉬웠어요. 질의응답을 늘려 주세요."></textarea>
+          <div class="slip-foot">
+            <span class="cat-pill" id="liveCat">아직 비어 있어요</span>
+            <span class="count" id="count">0/300</span>
+          </div>
+        </div>
+        <p class="why" id="why" aria-live="polite">단어를 보고 칭찬·개선 요청·질문 중 하나로 나눠요.</p>
+        <p class="err" id="err" role="alert" hidden></p>
+        <button class="primary" type="submit" id="submit">익명으로 남기기</button>
+      </form>
+    </section>
+
+    <section class="digest" aria-labelledby="digestTitle">
+      <div class="digest-h">
+        <h2 id="digestTitle">AI 요약</h2>
+        <span class="tech" title="이 데모는 단어 사전으로 분류합니다. 실제 버전은 Claude API를 씁니다.">브라우저 규칙 기반 데모</span>
+      </div>
+      <!-- 분류 비율 막대: 누르면 해당 분류만 보기 -->
+      <div class="dist" id="dist" role="group" aria-label="분류별 비율"></div>
+      <ol class="lines" id="lines"></ol>
+      <div class="todo">
+        <h3>운영진이 손볼 것</h3>
+        <ul id="topics"></ul>
+      </div>
+    </section>
+  </aside>
+
+  <!-- 오른쪽: 쪽지 벽 -->
+  <section class="wall-wrap" aria-labelledby="wallTitle">
+    <div class="wall-h">
+      <h2 id="wallTitle">들어온 의견 <span id="total"></span></h2>
+      <div class="filters" id="filters" role="group" aria-label="분류 고르기"></div>
+    </div>
+    <div class="wall" id="wall"></div>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 커리어 트랙 · 새벽기획자 목표 모델 · 실제 버전: Next.js · Supabase · Claude API</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+
+<script src="app.js"></script>
+</body>
+</html>

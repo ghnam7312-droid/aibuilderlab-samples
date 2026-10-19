@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>회의끝 · 회의록 정리</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Cpath d='M6 5h24a4 4 0 0 1 4 4v14a4 4 0 0 1-4 4H15l-7 6v-6H6a4 4 0 0 1-4-4V9a4 4 0 0 1 4-4z' fill='%232F5BFF'/%3E%3Cpath d='M11 16.5l4.2 4.2L25 11' fill='none' stroke='%23fff' stroke-width='3.2' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="description" content="회의록을 붙여 넣으면 결정사항과 할 일(담당자·마감)을 찾아 업무판에 올려 주는 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/maker.html">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 말풍선이 체크 표시로 끝난다 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <path d="M6 5h24a4 4 0 0 1 4 4v14a4 4 0 0 1-4 4H15l-7 6v-6H6a4 4 0 0 1-4-4V9a4 4 0 0 1 4-4z" fill="#2F5BFF"/>
+      <path d="M11 16.5l4.2 4.2L25 11" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div><strong>회의끝</strong><span>회의가 끝나면 할 일이 바로 정리돼요</span></div>
+  </div>
+  <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+</header>
+
+<main class="page">
+  <section class="split" aria-label="회의록 정리">
+    <!-- 왼쪽: 회의록 (입력 ↔ 표시 보기) -->
+    <div class="pane src-pane">
+      <div class="pane-h">
+        <h1>회의록</h1>
+        <div class="seg" role="group" aria-label="보기 방식">
+          <button type="button" id="modeEdit" aria-pressed="false">고치기</button>
+          <button type="button" id="modeMark" aria-pressed="true">표시 보기</button>
+        </div>
+      </div>
+      <p class="tip">담당자는 <code>@이름</code>, 마감은 <code>10/24</code>나 <code>금요일까지</code>, 결정은 <code>결정:</code>으로 쓰면 찾아요.</p>
+      <label class="sr" for="src">회의록 내용</label>
+      <textarea id="src" spellcheck="false" hidden></textarea>
+      <ol class="marked" id="marked" aria-label="분류된 회의록"></ol>
+      <div class="src-foot">
+        <span id="srcInfo"></span>
+        <button class="primary" id="run" type="button">정리하기</button>
+      </div>
+    </div>
+
+    <!-- 오른쪽: 정리 결과 -->
+    <div class="pane out-pane" id="out" aria-live="polite"></div>
+  </section>
+
+  <section class="board-wrap" aria-labelledby="boardTitle">
+    <div class="board-h">
+      <div>
+        <h2 id="boardTitle">업무판</h2>
+        <p>카드를 끌어 옮기거나 화살표 버튼으로 단계를 바꿔요.</p>
+      </div>
+      <div class="board-tools">
+        <div class="people" id="people" role="group" aria-label="담당자 고르기"></div>
+        <button class="dark" id="notion" type="button">Notion용으로 복사</button>
+      </div>
+    </div>
+    <div class="board" id="board"></div>
+    <details class="md" id="mdBox" hidden>
+      <summary>복사한 내용 보기</summary>
+      <pre id="mdOut"></pre>
+    </details>
+    <p class="fine">이 데모는 Notion에 직접 연결하지 않고, Notion에 붙여 넣으면 체크리스트가 되는 형식으로 복사해요. 실제 버전은 Notion API로 바로 등록합니다.</p>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 커리어 트랙 · 새벽기획자 목표 모델 · 실제 버전: AI 요약 · Notion API</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="app.js"></script>
+</body>
+</html>
