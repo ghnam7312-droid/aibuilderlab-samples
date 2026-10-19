@@ -12,9 +12,9 @@ AI 포트폴리오가 없던 취업 준비생이 8주 동안 기획 → 자동�
 
 | | 서비스 | 하는 일 | 열어 보기 |
 |---|---|---|---|
-| <img src="career-guestbook/screenshot.png" width="220" alt="한마디함 화면"> | **[한마디함](career-guestbook)** | 행사 익명 피드백을 받는 즉시 칭찬·개선 요청·질문으로 나눠 보여 주는 피드백 보드 | [데모](https://aibuilderlab.kr/demo/career-guestbook/) |
-| <img src="career-meeting/screenshot.png" width="220" alt="회의끝 화면"> | **[회의끝](career-meeting)** | 회의록에서 결정사항과 할 일(담당자·마감)을 찾아 업무판에 올리는 도구 | [데모](https://aibuilderlab.kr/demo/career-meeting/) |
-| <img src="career-study-prd/screenshot.png" width="220" alt="하루치 화면"> | **[하루치](career-study-prd)** | 오늘 할 몫만 보여 주는 AI 공부 코치 — 기획서 · 프로토타입 · 프롬프트 평가표 | [데모](https://aibuilderlab.kr/demo/career-study-prd/) |
+| <img src="career-guestbook/screenshot.png" width="220" alt="한마디함 화면"> | **[한마디함](career-guestbook)** | 행사 익명 피드백을 받는 즉시 칭찬·개선 요청·질문으로 나눠 보여 주는 피드백 보드 | [데모](https://aibuilderlab.kr/demo/career-guestbook/index.html) |
+| <img src="career-meeting/screenshot.png" width="220" alt="회의끝 화면"> | **[회의끝](career-meeting)** | 회의록에서 결정사항과 할 일(담당자·마감)을 찾아 업무판에 올리는 도구 | [데모](https://aibuilderlab.kr/demo/career-meeting/index.html) |
+| <img src="career-study-prd/screenshot.png" width="220" alt="하루치 화면"> | **[하루치](career-study-prd)** | 오늘 할 몫만 보여 주는 AI 공부 코치 — 기획서 · 프로토타입 · 프롬프트 평가표 | [데모](https://aibuilderlab.kr/demo/career-study-prd/index.html) |
 
 ## 직장인 AX 트랙 · 엑셀탈출
 
@@ -22,9 +22,9 @@ AI 포트폴리오가 없던 취업 준비생이 8주 동안 기획 → 자동�
 
 | | 서비스 | 하는 일 | 열어 보기 |
 |---|---|---|---|
-| <img src="ax-sales-merge/screenshot.png" width="220" alt="한장 화면"> | **[한장](ax-sales-merge)** | 10개 부서 실적 엑셀을 한 장으로 합치고, 보고 합계와 대조해 검산까지 | [데모](https://aibuilderlab.kr/demo/ax-sales-merge/) |
-| <img src="ax-quote-mail/screenshot.png" width="220" alt="견적함 화면"> | **[견적함](ax-quote-mail)** | 거래처 메일을 분류함에 나누고 견적 요청만 진행표로 정리 | [데모](https://aibuilderlab.kr/demo/ax-quote-mail/) |
-| <img src="ax-weekly-report/screenshot.png" width="220" alt="금요보고 화면"> | **[금요보고](ax-weekly-report)** | 일별 숫자로 핵심 지표·차트·요약·메일 본문까지 A4 한 장 보고서 생성 | [데모](https://aibuilderlab.kr/demo/ax-weekly-report/) |
+| <img src="ax-sales-merge/screenshot.png" width="220" alt="한장 화면"> | **[한장](ax-sales-merge)** | 10개 부서 실적 엑셀을 한 장으로 합치고, 보고 합계와 대조해 검산까지 | [데모](https://aibuilderlab.kr/demo/ax-sales-merge/index.html) |
+| <img src="ax-quote-mail/screenshot.png" width="220" alt="견적함 화면"> | **[견적함](ax-quote-mail)** | 거래처 메일을 분류함에 나누고 견적 요청만 진행표로 정리 | [데모](https://aibuilderlab.kr/demo/ax-quote-mail/index.html) |
+| <img src="ax-weekly-report/screenshot.png" width="220" alt="금요보고 화면"> | **[금요보고](ax-weekly-report)** | 일별 숫자로 핵심 지표·차트·요약·메일 본문까지 A4 한 장 보고서 생성 | [데모](https://aibuilderlab.kr/demo/ax-weekly-report/index.html) |
 
 ## 창업 트랙 · 린스타터
 
@@ -32,9 +32,9 @@ AI 포트폴리오가 없던 취업 준비생이 8주 동안 기획 → 자동�
 
 | | 서비스 | 하는 일 | 열어 보기 |
 |---|---|---|---|
-| <img src="startup-academy-report/screenshot.png" width="220" alt="다음주 화면"> | **[다음주](startup-academy-report)** | 단원 평가 결과를 학부모가 카카오톡으로 읽는 리포트로 바꾸는 학원용 SaaS | [데모](https://aibuilderlab.kr/demo/startup-academy-report/) |
-| <img src="startup-wrong-answer/screenshot.png" width="220" alt="오답지도 화면"> | **[오답지도](startup-wrong-answer)** | 학생 답만 넣으면 반 전체 오답을 지도로 칠하고 유형을 나누는 도구 | [데모](https://aibuilderlab.kr/demo/startup-wrong-answer/) |
-| <img src="startup-interview-board/screenshot.png" width="220" alt="들어보니 화면"> | **[들어보니](startup-interview-board)** | 인터뷰 근거를 태그하면 가설이 검증됨·반증됨으로 바뀌는 고객 인터뷰 보드 | [데모](https://aibuilderlab.kr/demo/startup-interview-board/) |
+| <img src="startup-academy-report/screenshot.png" width="220" alt="다음주 화면"> | **[다음주](startup-academy-report)** | 단원 평가 결과를 학부모가 카카오톡으로 읽는 리포트로 바꾸는 학원용 SaaS | [데모](https://aibuilderlab.kr/demo/startup-academy-report/index.html) |
+| <img src="startup-wrong-answer/screenshot.png" width="220" alt="오답지도 화면"> | **[오답지도](startup-wrong-answer)** | 학생 답만 넣으면 반 전체 오답을 지도로 칠하고 유형을 나누는 도구 | [데모](https://aibuilderlab.kr/demo/startup-wrong-answer/index.html) |
+| <img src="startup-interview-board/screenshot.png" width="220" alt="들어보니 화면"> | **[들어보니](startup-interview-board)** | 인터뷰 근거를 태그하면 가설이 검증됨·반증됨으로 바뀌는 고객 인터뷰 보드 | [데모](https://aibuilderlab.kr/demo/startup-interview-board/index.html) |
 
 ## 구조와 실행
 

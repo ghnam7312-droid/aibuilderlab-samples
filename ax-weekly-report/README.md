@@ -4,7 +4,7 @@
 
 ![금요보고 화면](screenshot.png)
 
-**데모** https://aibuilderlab.kr/demo/ax-weekly-report/
+**데모** https://aibuilderlab.kr/demo/ax-weekly-report/index.html
 
 > AI 빌더랩 직장인 AX 트랙 **1기 목표 모델 예시**입니다. 가상의 온라인몰 2주치 샘플 데이터로 동작합니다.
 

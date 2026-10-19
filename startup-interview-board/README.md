@@ -4,7 +4,7 @@
 
 ![들어보니 보드 화면](./screenshot.png)
 
-**데모:** https://aibuilderlab.kr/demo/startup-interview-board/
+**데모:** https://aibuilderlab.kr/demo/startup-interview-board/index.html
 
 > 이 저장소는 **AI 빌더랩 창업 트랙 1기 ‘목표 모델’ 예시**입니다. 수료생이 이 수준까지 만든다는 목표를 보여 주려고 만들었고, 인터뷰 대상 15명은 모두 가상 인물입니다. 데모는 샘플 데이터로 동작합니다.
 

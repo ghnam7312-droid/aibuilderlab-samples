@@ -4,7 +4,7 @@
 
 ![회의끝 화면](./screenshot.png)
 
-**데모** · https://aibuilderlab.kr/demo/career-meeting/
+**데모** · https://aibuilderlab.kr/demo/career-meeting/index.html
 
 > **알림** 이 저장소의 서비스는 AI 빌더랩 커리어 트랙 **1기 목표 모델(가상의 수강생 ‘새벽기획자’)** 의 예시 프로젝트입니다. 샘플 데이터로 동작하며, 'AI 정리'는 브라우저 안의 규칙으로 흉내 냅니다. Notion에는 직접 연결하지 않습니다.
 

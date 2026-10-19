@@ -4,7 +4,7 @@
 
 ![다음주 리포트 작업대 화면](./screenshot.png)
 
-**데모:** https://aibuilderlab.kr/demo/startup-academy-report/
+**데모:** https://aibuilderlab.kr/demo/startup-academy-report/index.html
 
 > 이 저장소는 **AI 빌더랩 창업 트랙 1기 ‘목표 모델’ 예시**입니다. 수료생이 이 수준까지 만든다는 목표를 보여 주려고 만들었고, 학원·학생·가격은 모두 가상입니다. 데모는 샘플 데이터로 동작합니다.
 

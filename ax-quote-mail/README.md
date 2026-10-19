@@ -4,7 +4,7 @@
 
 ![견적함 화면](screenshot.png)
 
-**데모** https://aibuilderlab.kr/demo/ax-quote-mail/
+**데모** https://aibuilderlab.kr/demo/ax-quote-mail/index.html
 
 > AI 빌더랩 직장인 AX 트랙 **1기 목표 모델 예시**입니다. 가상의 거래처 메일 16통으로 동작합니다.
 

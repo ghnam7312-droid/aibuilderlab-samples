@@ -4,7 +4,7 @@
 
 ![하루치 화면](./screenshot.png)
 
-**데모** · https://aibuilderlab.kr/demo/career-study-prd/
+**데모** · https://aibuilderlab.kr/demo/career-study-prd/index.html
 
 > **알림** 이 저장소의 서비스는 AI 빌더랩 커리어 트랙 **1기 목표 모델(가상의 수강생 ‘새벽기획자’)** 의 예시 프로젝트입니다. 샘플 데이터로 동작하며, 계획 생성과 코치 문구는 기획서의 v3 프롬프트를 브라우저 규칙으로 옮겨 흉내 냅니다. 스터디원 진행률의 다른 사람 값은 샘플입니다.
 

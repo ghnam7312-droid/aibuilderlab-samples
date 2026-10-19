@@ -4,7 +4,7 @@
 
 ![한장 화면](screenshot.png)
 
-**데모** https://aibuilderlab.kr/demo/ax-sales-merge/
+**데모** https://aibuilderlab.kr/demo/ax-sales-merge/index.html
 
 > AI 빌더랩 직장인 AX 트랙 **1기 목표 모델 예시**입니다. 가상의 회사(다온오피스) 샘플 데이터로 동작합니다.
 
