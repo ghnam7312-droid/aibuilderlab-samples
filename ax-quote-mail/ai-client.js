@@ -38,7 +38,7 @@
     if (typeof fetch !== "function") { state.enabled = false; state.reason = "fetch 없음"; emit(); return Promise.resolve(status()); }
     return withTimeout(fetch(ENDPOINT, { method: "GET" }), 6000)
       .then(function (r) { return r.json(); })
-      .then(function (j) { state.enabled = !!j.enabled; state.reason = j.enabled ? "" : "AI 키 미설정"; })
+      .then(function (j) { state.enabled = !!j.enabled; state.reason = j.enabled ? "" : (j.reason || "AI 키 미설정"); })
       .catch(function () { state.enabled = false; state.reason = "서버에 연결할 수 없음"; })
       .then(function () { emit(); return status(); });
   }

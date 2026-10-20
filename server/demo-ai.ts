@@ -7,12 +7,38 @@ import { createAdminClient } from "@/lib/supabase/admin";
  * - 작업(task)마다 정해진 지시문과 JSON 출력 형식이 있다. 화면은 task 이름과 입력만 보낸다.
  * - 키가 없거나 한도를 넘으면 {fallback:true}를 돌려주고, 화면은 브라우저 규칙으로 처리한다.
  * - 남용 방지: 방문자(IP 해시)당 시간당 DEMO_AI_PER_HOUR회, 전체 하루 DEMO_AI_PER_DAY회.
+ * - 월 예산: 실제 사용 토큰으로 원화 비용을 계산해 쌓고, 이번 달(한국 시간 1일 0시부터) 합계가
+ *   DEMO_AI_BUDGET_KRW(기본 10,000원)에 닿으면 그달 말까지 AI를 쓰지 않는다(규칙으로 전환).
+ *   호출 전에 '이번 호출이 최대로 쓸 수 있는 비용'까지 더해 보고 넘으면 부르지 않으므로 예산을 넘지 않는다.
  */
 
 const MODEL = process.env.DEMO_AI_MODEL || "claude-haiku-5-5";
 const PER_HOUR = Number(process.env.DEMO_AI_PER_HOUR || 40);
 const PER_DAY = Number(process.env.DEMO_AI_PER_DAY || 3000);
 const MAX_INPUT = 12000; // 입력 JSON 최대 글자 수
+
+// 요금 (USD / 100만 토큰). Haiku 5.5 기본 요금(10만 토큰 이하 요청). 모델을 바꾸면 환경변수로 맞춘다.
+const PRICE_IN = Number(process.env.DEMO_AI_PRICE_IN_USD || 0.1);
+const PRICE_OUT = Number(process.env.DEMO_AI_PRICE_OUT_USD || 0.5);
+// 환율은 넉넉하게 잡는다 (실제보다 높게 잡으면 예산이 먼저 닫혀 안전하다)
+const KRW_PER_USD = Number(process.env.DEMO_AI_KRW_PER_USD || 1500);
+export const BUDGET_KRW = Number(process.env.DEMO_AI_BUDGET_KRW || 10000);
+
+export function costKrw(inputTokens: number, outputTokens: number): number {
+  return ((inputTokens * PRICE_IN + outputTokens * PRICE_OUT) / 1_000_000) * KRW_PER_USD;
+}
+
+/** 이번 달 시작 (한국 시간 1일 0시) */
+export function monthStartKst(now = new Date()): Date {
+  const k = new Date(now.getTime() + 9 * 3600_000);
+  return new Date(Date.UTC(k.getUTCFullYear(), k.getUTCMonth(), 1) - 9 * 3600_000);
+}
+
+/** 이번 달 쓴 금액(원) */
+export async function monthSpentKrw(): Promise<number> {
+  const { data } = await createAdminClient().rpc("demo_ai_month_cost", { since: monthStartKst().toISOString() });
+  return Number(data ?? 0);
+}
 
 export function demoAiEnabled(): boolean {
   return !!process.env.ANTHROPIC_API_KEY && process.env.DEMO_AI_OFF !== "true";
@@ -112,6 +138,9 @@ export async function runDemoTask(taskName: string, input: unknown, hash: string
   const payload = JSON.stringify(input ?? {});
   if (payload.length > MAX_INPUT) return { ok: false, fallback: true, reason: "입력이 너무 깁니다" };
   if (!(await usageOk(hash))) return { ok: false, fallback: true, reason: "사용량 한도" };
+  // 월 예산: 입력은 글자 수로 넉넉히(글자당 1토큰) 어림하고, 출력은 최대치로 잡아 더해 본다
+  const worst = costKrw(Math.ceil((payload.length + task.system.length + task.shape.length) * 1.0), task.maxTokens);
+  if ((await monthSpentKrw()) + worst > BUDGET_KRW) return { ok: false, fallback: true, reason: "이번 달 AI 예산 소진" };
 
   const t0 = Date.now();
   const db = createAdminClient();
@@ -134,8 +163,18 @@ export async function runDemoTask(taskName: string, input: unknown, hash: string
     const j = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(j?.error?.message || `HTTP ${res.status}`);
     const text = (j.content ?? []).map((c: { text?: string }) => c.text ?? "").join("");
-    const data = firstJson(text);
-    await db.from("demo_ai_usage").insert({ ip_hash: hash, task: taskName, ok: true });
+    const inTok = Number(j.usage?.input_tokens ?? 0);
+    const outTok = Number(j.usage?.output_tokens ?? 0);
+    const cost = costKrw(inTok, outTok);
+    let data: unknown;
+    try {
+      data = firstJson(text);
+    } catch (e) {
+      // 응답은 받았으니 비용은 기록한다
+      await db.from("demo_ai_usage").insert({ ip_hash: hash, task: taskName, ok: false, input_tokens: inTok, output_tokens: outTok, cost_krw: cost });
+      return { ok: false, fallback: true, reason: e instanceof Error ? e.message : "형식 오류" };
+    }
+    await db.from("demo_ai_usage").insert({ ip_hash: hash, task: taskName, ok: true, input_tokens: inTok, output_tokens: outTok, cost_krw: cost });
     return { ok: true, mode: "ai", model: MODEL, data, ms: Date.now() - t0 };
   } catch (e) {
     await db.from("demo_ai_usage").insert({ ip_hash: hash, task: taskName, ok: false });
