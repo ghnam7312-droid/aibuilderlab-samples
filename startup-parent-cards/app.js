@@ -8,6 +8,9 @@
  */
 (function () {
   "use strict";
+
+  /** 해 볼 말: 문장에 따옴표가 이미 있으면(Claude가 붙인 경우) 겉 따옴표를 또 붙이지 않는다 */
+  function quoteSay(t) { return /["“”]/.test(t || "") ? esc(t) : `“${esc(t)}”`; }
   const L = window.Jibeuro;
   const STORE_KEY = "startup-parent-cards-v1";
   const TRY_SAMPLE = {
@@ -115,7 +118,7 @@
   function slotHtml(id, label) {
     const l = result.lines[id];
     if (!l) return `<div class="slot empty-slot"><h3>${label}</h3><p>원고에서 고를 문장이 없어요.</p></div>`;
-    const text = id === "say" ? `“${esc(l.text)}”` : esc(l.text);
+    const text = id === "say" ? quoteSay(l.text) : esc(l.text);
     return `<div class="slot s-${id}"><h3>${label}${l.by === "ai" ? `<span class="by">Claude</span>` : ""}</h3><p>${text}</p><div class="refs">${refBtns(l)}<span class="okmark">근거 일치 ${Math.round(l.check.score * 100)}%</span></div></div>`;
   }
   function stopHtml() {
@@ -229,7 +232,7 @@
     const w = week();
     $("qWeek").textContent = w.replace("-W", "년 ") + "주차";
     const list = st.queue.filter((q) => q.week === w);
-    $("queue").innerHTML = list.map((q) => `<li><div><b>${esc(q.title)}</b><span>“${esc(q.say)}”</span></div><em>${q.mode === "ai" ? "Claude" : "규칙"}</em><button type="button" class="x" data-del="${esc(q.lectureId)}" aria-label="${esc(q.title)} 카드 빼기">빼기</button></li>`).join("") || `<li class="none">아직 담은 카드가 없어요.</li>`;
+    $("queue").innerHTML = list.map((q) => `<li><div><b>${esc(q.title)}</b><span>${quoteSay(q.say)}</span></div><em>${q.mode === "ai" ? "Claude" : "규칙"}</em><button type="button" class="x" data-del="${esc(q.lectureId)}" aria-label="${esc(q.title)} 카드 빼기">빼기</button></li>`).join("") || `<li class="none">아직 담은 카드가 없어요.</li>`;
   }
   $("queue").addEventListener("click", (e) => {
     const b = e.target.closest("[data-del]"); if (!b) return;
