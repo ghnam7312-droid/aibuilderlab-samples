@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>적어줌 · 미팅 메모 → CRM</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='3' y='4' width='22' height='28' rx='4' fill='%230B8577'/%3E%3Crect x='17' y='12' width='16' height='20' rx='3' fill='%23143A36'/%3E%3C/svg%3E">
+<meta name="description" content="미팅 메모를 붙여 넣으면 CRM 칸(고객사·단계·금액·날짜·다음 할 일)이 채워지고, 금액과 날짜는 사람이 원문과 대조해야 저장되는 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=sales">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 메모 한 장이 CRM 칸으로 들어간다 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="3" y="4" width="22" height="28" rx="4" fill="#0B8577"/>
+      <path d="M8 12h12M8 17h9" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+      <rect x="17" y="14" width="16" height="18" rx="3" fill="#143A36"/>
+      <path d="M21 20h8M21 25h8" stroke="#7FE0CF" stroke-width="2.4" stroke-linecap="round"/>
+    </svg>
+    <div><strong>적어줌</strong><span>미팅 메모를 붙여 넣으면 CRM 칸이 채워져요</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="goal" title="1기 목표치">목표 · CRM 입력 <s>하루 50분</s> <b>10분</b> · 팀 5명</span>
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="split" aria-label="미팅 메모 옮기기">
+    <!-- 왼쪽: 미팅 메모 -->
+    <div class="pane src-pane">
+      <div class="pane-h">
+        <h1>미팅 메모</h1>
+        <label class="owner">영업 담당
+          <select id="owner"></select>
+        </label>
+      </div>
+      <div class="samples" role="group" aria-label="예시 메모">
+        <span>예시</span>
+        <button type="button" data-sample="0" aria-pressed="false">가람식품 · 금액 2개</button>
+        <button type="button" data-sample="1" aria-pressed="false">하늘물류 · 억 단위</button>
+        <button type="button" data-sample="2" aria-pressed="false">청솔제지 · 계약</button>
+      </div>
+      <label class="sr" for="memo">미팅 메모 내용</label>
+      <textarea id="memo" spellcheck="false"></textarea>
+      <div class="found" id="found" aria-label="메모에서 찾은 숫자"></div>
+      <div class="src-foot">
+        <span id="memoInfo"></span>
+        <button class="primary" id="run" type="button">CRM 칸 채우기</button>
+      </div>
+    </div>
+
+    <!-- 오른쪽: 검토 화면 -->
+    <div class="pane out-pane">
+      <div class="pane-h"><h2 class="t">검토 화면</h2><span id="modeChip"></span></div>
+      <p class="meta">금액·날짜는 AI가 잘못 옮길 수 있어요. <b>원문과 맞음</b>을 눌러야 저장돼요.</p>
+      <form id="form" class="form" novalidate></form>
+      <div class="save-row">
+        <p class="why" id="why" aria-live="polite"></p>
+        <button class="primary" id="save" type="button">CRM에 저장</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="crm" aria-labelledby="crmTitle">
+    <div class="crm-h">
+      <div>
+        <h2 id="crmTitle">고객 목록 <small>CRM</small></h2>
+        <p id="crmInfo"></p>
+      </div>
+      <div class="crm-tools">
+        <label class="sr" for="fStage">단계로 거르기</label>
+        <select id="fStage"></select>
+        <label class="sr" for="fOwner">담당으로 거르기</label>
+        <select id="fOwner"></select>
+        <label class="sr" for="fQ">검색</label>
+        <input id="fQ" type="search" placeholder="고객사·내용 검색">
+        <button class="dark" id="csv" type="button">CSV 내보내기</button>
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="crm-t" id="crmTable">
+        <thead><tr><th>고객사</th><th>단계</th><th class="r">예상 금액</th><th>미팅일</th><th>다음 연락</th><th>다음 할 일</th><th>담당</th><th><span class="sr">지우기</span></th></tr></thead>
+        <tbody id="crmBody"></tbody>
+      </table>
+    </div>
+    <p class="fine">이 데모의 CRM은 브라우저 안의 고객 목록이에요(외부 CRM에 연결하지 않아요). CSV는 엑셀·구글 시트에서 바로 열리고, 고객 연락처(전화·메일)는 화면·저장·내보내기에서 모두 가려요.</p>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 직장인 AX 트랙 · 미팅기록왕 목표 모델 · 등장하는 회사와 사람은 모두 가상입니다</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

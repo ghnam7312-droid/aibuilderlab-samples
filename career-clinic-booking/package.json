@@ -1,0 +1,11 @@
+{
+  "name": "cheoncheon-yeyak",
+  "version": "1.0.0",
+  "private": true,
+  "description": "천천예약 — 동네 병원 예약 화면 리디자인 시제품 + 사용성 테스트 기록 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

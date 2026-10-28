@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>효과먼저 · 기관 제안서</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='10' fill='%234C45D6'/%3E%3Cpath d='M9 25l6-6 4 4 8-9' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta name="description" content="강사 소개 위주였던 부모 교육 제안서를 기관이 얻는 효과(참여율·만족도·운영 부담) 중심으로 다시 쓰고, 연간 패키지 가격과 기관 영업 현황을 함께 관리하는 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=parenting-edu">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 오르는 선 = 기관이 얻는 효과를 먼저 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect width="36" height="36" rx="10" fill="#4C45D6"/>
+      <path d="M8 26l6.5-6.5 4.5 4.5 9-10" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="28" cy="14" r="2.6" fill="#C9C5FF"/>
+    </svg>
+    <div><strong>효과먼저</strong><span>강사 소개 말고, 기관이 얻는 것부터</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <!-- 기관 영업 현황 -->
+  <section class="pipe" aria-labelledby="pipeH">
+    <div class="pipe-h">
+      <h2 id="pipeH">기관 제안 현황</h2>
+      <p id="pipeSum"></p>
+    </div>
+    <div class="orgs" id="orgs" role="group" aria-label="기관 고르기"></div>
+  </section>
+
+  <section class="split">
+    <!-- 왼쪽: 기관 · 패키지 · 처음 쓴 제안서 -->
+    <div class="pane left">
+      <div class="org-h">
+        <div><h1 id="orgName"></h1><p class="sub" id="orgMeta"></p></div>
+        <label class="st-sel"><span class="sr">진행 상태</span><select id="status"></select></label>
+      </div>
+
+      <h3>인터뷰에서 들은 말</h3>
+      <ul class="quotes" id="quotes"></ul>
+
+      <div class="grid2">
+        <label class="lbl">지금 참여율 <span class="unit"><input type="number" id="attendNow" min="0" max="100"> %</span></label>
+        <label class="lbl">연간 예산 <span class="unit"><input type="number" id="budget" min="0" max="5000" step="10"> 만 원</span></label>
+      </div>
+
+      <h3>연간 패키지</h3>
+      <div class="pk">
+        <div class="lbl">회차 <div class="seg" id="sessions" role="group" aria-label="회차"></div></div>
+        <div class="grid2">
+          <label class="lbl">회당 강의료 <span class="unit"><input type="number" id="per" min="0" max="200"> 만 원</span></label>
+          <label class="lbl">연간 계약 할인 <span class="unit"><input type="number" id="disc" min="0" max="40"> %</span></label>
+        </div>
+        <label class="lbl" for="attendTarget">목표 참여율 <b id="atOut"></b></label>
+        <input type="range" id="attendTarget" min="40" max="90" step="5">
+        <p class="price" id="price" aria-live="polite"></p>
+      </div>
+
+      <h3>처음 쓴 제안서 점검</h3>
+      <label class="sr" for="draft">처음 쓴 제안서</label>
+      <textarea id="draft" rows="5"></textarea>
+      <div id="lint" aria-live="polite"></div>
+      <button class="primary" id="run" type="button">기관 효과 중심으로 다시 쓰기</button>
+    </div>
+
+    <!-- 오른쪽: 다시 쓴 제안서 -->
+    <div class="pane right" id="out" aria-live="polite"></div>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 창업 트랙 · 놀이처방전 목표 모델 · 다시 쓰기 Claude API (실패 시 규칙 템플릿) · 기관·숫자는 모두 가상</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

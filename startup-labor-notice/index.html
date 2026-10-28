@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>안내한장 · 법령 개정 고객사 안내문</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Cpath d='M8 3h14l7 7v21a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z' fill='%236D3FC0'/%3E%3Cpath d='M11 18l4 4 9-9' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="description" content="법령 개정 하나를 고객사별 안내문으로 바꾸고, 초안의 시행일·금액을 공식 고시 정보와 대조한 뒤 근거 링크를 붙여 발송 대기에 넣는 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=labor-office">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 접힌 귀퉁이가 있는 안내문 한 장 + 대조 끝 표시 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <path d="M8 3h14l7 7v21a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" fill="#6D3FC0"/>
+      <path d="M22 3v5a2 2 0 0 0 2 2h5z" fill="#B9A3E6"/>
+      <path d="M11 19l4 4 9-9" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div><strong>안내한장</strong><span>개정 하나, 고객사마다 맞춘 안내문 한 장</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <div class="goal">
+    <p><b>목표치</b> 안내문 작성 고객사당 <s>30분</s> → <em>5분</em> · 고객사 <em>22곳</em></p>
+    <p class="sample-note" role="note">화면의 개정 내용·금액·시행일·링크는 모두 <b>샘플 값</b>이에요. 실제 수치는 공식 고시에서 확인합니다.</p>
+  </div>
+
+  <div class="layout">
+    <section class="col-a" aria-labelledby="amTitle">
+      <h2 id="amTitle">개정 항목</h2>
+      <div class="amends" id="amends" role="group" aria-label="개정 항목 고르기"></div>
+      <div class="gazette" id="gazette"></div>
+    </section>
+
+    <section class="col-b" aria-labelledby="clTitle">
+      <div class="pane-h">
+        <h2 id="clTitle">고객사</h2>
+        <label class="only"><input type="checkbox" id="onlyTarget" checked> 안내 대상만</label>
+      </div>
+      <p class="prog" id="prog"></p>
+      <div class="clients" id="clients" role="group" aria-label="고객사 고르기"></div>
+    </section>
+
+    <section class="paper" aria-labelledby="drTitle">
+      <div class="pane-h"><h2 id="drTitle">안내문 초안</h2><span id="modeChip"></span></div>
+      <p class="to" id="to"></p>
+      <label class="lbl" for="subject">제목</label>
+      <input id="subject" autocomplete="off" maxlength="80">
+      <label class="lbl" for="draft">본문</label>
+      <textarea id="draft" spellcheck="false" rows="15"></textarea>
+      <div class="checks" id="checks" aria-live="polite"></div>
+      <label class="confirm"><input type="checkbox" id="confirm"> <span>고시 원문을 열어 <b>시행일·금액</b>을 대조했어요 <a id="openLink" href="#" target="_blank" rel="noopener noreferrer">고시 열기</a></span></label>
+      <div class="dr-tools">
+        <button class="ghost-btn" id="aiDraft" type="button">Claude로 다시 쓰기</button>
+        <button class="ghost-btn" id="ruleDraft" type="button">틀 초안으로</button>
+        <button class="primary" id="enqueue" type="button">발송 대기에 넣기</button>
+      </div>
+    </section>
+  </div>
+
+  <section class="queue" aria-labelledby="qTitle">
+    <div class="pane-h">
+      <h2 id="qTitle">발송 대기 <span class="n" id="qN">0</span></h2>
+      <div class="q-tools">
+        <button class="ghost-btn" id="export" type="button">대기 목록 내려받기 (.txt)</button>
+      </div>
+    </div>
+    <div id="queue"></div>
+    <p class="fine">이 데모는 실제로 보내지 않아요. 실제 버전은 사람이 대조 확인한 안내문만 메일로 보냅니다. 내려받은 파일의 담당자 이름은 가려 둡니다.</p>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 스타트업 트랙 · 노무한눈 목표 모델 · 초안 Claude API (실패 시 틀 초안) · 발송 전 공식 고시 대조</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

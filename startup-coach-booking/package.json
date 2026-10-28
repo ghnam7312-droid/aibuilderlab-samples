@@ -1,0 +1,11 @@
+{
+  "name": "hanjari-coach-booking",
+  "version": "1.0.0",
+  "private": true,
+  "description": "한자리 — 상담 예약 · 모의 결제 · 안내 메일 자동화 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

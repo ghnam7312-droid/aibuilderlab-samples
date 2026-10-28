@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>두문장 · 광고 문구 A/B 테스트</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='2' y='6' width='19' height='14' rx='4' fill='%23B9B2A8'/%3E%3Crect x='15' y='16' width='19' height='14' rx='4' fill='%23E04F2E'/%3E%3C/svg%3E">
+<meta name="description" content="행사 홍보 문구 두 개를 나눠 보여 주고, 새로고침 중복을 뺀 클릭률로 이긴 문구만 남기는 A/B 테스트 도우미">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=marketer">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 겹쳐 놓은 문구 카드 두 장, 앞에 나온 쪽이 이긴 문구 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="2" y="6" width="19" height="14" rx="4" fill="#B9B2A8"/>
+      <rect x="15" y="16" width="19" height="14" rx="4" fill="#E04F2E"/>
+      <path d="M20 23.5l3 3 6-6.5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div><strong>두문장</strong><span>두 문구를 겨뤄 숫자로 이긴 쪽만 남겨요</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <!-- 요약: 끝난 대결 기준 처음 문구 vs 남긴 문구 -->
+  <section class="kpis" id="kpis" aria-label="요약"></section>
+
+  <section class="split">
+    <!-- 왼쪽: 대결 목록 -->
+    <nav class="pane list-pane" aria-label="대결 목록">
+      <div class="pane-h">
+        <h1>대결 목록</h1>
+        <div class="seg" role="group" aria-label="거르기">
+          <button type="button" data-f="all" aria-pressed="true">전체</button>
+          <button type="button" data-f="run" aria-pressed="false">진행 중</button>
+          <button type="button" data-f="done" aria-pressed="false">끝남</button>
+        </div>
+      </div>
+      <ul class="tests" id="tests"></ul>
+      <div class="list-foot">
+        <button class="ghost-btn" id="csv" type="button">결과 CSV 내려받기</button>
+      </div>
+    </nav>
+
+    <!-- 오른쪽: 선택한 대결 -->
+    <div class="pane detail" id="detail" aria-live="polite"></div>
+  </section>
+
+  <section class="lower">
+    <!-- 클릭 시험: 방문자가 되어 눌러 보기 -->
+    <div class="card-box sim" aria-labelledby="simTitle">
+      <div class="box-h"><h2 id="simTitle">방문자가 되어 눌러 보기</h2><span class="tiny" id="simFor"></span></div>
+      <p class="tip">새 방문자는 A·B 중 하나에 배정돼요. 같은 방문자가 새로고침하면 다시 기록이 들어오지만 30분 안의 같은 기록은 세지 않아요.</p>
+      <div class="sim-grid">
+        <div class="phone" id="phone"></div>
+        <div>
+          <div class="sim-btns">
+            <button class="ghost-btn" id="simNew" type="button">새 방문자</button>
+            <button class="primary sm" id="simClick" type="button">링크 누르기</button>
+            <button class="ghost-btn" id="simRefresh" type="button">새로고침</button>
+          </div>
+          <ol class="log" id="log" aria-label="최근 기록"></ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- 다음 대결 후보 -->
+    <div class="card-box next" aria-labelledby="nextTitle">
+      <div class="box-h"><h2 id="nextTitle">다음 대결 후보</h2><span id="sugMode"></span></div>
+      <p class="tip">남긴 문구에 맞설 새 문구를 만들어요. 후보는 바로 쓰지 않고 다음 대결의 B로만 올라가요.</p>
+      <button class="dark" id="suggest" type="button">후보 3개 만들기</button>
+      <ul class="cands" id="cands"></ul>
+      <p class="tiny" id="sugNote"></p>
+    </div>
+  </section>
+  <p class="fine">목표치(1기): 문구 6쌍 테스트, 클릭률 1.8% → 3.1%, 문구 작성 2시간 → 20분. 판정은 두 비율 z검정(유의수준 5%)과 문구별 노출 300회 이상일 때만 내려요. 방문자는 임의 번호로만 기록하고 내보내기에는 집계만 들어가요.</p>
+</main>
+
+<footer class="foot">AI 빌더랩 커리어 트랙 · 전환율장인 목표 모델 · 후보 문구 Claude API (실패 시 규칙) · 집계는 중복 제외</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

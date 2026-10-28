@@ -1,0 +1,11 @@
+{
+  "name": "yeoldukan-labor-check",
+  "version": "1.0.0",
+  "private": true,
+  "description": "열두칸 — 소상공인 노무 진단 상품 기획 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

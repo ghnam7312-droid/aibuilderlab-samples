@@ -1,0 +1,11 @@
+{
+  "name": "sasilmeonjeo-labor-intake",
+  "version": "1.0.0",
+  "private": true,
+  "description": "사실먼저 — 노무 상담 사전 접수 · 사실관계 정리 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>이어감 · 교육 후속 관리 상품 기획</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='2' y='2' width='32' height='32' rx='16' fill='%23D9572B'/%3E%3Cpath d='M9 22c3-8 6-8 9 0s6 8 9 0' fill='none' stroke='%23fff' stroke-width='3.2' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="description" content="담당자 인터뷰를 근거로 3개월 교육 후속 관리 상품의 구성·예시 가격을 짜고, '효과 보장' 대신 측정 지표와 방법을 약속하는 제안 문구를 만드는 도구 (AI 빌더랩 1기 목표 모델 예시)">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=corp-trainer">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 한 번으로 끝나지 않고 이어지는 물결 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="2" y="2" width="32" height="32" rx="16" fill="#D9572B"/>
+      <path d="M9 22c3-8 6-8 9 0s6 8 9 0" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/>
+    </svg>
+    <div><strong>이어감</strong><span>강의 뒤 3개월을 상품으로</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <p class="goal" aria-label="1기 목표치"><b>1기 목표치</b><span>담당자 8명 인터뷰</span><span>3개월 후속 관리 상품 4곳 계약</span></p>
+
+  <div class="grid">
+    <div class="col">
+      <!-- ① 인터뷰 근거 -->
+      <section class="card" aria-labelledby="ivTitle">
+        <div class="card-h"><h2 id="ivTitle"><span class="step">1</span>담당자 인터뷰</h2><span class="meta" id="ivMeta"></span></div>
+        <div id="needs" class="needs"></div>
+        <div class="ivs" id="ivs" role="list"></div>
+      </section>
+
+      <!-- ② 상품 구성 · 가격 -->
+      <section class="card" aria-labelledby="pkTitle">
+        <div class="card-h"><h2 id="pkTitle"><span class="step">2</span>3개월 구성 · 예시 가격</h2>
+          <label class="hc">인원 <input id="hc" type="number" min="1" max="999" inputmode="numeric" aria-label="교육 인원"> 명</label></div>
+        <ul class="mods" id="mods"></ul>
+        <div class="cov" id="cov" aria-live="polite"></div>
+        <div class="price" id="price" aria-live="polite"></div>
+      </section>
+    </div>
+
+    <!-- ③ 제안 문구 -->
+    <section class="card out" aria-labelledby="cpTitle">
+      <div class="card-h"><h2 id="cpTitle"><span class="step">3</span>제안 문구</h2><span class="meta" id="cpMeta"></span></div>
+      <label class="lbl" for="draft">초안 <span>보장·단정 표현을 바로 찾아 표시해요</span></label>
+      <textarea id="draft" rows="4"></textarea>
+      <ul class="flags" id="flags" aria-live="polite"></ul>
+      <div class="row">
+        <button class="ghost-btn" id="fix" type="button">걸린 문장 측정 약속으로 고치기</button>
+        <button class="primary" id="run" type="button">제안 문구 만들기</button>
+      </div>
+      <div id="copy" aria-live="polite"></div>
+      <div class="review">
+        <label><input type="checkbox" id="reviewed"> 사람이 최종 문구를 확인했어요</label>
+        <p>표시·광고 문구가 괜찮은지는 AI나 검사기가 판단하지 않아요. 검사기는 후보만 표시합니다. 보내기 전 담당자(필요하면 법무 담당)가 확인하세요.</p>
+      </div>
+      <div class="out-tools">
+        <button class="ghost-btn" id="copyBtn" type="button">제안서 복사</button>
+        <button class="dark" id="print" type="button">인쇄</button>
+      </div>
+      <details class="md" id="mdBox" hidden><summary>복사한 제안서 보기</summary><pre id="mdOut"></pre></details>
+    </section>
+  </div>
+  <p class="fine">가격은 예시이며 실제 판매 조건이 아닙니다(부가세 별도). 인터뷰 담당자는 모두 가상이고, 회사 이름 대신 업종으로 적었습니다.</p>
+</main>
+
+<footer class="foot">AI 빌더랩 창업 트랙 · 교육효과측정소 목표 모델 · 제안 문구 Claude API (실패 시 규칙) · 문구 검사는 브라우저에서</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>한자리 · 상담 예약 자동화</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='3' y='6' width='30' height='27' rx='7' fill='%23D9542B'/%3E%3Crect x='3' y='6' width='30' height='8' rx='4' fill='%23A63A18'/%3E%3Ccircle cx='18' cy='23' r='5' fill='%23fff'/%3E%3C/svg%3E">
+<meta name="description" content="상담 예약 폼, 모의 결제, 안내 메일 자동 발송을 한곳에서. 메일은 보내는 순간 결제 상태를 다시 확인해 취소된 예약에는 가지 않는다.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=career-coach">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 달력 위에 잡아 둔 한 자리 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="3" y="6" width="30" height="27" rx="7" fill="#D9542B"/>
+      <rect x="3" y="6" width="30" height="8" rx="4" fill="#A63A18"/>
+      <circle cx="18" cy="23" r="5" fill="#fff"/>
+    </svg>
+    <div><strong>한자리</strong><span>예약 · 결제 · 안내 메일을 한자리에서</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <div class="top-row">
+    <ul class="goals" aria-label="1기 목표치">
+      <li><b>30분 → 5분</b><span>하루 예약 응대</span></li>
+      <li><b>22% → 6%</b><span>노쇼</span></li>
+      <li class="g-note">1기 목표치</li>
+    </ul>
+    <!-- 시뮬레이션 시계: 앞으로 돌리면 그 사이 보낼 메일이 처리된다 -->
+    <div class="clock" role="group" aria-label="시뮬레이션 시계">
+      <span>지금 <b id="now"></b></span>
+      <button type="button" class="ghost-btn" data-step="6">+6시간</button>
+      <button type="button" class="ghost-btn" data-step="24">+1일</button>
+      <button type="button" class="link-btn" id="realNow">실제 시각</button>
+    </div>
+  </div>
+
+  <section class="grid">
+    <form class="panel" id="form" autocomplete="off" aria-labelledby="formH" novalidate>
+      <h1 id="formH">예약 받기 <small>고객이 보는 폼</small></h1>
+      <fieldset class="prods" id="prods"><legend class="fld">상품</legend></fieldset>
+      <fieldset class="slots-f"><legend class="fld">시간 <small>회색은 이미 잡힌 자리</small></legend><div class="slots" id="slots"></div></fieldset>
+      <div class="two">
+        <div><label class="fld" for="name">이름</label><input type="text" id="name" required></div>
+        <div><label class="fld" for="email">이메일</label><input type="email" id="email" required></div>
+      </div>
+      <label class="fld" for="note">상담에서 다루고 싶은 것 (선택)</label>
+      <input type="text" id="note" maxlength="200">
+      <p class="err" id="err" role="alert"></p>
+      <button class="primary" type="submit">예약하고 결제 링크 받기</button>
+    </form>
+
+    <section class="panel" aria-labelledby="listH">
+      <div class="panel-h"><h2 id="listH">예약 현황</h2><div class="filters" id="filters" role="group" aria-label="상태 거르기"></div></div>
+      <div class="stats" id="stats"></div>
+      <ul class="bookings" id="bookings"></ul>
+    </section>
+
+    <section class="panel outbox-p" aria-labelledby="boxH">
+      <div class="panel-h"><h2 id="boxH">자동 안내 메일</h2><span class="mode" id="mailMode" data-mode="rule">규칙 기반</span></div>
+      <p class="tip">보낼 시각이 되면 그 순간의 결제 상태를 다시 보고 보내요. 취소·만료된 예약은 <b>보류</b>로 남아요.</p>
+      <ol class="outbox" id="outbox"></ol>
+      <article class="mail" id="mail" aria-live="polite"></article>
+    </section>
+  </section>
+</main>
+
+<dialog class="paydlg" id="payDlg" aria-labelledby="payH">
+  <form method="dialog">
+    <p class="mock">모의 결제 · 실제로 돈이 오가지 않아요</p>
+    <h2 id="payH">결제하기</h2>
+    <div id="payBody"></div>
+    <div class="pay-btns">
+      <button class="primary" value="ok" type="submit">결제 승인</button>
+      <button class="ghost-btn" value="fail" type="submit">승인 실패 시험</button>
+      <button class="link-btn" value="close" type="submit">닫기</button>
+    </div>
+  </form>
+</dialog>
+
+<footer class="foot">AI 빌더랩 창업 트랙 · 이직나침반 목표 모델 · 확정 메일 문장 Claude API (실패 시 규칙) · 결제는 모의 상태 전환, 실제 버전은 결제 링크 + 메일 자동 발송</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

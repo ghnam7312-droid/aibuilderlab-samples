@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>값찾기 · 인터뷰와 가격 실험</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='10' fill='%231F7A4D'/%3E%3Cpath d='M9 26V19M16 26V13M23 26V16' stroke='%23fff' stroke-width='3.4' stroke-linecap='round'/%3E%3Ccircle cx='16' cy='8.5' r='2.6' fill='%23FFD15C'/%3E%3C/svg%3E">
+<meta name="description" content="유도형 인터뷰 질문을 지난 행동 질문으로 바꾸고, 가격 3안에 대한 실제 선결제로 가격을 정하는 1인 창업자용 정리 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=english-tutor">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 세 막대(가격 3안) 중 가운데 위의 점 = 고른 가격 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect width="36" height="36" rx="10" fill="#1F7A4D"/>
+      <path d="M9 26V19M16 26V13M23 26V16" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/>
+      <circle cx="16" cy="8.5" r="2.6" fill="#FFD15C"/>
+    </svg>
+    <div><strong>값찾기</strong><span>말이 아니라 결제로 가격을 정해요</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="split" aria-label="인터뷰 질문지와 가격 실험">
+    <div class="pane q-pane">
+      <div class="pane-h">
+        <h1>인터뷰 질문지</h1>
+        <span class="mode" id="mode" data-mode="rule">규칙 기반</span>
+      </div>
+      <p class="tip">‘쓰실 건가요?’ 같은 질문에는 누구나 ‘네’라고 해요. 지난번에 <b>실제로 한 일</b>을 물어야 답이 맞아요.</p>
+      <div class="q-sum" id="qSum"></div>
+      <ol class="qs" id="qs"></ol>
+      <form class="q-add" id="qAdd">
+        <label class="sr" for="qNew">질문 추가</label>
+        <input id="qNew" placeholder="질문을 추가하세요 (예: 이런 서비스가 있으면 쓰실 건가요?)" autocomplete="off">
+        <button class="ghost-btn" type="submit">추가</button>
+      </form>
+      <div class="q-foot">
+        <button class="ghost-btn" id="fixAll" type="button">유도형 모두 바꾸기</button>
+        <button class="primary" id="check" type="button">질문지 검사</button>
+      </div>
+    </div>
+
+    <div class="pane p-pane">
+      <div class="pane-h">
+        <h2>가격 3안 실험</h2>
+        <div class="seg" role="group" aria-label="결제로 셀 반응">
+          <button type="button" data-basis="paid" aria-pressed="true">선결제만</button>
+          <button type="button" data-basis="interest" aria-pressed="false">관심까지</button>
+        </div>
+      </div>
+      <p class="tip">한 사람에게 한 가격만 보여 주고, 예약금 1만 원을 낸 사람만 결제로 셌어요. ‘관심까지’를 누르면 말로 한 ‘쓸게요’도 세요.</p>
+      <div class="opts" id="opts"></div>
+      <div class="verdict" id="verdict" aria-live="polite"></div>
+      <div class="pv" id="pv"></div>
+    </div>
+  </section>
+
+  <section class="people" aria-labelledby="pTitle">
+    <div class="people-h">
+      <div>
+        <h2 id="pTitle">인터뷰 12명</h2>
+        <p>이름 대신 번호로 기록해요. 반응을 누르면 <b>거절 → 관심 → 선결제</b> 순서로 바뀌고 위 결과가 다시 계산돼요.</p>
+      </div>
+      <div class="tools">
+        <label class="sr" for="seg">구분 거르기</label>
+        <select id="seg"><option value="all">전체</option><option value="직장인">직장인</option><option value="대학생">대학생</option><option value="학부모">학부모</option></select>
+        <button class="ghost-btn" id="csv" type="button">CSV 내려받기</button>
+        <button class="dark" id="md" type="button">투자 설명용 요약 복사</button>
+      </div>
+    </div>
+    <div class="tbl-wrap"><table class="pt" id="pt"></table></div>
+    <details class="md" id="mdBox" hidden><summary>복사한 내용 보기</summary><pre id="mdOut"></pre></details>
+    <p class="fine">인터뷰 대상·금액·반응은 모두 가상의 예시예요. 결과 ‘월 3만 원 확정’은 1기 목표치이며, 12명은 방향을 보는 숫자라 첫 달 결제로 다시 확인하는 것을 전제로 해요.</p>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 창업 트랙 · 스피킹메이트 목표 모델 · 질문 검사 Claude API (실패 시 규칙) · 가격 집계는 브라우저 안에서만</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

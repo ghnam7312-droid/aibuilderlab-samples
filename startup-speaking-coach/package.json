@@ -1,0 +1,11 @@
+{
+  "name": "malhaebom",
+  "version": "1.0.0",
+  "private": true,
+  "description": "말해봄 — 영어 말하기 숙제 첨삭, 고칠 점은 한 번에 2개 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

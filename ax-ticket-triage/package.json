@@ -1,0 +1,11 @@
+{
+  "name": "cheotdap",
+  "version": "1.0.0",
+  "private": true,
+  "description": "첫답 — 고객 문의 분류 · 담당 배정 · 답변 초안, 환불·보상은 사람에게 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

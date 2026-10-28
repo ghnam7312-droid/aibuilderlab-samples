@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>프롬서랍 · 팀 AI 사용 가이드</title>
+<meta name="description" content="넣으면 안 되는 정보 목록을 맨 앞에 두고, 팀 공용 프롬프트 12개를 꺼내 채우기 전에 검사하고, 결과물을 검수표로 확인하는 팀 AI 사용 가이드">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='3' y='5' width='30' height='27' rx='5' fill='%23B4500C'/%3E%3Cpath d='M3 18h30' stroke='%23fff' stroke-width='2'/%3E%3Crect x='14' y='10' width='8' height='3' rx='1.5' fill='%23fff'/%3E%3Crect x='14' y='23' width='8' height='3' rx='1.5' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=marketing-team">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 서랍 두 칸 — 팀이 같이 꺼내 쓰는 프롬프트 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="3" y="5" width="30" height="27" rx="5" fill="#B4500C"/>
+      <path d="M3 18h30" stroke="#fff" stroke-width="2"/>
+      <rect x="14" y="10" width="8" height="3" rx="1.5" fill="#fff"/>
+      <rect x="14" y="23" width="8" height="3" rx="1.5" fill="#FFD6B0"/>
+    </svg>
+    <div><strong>프롬서랍</strong><span>팀 6명이 같은 방식으로 AI를 쓰는 가이드</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="goal" title="1기 목표치">목표 공용 프롬프트 <b>12개</b> · 검수표 <b>1장</b></span>
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <!-- 가이드 맨 앞: 넣으면 안 되는 정보 -->
+  <section class="rule" aria-labelledby="ruleTitle">
+    <div class="rule-h">
+      <span class="no">1</span>
+      <div>
+        <h1 id="ruleTitle">AI에 넣으면 안 되는 정보</h1>
+        <p>프롬프트와 붙이는 자료 모두에 해당합니다. 아래에서 복사할 때 자동으로 검사합니다.</p>
+      </div>
+    </div>
+    <ul class="ban" id="ban"></ul>
+    <p class="human-note"><b>AI에 판단을 맡기지 않는 일</b> 표시광고·약관 위반 여부, 효능·부작용, 제품 안전 — 초안은 써도 되지만 결론은 법무·품질 담당자가 냅니다.</p>
+  </section>
+
+  <div class="grid">
+    <section class="panel lib" aria-labelledby="libTitle">
+      <h2 id="libTitle">공용 프롬프트 <small id="libCount"></small></h2>
+      <label class="sr" for="q">프롬프트 찾기</label>
+      <input id="q" type="search" placeholder="찾기: 답글, 리포트, 카피…" autocomplete="off">
+      <div class="cats" role="group" aria-label="분류" id="cats"></div>
+      <ul class="plist" id="plist"></ul>
+    </section>
+
+    <section class="panel work" aria-labelledby="workTitle">
+      <div class="work-h">
+        <div>
+          <p class="kicker" id="workMeta"></p>
+          <h2 id="workTitle"></h2>
+        </div>
+      </div>
+      <div class="vars" id="vars"></div>
+      <label class="lbl" for="material">붙일 자료 <small>리뷰·숫자·메모 (선택)</small></label>
+      <textarea id="material" rows="3" spellcheck="false"></textarea>
+
+      <div class="pv-h"><b>보낼 프롬프트</b><span id="emptyNote"></span></div>
+      <pre class="pv" id="pv" aria-live="polite"></pre>
+      <div class="scan" id="scan" role="status" aria-live="polite"></div>
+      <div class="acts">
+        <button class="primary" id="copy" type="button">복사</button>
+        <button class="ghost-btn" id="maskCopy" type="button">가리고 복사</button>
+      </div>
+
+      <div class="qc">
+        <div class="qc-h">
+          <h3>프롬프트 점검</h3>
+          <span id="mode"></span>
+          <button class="ghost-btn sm" id="review" type="button">Claude로 점검</button>
+        </div>
+        <div class="meter" id="meter"></div>
+        <div class="improved" id="improved" hidden></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="panel check" aria-labelledby="chkTitle">
+    <div class="chk-h">
+      <span class="no">2</span>
+      <div>
+        <h2 id="chkTitle">결과물 검수표</h2>
+        <p>AI가 쓴 결과물을 붙여 넣으면 자동으로 볼 수 있는 항목은 먼저 확인합니다. 나머지는 사람이 체크합니다.</p>
+      </div>
+      <button class="ghost-btn" id="print" type="button">검수표 인쇄</button>
+    </div>
+    <div class="chk-grid">
+      <div>
+        <label class="lbl" for="output">AI 결과물</label>
+        <textarea id="output" rows="6" spellcheck="false"></textarea>
+      </div>
+      <div>
+        <p class="left" id="left"></p>
+        <ul class="cl" id="cl"></ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 직장인 AX 트랙 · 보고서는자동 목표 모델 · 가상의 쇼핑몰 ‘하루살림’ 마케팅팀 가이드 · 점검 Claude API (실패 시 규칙)</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

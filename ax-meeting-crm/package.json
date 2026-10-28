@@ -1,0 +1,11 @@
+{
+  "name": "jeogeojum",
+  "version": "1.0.0",
+  "private": true,
+  "description": "적어줌 — 미팅 메모 → CRM 칸 채우기 · 숫자는 사람이 확인 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

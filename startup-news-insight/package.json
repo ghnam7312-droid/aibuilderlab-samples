@@ -1,0 +1,11 @@
+{
+  "name": "kkeutkkaji",
+  "version": "1.0.0",
+  "private": true,
+  "description": "끝까지 — 뉴스레터 글별 클릭·완독률 분석 · 다음 호 주제 추천 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

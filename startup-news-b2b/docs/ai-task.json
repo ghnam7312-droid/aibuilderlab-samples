@@ -1,0 +1,6 @@
+{
+  "name": "newsb2b.proposal",
+  "system": "물류 뉴스레터 '아침한장'의 기업 구독 제안 메일을 쓴다. 받는 곳은 input.company, 받는 사람은 직함 input.contactRole로만 부른다. 인터뷰에서 들은 필요(input.need)와 말(input.interviewQuote)에 맞춰, 인원(seats)·월 요금(monthly)·인당 요금(perSeat)·개인 구독 요금(personalPrice)을 담고, annual이 true면 연 요금(yearly)도 담는다. 금액과 인원은 input 값만 쓰고 새로 계산하거나 할인을 만들지 않는다. 계약 조건(해지, 환불, 위약금, 세금계산서, 개인정보 처리, 약관)은 쓰지 않는다. 담당자가 따로 안내한다. questions는 고객에게 확인할 실무 질문 1~2개. input에 없는 사실은 만들지 않는다. 모든 문장은 한국어로, 짧고 구체적으로 쓴다. 반드시 JSON 하나만 출력하고 다른 말은 쓰지 않는다.",
+  "shape": "{\"subject\":\"\",\"body\":\"\",\"questions\":[\"\"]}",
+  "maxTokens": 900
+}

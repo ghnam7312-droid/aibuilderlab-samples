@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>빠짐없이 · 만족도 서술형 요약</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Ccircle cx='18' cy='18' r='15' fill='%236247D1'/%3E%3Ccircle cx='12' cy='15' r='3' fill='%23fff'/%3E%3Ccircle cx='20' cy='13' r='2.4' fill='%23fff'/%3E%3Ccircle cx='25' cy='19' r='2' fill='%23fff'/%3E%3Ccircle cx='17' cy='22' r='2.6' fill='%23fff'/%3E%3Ccircle cx='11.5' cy='24' r='1.6' fill='%23FFC94D'/%3E%3C/svg%3E">
+<meta name="description" content="교육 만족도 서술형 응답을 의견 묶음으로 요약하되, 3명 이상 나온 의견은 하나도 빠뜨리지 않고 검수표로 확인하는 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=hr-edu">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 크고 작은 의견 점이 모두 한 원 안에 남는다 (작은 노란 점 = 소수 의견) -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <circle cx="18" cy="18" r="15" fill="#6247D1"/>
+      <circle cx="12" cy="15" r="3" fill="#fff"/><circle cx="20" cy="13" r="2.4" fill="#fff"/>
+      <circle cx="25" cy="19" r="2" fill="#fff"/><circle cx="17" cy="22" r="2.6" fill="#fff"/>
+      <circle cx="11.5" cy="24" r="1.6" fill="#FFC94D"/>
+    </svg>
+    <div><strong>빠짐없이</strong><span>서술형 의견, 세 명이 말했으면 요약에 남아요</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="course" aria-label="설문 설정">
+    <label class="f grow"><span>교육</span><input id="course" type="text" autocomplete="off"></label>
+    <div class="stat" id="stat" aria-live="polite"></div>
+    <label class="f"><span>요약에 반드시 남길 의견</span><select id="minCount"><option value="2">2명 이상</option><option value="3" selected>3명 이상</option><option value="4">4명 이상</option></select></label>
+    <p class="goal"><b>목표치</b> 요약 1일 → 30분 · 다음 교육 개선 3건 반영</p>
+  </section>
+
+  <section class="split" aria-label="응답과 요약">
+    <div class="pane src-pane">
+      <div class="pane-h">
+        <h1>응답 원문 <em id="nResp"></em></h1>
+        <div class="seg" role="group" aria-label="보기 방식">
+          <button type="button" id="modeList" aria-pressed="true">목록</button>
+          <button type="button" id="modeEdit" aria-pressed="false">붙여 넣기</button>
+        </div>
+      </div>
+      <p class="tip" id="tip">설문 시트에서 <code>점수 ⇥ 의견</code> 두 칸을 붙여 넣으세요. 전화번호·메일·사번은 화면과 AI에 보내기 전에 가립니다.</p>
+      <div class="filter-on" id="filterOn" hidden></div>
+      <ol class="resp" id="list" aria-label="응답 목록"></ol>
+      <label class="sr" for="src">응답 붙여 넣기</label>
+      <textarea id="src" spellcheck="false" hidden></textarea>
+      <div class="src-foot">
+        <span id="srcInfo"></span>
+        <button class="primary" id="run" type="button">요약하기</button>
+      </div>
+    </div>
+
+    <div class="pane out-pane" id="out" aria-live="polite"></div>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 직장인 AX 트랙 · 출결은알아서 목표 모델 · 가상의 회사 온결물산 교육 만족도 응답</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

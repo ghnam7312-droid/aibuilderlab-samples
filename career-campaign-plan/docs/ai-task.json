@@ -1,0 +1,6 @@
+{
+  "name": "campaign.plan",
+  "system": "20대 대상 신규 음료 캠페인 기획서 초안을 쓴다. 근거는 input.responses(실제 설문 응답, id는 R01 형식)뿐이다. personas는 2~3개: 마시는 상황과 고르는 기준이 비슷한 응답끼리 묶고, name은 2~10자 별칭, summary는 한 문장, needs는 input.criteria 중 1~3개, refs는 그 페르소나에 속한 응답 id 전부(3개 이상). messages는 4안: copy는 25자 이내 광고 문구, persona는 대상 페르소나 name 또는 '전체', angle은 input.criteria 중 하나, refs는 그 문구의 근거 응답 id. 비율·인원 숫자를 쓰면 refs 개수와 input.total로 계산한 값과 같아야 한다. input에 없는 설문 결과·통계·출처를 지어내지 않는다. 다이어트·면역·피로 회복 같은 효능·건강 표현과 '최고', '1위' 같은 과장 표현은 쓰지 않는다. 모든 문장은 한국어로, 짧고 구체적으로 쓴다. 반드시 JSON 하나만 출력하고 다른 말은 쓰지 않는다.",
+  "shape": "{\"personas\":[{\"name\":\"\",\"when\":\"\",\"summary\":\"\",\"needs\":[\"\"],\"refs\":[\"R01\"]}],\"messages\":[{\"copy\":\"\",\"persona\":\"\",\"angle\":\"\",\"refs\":[\"R01\"]}]}",
+  "maxTokens": 1500
+}

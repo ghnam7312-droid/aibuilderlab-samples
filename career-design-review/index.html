@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>모아닫기 · 디자인 리뷰 코멘트 정리</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Ccircle cx='9' cy='10' r='5' fill='%23B9A8FF'/%3E%3Ccircle cx='9' cy='26' r='5' fill='%23B9A8FF'/%3E%3Cpath d='M13 11c6 1 7 7 10 7M13 25c6-1 7-7 10-7' fill='none' stroke='%236B4EE6' stroke-width='3' stroke-linecap='round'/%3E%3Crect x='21' y='11' width='13' height='14' rx='4' fill='%236B4EE6'/%3E%3Cpath d='M24.5 18l2.3 2.3 4-4.6' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta name="description" content="카톡·메일·피그마에 흩어진 시안 피드백을 모아 같은 의견은 하나로 합치고, 반영함·보류·안 함으로 끝까지 닫는 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=ux-designer">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 흩어진 두 점이 한 상자로 모여 체크로 닫힌다 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <circle cx="9" cy="10" r="5" fill="#B9A8FF"/>
+      <circle cx="9" cy="26" r="5" fill="#B9A8FF"/>
+      <path d="M13 11c6 1 7 7 10 7M13 25c6-1 7-7 10-7" fill="none" stroke="#6B4EE6" stroke-width="3" stroke-linecap="round"/>
+      <rect x="21" y="11" width="13" height="14" rx="4" fill="#6B4EE6"/>
+      <path d="M24.5 18l2.3 2.3 4-4.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div><strong>모아닫기</strong><span>흩어진 시안 피드백을 모아서, 하나씩 끝까지 닫아요</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <!-- 진행 요약: 몇 건이 몇 항목이 됐고, 몇 개가 남았나 -->
+  <section class="flow" id="flow" aria-label="정리 현황"></section>
+
+  <section class="split">
+    <!-- 왼쪽: 받은 코멘트 -->
+    <div class="pane inbox">
+      <div class="pane-h">
+        <h1>받은 코멘트 <span class="n" id="inN"></span></h1>
+        <button class="primary" id="run" type="button">정리하기</button>
+      </div>
+      <div class="chips" id="srcChips" role="group" aria-label="채널 거르기"></div>
+      <ul class="comments" id="comments"></ul>
+      <details class="paste" id="pasteBox">
+        <summary>코멘트 붙여 넣어 더하기</summary>
+        <p class="tip">한 줄에 하나씩 <code>[카톡] 이름 · 화면: 내용</code> 형식으로 붙여 넣으세요. 채널은 카톡·메일·피그마.</p>
+        <label class="sr" for="pasteIn">붙여 넣을 코멘트</label>
+        <textarea id="pasteIn" rows="4" spellcheck="false" placeholder="[피그마] 태민 · 결제: 결제 버튼을 화면 아래에 고정해 주세요"></textarea>
+        <button class="ghost-btn" id="pasteAdd" type="button">더하고 다시 정리</button>
+      </details>
+    </div>
+
+    <!-- 오른쪽: 수정 항목 -->
+    <div class="pane items" aria-live="polite">
+      <div class="pane-h">
+        <h2 id="projTitle">동네책방 앱 · 2차 시안 리뷰</h2>
+        <span id="modeChip"></span>
+      </div>
+      <div class="items-tools">
+        <div class="seg" role="group" aria-label="항목 거르기">
+          <button type="button" data-v="all" aria-pressed="true">전체</button>
+          <button type="button" data-v="open" aria-pressed="false">남은 것</button>
+          <button type="button" data-v="closed" aria-pressed="false">닫은 것</button>
+        </div>
+        <button class="dark" id="notion" type="button">Notion용으로 복사</button>
+      </div>
+      <div id="groups"></div>
+      <details class="md" id="mdBox" hidden>
+        <summary>복사한 내용 보기</summary>
+        <pre id="mdOut"></pre>
+      </details>
+    </div>
+  </section>
+  <p class="fine">같은 사람이 같은 말을 여러 채널로 보낸 것은 하나만 남기고, 같은 화면의 비슷한 의견은 한 항목으로 합쳐요. 보류·안 함은 이유를 적어야 닫혀요. 내보낼 때 메일 주소·전화번호는 지워요.</p>
+</main>
+
+<footer class="foot">AI 빌더랩 커리어 트랙 · 픽셀산책 목표 모델 · 묶기 Claude API (실패 시 규칙) · Notion 마크다운</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

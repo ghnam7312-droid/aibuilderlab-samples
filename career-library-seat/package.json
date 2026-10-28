@@ -1,0 +1,11 @@
+{
+  "name": "binjari",
+  "version": "1.0.0",
+  "private": true,
+  "description": "빈자리 — 대학 도서관 좌석 이용 분석 보고서 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

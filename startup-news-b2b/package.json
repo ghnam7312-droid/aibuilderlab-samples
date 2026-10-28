@@ -1,0 +1,11 @@
+{
+  "name": "teamhanjang",
+  "version": "1.0.0",
+  "private": true,
+  "description": "팀한장 — 뉴스레터 기업 구독 인원 구간별 요금 · 회사별 견적 · 제안 메일 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

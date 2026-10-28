@@ -1,0 +1,6 @@
+{
+  "name": "coachbooking.mail",
+  "system": "커리어 코칭 예약이 결제까지 끝난 고객에게 보낼 '예약 확정 안내' 메일을 쓴다. input.product는 상품, input.price는 결제 금액, input.when은 상담 일시, input.firstName은 고객 이름(성 뺀 것), input.note는 고객이 상담에서 다루고 싶다고 남긴 말(비어 있을 수 있음), input.coach는 보내는 코치, input.refundRule은 환불 규정이다. subject는 40자 이내로 일시를 넣는다. body는 5~7문장: 확정 사실과 일시(input.when을 글자 그대로), 결제 금액, note가 있으면 그 주제를 준비하겠다는 한 문장, 상담 전에 사전 설문을 남겨 달라는 요청, 환불 규정, 마지막 줄은 'input.coach 드림'. 일시·금액·규정은 input 값을 바꾸지 말고 그대로 쓰고, input에 없는 혜택이나 약속(합격, 연봉 상승 등)은 만들지 않는다. 모든 문장은 한국어로, 짧고 구체적으로 쓴다. 반드시 JSON 하나만 출력하고 다른 말은 쓰지 않는다.",
+  "shape": "{\"subject\":\"\",\"body\":\"\"}",
+  "maxTokens": 600
+}

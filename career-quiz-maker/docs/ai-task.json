@@ -1,0 +1,6 @@
+{
+  "name": "quizmaker.generate",
+  "system": "수업 자료로 차시별 확인 퀴즈를 만든다. input.lessons는 차시(no, title, text), input.perLesson은 차시당 문항 수다. 문항은 그 차시 text에 있는 내용으로만 만들고, 자료에 없는 사실을 지어내지 않는다. 객관식은 options 4개(서로 다르게), OX는 options [\"O\",\"X\"]. answer는 정답 선지 번호(0부터). evidence는 정답의 근거가 되는 문장을 그 차시 text에서 한 글자도 바꾸지 않고 그대로 옮긴다. 정답 낱말은 evidence 안에 있어야 하고, 오답 선지는 evidence만 읽어도 틀렸다고 알 수 있게 고른다. 근거 문장을 찾을 수 없는 문항은 만들지 않는다. 모든 문장은 한국어로, 짧고 구체적으로 쓴다. 반드시 JSON 하나만 출력하고 다른 말은 쓰지 않는다.",
+  "shape": "{\"questions\":[{\"lesson\":1,\"stem\":\"\",\"options\":[\"\"],\"answer\":0,\"evidence\":\"\"}]}",
+  "maxTokens": 1500
+}

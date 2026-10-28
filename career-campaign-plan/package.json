@@ -1,0 +1,11 @@
+{
+  "name": "eungdapdaero",
+  "version": "1.0.0",
+  "private": true,
+  "description": "응답대로 — 실제 설문 응답만 근거로 쓰는 캠페인 기획서 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

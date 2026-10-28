@@ -1,0 +1,11 @@
+{
+  "name": "gogaekmal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "고객말 — 쇼핑몰 리뷰 분류 · 애매한 리뷰는 사람 확인 · 개선 요청 상위 5 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

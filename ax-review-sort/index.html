@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>고객말 · 리뷰 분류와 개선 요청 정리</title>
+<meta name="description" content="쇼핑몰 리뷰를 감정·주제·개선 요청으로 나누고, 애매한 리뷰는 사람 확인으로 따로 모아 상품팀에 보낼 개선 요청 상위 5개를 만드는 도구">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Cpath d='M5 6h26a3 3 0 0 1 3 3v15a3 3 0 0 1-3 3H14l-7 5v-5H5a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3z' fill='%236A3FC8'/%3E%3Cpath d='M9 13h18M9 18h11' stroke='%23fff' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=marketing-team">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 말풍선 안의 두 줄 중 하나만 짧다 — 읽고 골라낸다 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <path d="M5 6h26a3 3 0 0 1 3 3v15a3 3 0 0 1-3 3H14l-7 5v-5H5a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3z" fill="#6A3FC8"/>
+      <path d="M9 13h18" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M9 19h9" stroke="#FFC861" stroke-width="2.6" stroke-linecap="round"/>
+    </svg>
+    <div><strong>고객말</strong><span>리뷰 800건에서 고칠 것만 골라 상품팀으로</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="goal" title="1기 목표치">목표 <s>월 2일</s> <b>1시간</b></span>
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="stats" id="stats" aria-label="분류 결과 요약" aria-live="polite"></section>
+
+  <div class="grid">
+    <section class="panel list-pane" aria-labelledby="listTitle">
+      <div class="pane-h">
+        <h1 id="listTitle">10월 리뷰 <small id="listInfo"></small></h1>
+        <span id="mode"></span>
+        <button class="primary" id="run" type="button">다시 분류하기</button>
+      </div>
+      <div class="filters">
+        <div class="seg" role="group" aria-label="보기" id="seg">
+          <button type="button" data-f="all">전체</button>
+          <button type="button" data-f="human">사람 확인</button>
+          <button type="button" data-f="request">개선 요청</button>
+          <button type="button" data-f="neg">부정</button>
+          <button type="button" data-f="pos">긍정</button>
+        </div>
+        <label class="sel"><span class="sr">상품 고르기</span>
+          <select id="product"></select>
+        </label>
+      </div>
+      <p class="tip" id="tip"></p>
+      <div class="reviews" id="reviews"></div>
+    </section>
+
+    <aside class="side">
+      <section class="panel" aria-labelledby="topTitle">
+        <h2 id="topTitle">상품팀 전달 <small>개선 요청 상위 5</small></h2>
+        <ol class="top" id="top"></ol>
+        <p class="note" id="topNote"></p>
+        <button class="dark wide" id="copy" type="button">상품팀에 보낼 글 복사</button>
+        <details class="md" id="mdBox" hidden>
+          <summary>복사한 글 보기</summary>
+          <pre id="mdOut"></pre>
+        </details>
+      </section>
+
+      <section class="panel" aria-labelledby="addTitle">
+        <h2 id="addTitle">리뷰 붙여넣기</h2>
+        <p class="tip">한 줄에 한 건, <code>별점 | 상품 | 내용</code>. 넣으면 바로 분류됩니다.</p>
+        <label class="sr" for="paste">붙여 넣을 리뷰</label>
+        <textarea id="paste" rows="4" spellcheck="false" placeholder="2 | 텀블러 | 세척하다 뚜껑 고무가 빠졌어요. 고정되게 바꿔 주세요"></textarea>
+        <p class="err" id="pasteErr" role="alert" hidden></p>
+        <button class="ghost-btn wide" id="add" type="button">리뷰 추가</button>
+      </section>
+
+      <p class="fine">작성자 이름은 가운데를 가려 보여 주고, 본문 속 전화번호·이메일은 화면·AI 입력·상품팀 전달 글에서 모두 가립니다. 안전 관련 리뷰는 AI가 분류하지 않고 품질안전 담당자에게 넘깁니다.</p>
+    </aside>
+  </div>
+</main>
+
+<footer class="foot">AI 빌더랩 직장인 AX 트랙 · 보고서는자동 목표 모델 · 가상의 쇼핑몰 ‘하루살림’ 리뷰 · 분류 Claude API (실패 시 규칙)</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

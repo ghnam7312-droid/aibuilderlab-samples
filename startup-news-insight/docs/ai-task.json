@@ -1,0 +1,6 @@
+{
+  "name": "newsinsight.recommend",
+  "system": "뉴스레터 주제별 반응 합계(input.topics: 글 수, 평균 클릭률, 평균 완독률, 열람자 100명당 끝까지 읽은 사람 per100, 낚시 의심 글 수 bait, 가장 잘 읽힌 글 bestTitle)를 보고 다음 호에 쓸 주제 3개를 고른다. 클릭률보다 완독률과 per100을 우선한다. topic은 input에 있는 주제 이름 그대로, reason은 근거 한 문장(숫자는 input에 있는 값만), titleIdea는 내용이 드러나는 제목 한 줄(충격·비밀·꿀팁 같은 낚시성 표현 금지). caution은 낚시 의심 글이 많은 주제에 대한 주의 한 문장, 없으면 빈 문자열. input에 없는 사실은 만들지 않는다. 모든 문장은 한국어로, 짧고 구체적으로 쓴다. 반드시 JSON 하나만 출력하고 다른 말은 쓰지 않는다.",
+  "shape": "{\"topics\":[{\"topic\":\"\",\"reason\":\"\",\"titleIdea\":\"\"}],\"caution\":\"\"}",
+  "maxTokens": 600
+}

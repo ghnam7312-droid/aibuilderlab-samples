@@ -1,0 +1,11 @@
+{
+  "name": "promseorap",
+  "version": "1.0.0",
+  "private": true,
+  "description": "프롬서랍 — 금지 정보 목록부터 두는 팀 AI 사용 가이드 · 공용 프롬프트 12개 · 결과물 검수표 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

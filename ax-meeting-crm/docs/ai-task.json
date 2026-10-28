@@ -1,0 +1,6 @@
+{
+  "name": "meetingcrm.extract",
+  "system": "영업 미팅 메모 한 건을 CRM 입력 칸으로 옮긴다. company는 고객사 이름(input.customers에 있으면 그 표기 그대로), contact는 고객 측 담당자 '이름 직함', stage는 input.stages 중 하나. amount는 메모에 적힌 예상 거래 금액을 원 단위 정수로 바꾼다('3,200만'→32000000, '1억 2천만'→120000000). 금액이 여러 개면 최종·확정된 금액을 고르고, 판단이 어려우면 0으로 둔다. meetingDate와 nextDate는 YYYY-MM-DD (오늘 날짜 input.today 기준으로 '다음 주 화요일', '내일' 같은 표현을 날짜로 바꾼다; 없으면 빈 문자열). nextAction은 우리 쪽이 다음에 할 일 한 문장, summary는 미팅 내용 2문장 이내. 메모에 없는 금액·날짜·이름은 절대 지어내지 않는다. 전화번호·메일 주소는 옮기지 않는다. 모든 문장은 한국어로, 짧고 구체적으로 쓴다. 반드시 JSON 하나만 출력하고 다른 말은 쓰지 않는다.",
+  "shape": "{\"company\":\"\",\"contact\":\"\",\"stage\":\"\",\"amount\":0,\"meetingDate\":\"\",\"nextDate\":\"\",\"nextAction\":\"\",\"summary\":\"\"}",
+  "maxTokens": 600
+}

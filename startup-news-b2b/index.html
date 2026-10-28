@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>팀한장 · 기업 구독 요금 설계</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='3' y='9' width='22' height='24' rx='4' fill='%2399D5DE'/%3E%3Crect x='11' y='3' width='22' height='24' rx='4' fill='%230B7285'/%3E%3Cpath d='M16 20v-3M21 20v-6M26 20v-9' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="description" content="뉴스레터를 회사 단위로 팔 때 인원 구간별 요금을 설계하고, 인터뷰한 회사마다 견적과 제안 메일을 만드는 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=newsletter">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 겹친 두 장 = 팀이 함께 받는 뉴스레터, 막대 = 인원 구간 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="3" y="9" width="22" height="24" rx="4" fill="#99D5DE"/>
+      <rect x="11" y="3" width="22" height="24" rx="4" fill="#0B7285"/>
+      <path d="M16 20v-3M21 20v-6M26 20v-9" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <div><strong>팀한장</strong><span>기업 구독, 인원만큼 공정하게</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <ul class="goals" aria-label="목표치와 지금 숫자">
+    <li><b>5곳</b><span>물류사 인터뷰 (목표치)</span></li>
+    <li><b>2곳</b><span>기업 구독 계약 (목표치)</span></li>
+    <li><b id="mrr">—</b><span>계약한 곳 월 매출</span></li>
+    <li><b id="vsUnl">—</b><span>‘무제한 49,000원’이었다면</span></li>
+  </ul>
+
+  <section class="grid">
+    <!-- 왼쪽: 요금 구간 -->
+    <div class="card" aria-labelledby="tierTitle">
+      <div class="card-h"><h1 id="tierTitle">인원 구간별 요금</h1>
+        <div class="seg" role="group" aria-label="계산 방식">
+          <button type="button" data-mode="graduated" aria-pressed="true">누적</button>
+          <button type="button" data-mode="volume" aria-pressed="false">전체 적용</button>
+        </div>
+      </div>
+      <p class="sub" id="modeHelp"></p>
+      <table class="tiers" id="tiers"></table>
+      <div class="tcheck" id="tcheck" role="status"></div>
+      <figure class="curve">
+        <div class="chart" id="chart" role="img"></div>
+        <figcaption><i class="k-t"></i>구간별 요금 <i class="k-u"></i>무제한 49,000원 <i class="k-p"></i>개인 구독 × 인원</figcaption>
+      </figure>
+      <label class="annual"><input type="checkbox" id="annual"> 연 결제 (2개월분 할인)</label>
+    </div>
+
+    <!-- 오른쪽: 인터뷰한 회사 -->
+    <div class="card" aria-labelledby="coTitle">
+      <div class="card-h"><h2 id="coTitle">인터뷰한 물류사</h2><button class="ghost-btn" id="csv" type="button">견적 CSV</button></div>
+      <p class="sub">인원을 바꾸면 견적이 바로 바뀌어요. 회사를 고르면 아래에 제안 메일을 만들어요. 담당자는 직함만 적어요.</p>
+      <ul class="cos" id="cos"></ul>
+    </div>
+  </section>
+
+  <section class="card prop" aria-labelledby="propTitle">
+    <div class="card-h"><h2 id="propTitle">제안 메일</h2><span id="modeChip"></span></div>
+    <div class="prop-grid">
+      <div class="quote" id="quote"></div>
+      <div class="mail">
+        <label for="subj">제목</label>
+        <input id="subj">
+        <label for="body">본문</label>
+        <textarea id="body" rows="9"></textarea>
+        <div class="removed" id="removed" hidden></div>
+        <p class="legal">계약 조건(세금계산서·해지·환불·개인정보 처리)은 Claude가 쓰지 않아요. 그런 문장이 나오면 빼고, 담당자가 직접 확인해 안내해요.</p>
+        <div class="mail-foot">
+          <button class="ghost-btn" id="copy" type="button">메일 복사</button>
+          <button class="ghost-btn" id="print" type="button">견적서 인쇄</button>
+          <button class="primary" id="run" type="button">초안 만들기</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <p class="fine">회사·담당자·인터뷰 내용·금액은 모두 가상입니다. 이 데모는 메일을 보내거나 결제하지 않아요.</p>
+</main>
+
+<footer class="foot">AI 빌더랩 창업 트랙 · 업계한장 목표 모델 · 제안 메일 Claude API (실패 시 규칙 문장) · 인원 구간별 요금</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

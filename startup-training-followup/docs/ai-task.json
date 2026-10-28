@@ -1,0 +1,6 @@
+{
+  "name": "trainingfollowup.copy",
+  "system": "기업 교육 후 3개월 후속 관리 상품의 제안 문구를 쓴다. input.modules(구성과 각 지표·방법·시점), input.interviews(담당자 요구 요약), input.price, input.draft(초안)만 근거로 쓰고, input에 없는 성과 수치나 고객 사례는 지어내지 않는다. 효과·성과를 보장하거나 단정하는 말(보장, 반드시, 무조건, 확실히, 100%, 성과가 오른다 등)은 쓰지 않는다. 대신 무엇을(지표) 어떻게(방법) 언제(시점) 재서 보고하는지를 약속한다. headline은 30자 이내 한 문장. pitch는 담당자 요구와 구성을 이은 2~3문장. promises는 modules마다 하나씩 metric, method, timing을 input 그대로 쓴다. flags는 draft에서 보장·단정으로 읽히는 표현과 그 이유, 측정 약속으로 고친 문장. 표현이 법적으로 괜찮은지는 판단하지 않는다. 모든 문장은 한국어로, 짧고 구체적으로 쓴다. 반드시 JSON 하나만 출력하고 다른 말은 쓰지 않는다.",
+  "shape": "{\"headline\":\"\",\"pitch\":\"\",\"promises\":[{\"metric\":\"\",\"method\":\"\",\"timing\":\"\"}],\"flags\":[{\"phrase\":\"\",\"reason\":\"\",\"rewrite\":\"\"}]}",
+  "maxTokens": 1000
+}

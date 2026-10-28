@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>당일결과 · 교육 만족도·효과 리포트</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='4' y='3' width='28' height='30' rx='6' fill='%230B8A7A'/%3E%3Cpath d='M11 25v-5M18 25V13M25 25v-8' stroke='%23fff' stroke-width='3.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="description" content="교육이 끝난 날 설문을 붙여 넣으면 응답자 이름을 가리고 집계만 담은 만족도·효과 리포트를 만들어 주는 도구 (AI 빌더랩 1기 목표 모델 예시)">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=corp-trainer">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 종이 한 장 위로 올라가는 막대 세 개 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="4" y="3" width="28" height="30" rx="6" fill="#0B8A7A"/>
+      <path d="M11 25v-5M18 25V13M25 25v-8" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/>
+    </svg>
+    <div><strong>당일결과</strong><span>교육 끝난 날, 윗선에 올릴 리포트</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <p class="goal" aria-label="1기 목표치"><b>1기 목표치</b><span>고객사 12곳</span><span>리포트 전달 1주 → 당일</span><span>재계약률 40% → 70%</span></p>
+
+  <section class="split">
+    <!-- 왼쪽: 설문 응답 -->
+    <div class="pane src-pane" aria-labelledby="srcTitle">
+      <div class="pane-h">
+        <h1 id="srcTitle">설문 응답</h1>
+        <div class="seg" role="group" aria-label="보기 방식">
+          <button type="button" id="viewTable" aria-pressed="true">표</button>
+          <button type="button" id="viewCsv" aria-pressed="false">CSV 고치기</button>
+        </div>
+      </div>
+      <div class="samples" role="group" aria-label="예시 과정">
+        <span>예시</span>
+        <button type="button" data-course="a" aria-pressed="true">신임 팀장 리더십 · 32명</button>
+        <button type="button" data-course="b" aria-pressed="false">고객 응대 실무 · 21명</button>
+      </div>
+      <p class="tip">설문 도구에서 내려받은 CSV를 그대로 붙여 넣으세요. 이름 칸은 <b>중복 응답 확인에만</b> 쓰고, 리포트에는 넣지 않아요.</p>
+      <div id="tableBox" class="table-box"></div>
+      <label class="sr" for="csv">설문 CSV</label>
+      <textarea id="csv" spellcheck="false" hidden></textarea>
+      <ul class="errs" id="errs" hidden></ul>
+      <div class="src-foot">
+        <label class="total">참석 <input id="total" type="number" min="1" max="999" inputmode="numeric" aria-label="참석 인원"> 명</label>
+        <button class="primary" id="run" type="button">리포트 만들기</button>
+      </div>
+    </div>
+
+    <!-- 오른쪽: 담당자에게 보낼 리포트 -->
+    <div class="pane out-pane">
+      <div class="out-tools">
+        <label class="filter">부서 <select id="dept" aria-label="부서로 보기"></select></label>
+        <button class="ghost-btn" id="copy" type="button">보고 문구 복사</button>
+        <button class="dark" id="print" type="button">인쇄 · PDF</button>
+      </div>
+      <article class="paper" id="paper" aria-live="polite"></article>
+    </div>
+  </section>
+
+  <details class="md" id="mdBox" hidden>
+    <summary>복사한 보고 문구 보기</summary>
+    <pre id="mdOut"></pre>
+  </details>
+  <p class="fine">부서별 결과는 응답 5명 이상일 때만 보여요. 5명 미만 부서는 ‘기타’로 합치고, 합쳐도 5명이 안 되면 숨깁니다. 의견 속 이름·연락처는 가린 뒤 순서를 섞어 보여 줘요.</p>
+</main>
+
+<footer class="foot">AI 빌더랩 창업 트랙 · 교육효과측정소 목표 모델 · 요약 Claude API (실패 시 규칙) · 익명 처리는 브라우저에서</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

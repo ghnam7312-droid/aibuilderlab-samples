@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>본보기 · 상담 품질 체크리스트</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='6' y='3' width='24' height='30' rx='4' fill='%23C2571A'/%3E%3Cpath d='M11 12l2.5 2.5L18 10M11 22l2.5 2.5L18 20' fill='none' stroke='%23fff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M21 12h4M21 22h4' stroke='%23FFD9BF' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="description" content="우리 팀의 실제 우수 응답에서 뽑은 상담 품질 체크리스트 10항목으로 신입 상담원의 답변을 점검하고, 실제 예시로 교육 자료를 만드는 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=cs-team">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 체크가 두 줄 있는 점검표 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="6" y="3" width="24" height="30" rx="4" fill="#C2571A"/>
+      <path d="M11 12l2.5 2.5L18 10M11 22l2.5 2.5L18 20" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M21 12h4M21 22h4" stroke="#FFD9BF" stroke-width="2.6" stroke-linecap="round"/>
+    </svg>
+    <div><strong>본보기</strong><span>우리 팀의 실제 모범으로 배우는 상담</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="goals" aria-label="체크리스트 현황과 목표">
+    <div class="goal"><span>체크리스트</span><b>10항목</b><small id="gSrc"></small></div>
+    <div class="goal"><span>예시로 쓰는 응답</span><b id="gEx">0건</b><small>실제 응답 · 팀장 평가 4.5점 이상</small></div>
+    <div class="goal hi"><span>이번 답변</span><b id="gScore">—</b><small id="gScoreSub"></small></div>
+    <div class="goal"><span>신입 적응</span><b>3주 목표</b><small>전에는 두 달</small></div>
+  </section>
+
+  <div class="tabs" role="tablist" aria-label="화면">
+    <button type="button" role="tab" id="tab-check" aria-selected="true" aria-controls="p-check">답변 점검</button>
+    <button type="button" role="tab" id="tab-book" aria-selected="false" aria-controls="p-book" tabindex="-1">교육 자료</button>
+  </div>
+
+  <section id="p-check" role="tabpanel" aria-labelledby="tab-check">
+    <div class="split">
+      <div class="pane">
+        <div class="pane-h"><h1>연습 문의</h1><span class="who-chip">신입 상담원 · 한소율</span></div>
+        <div class="inqs" id="inqs" role="group" aria-label="연습 문의 고르기"></div>
+        <blockquote class="inq" id="inq"></blockquote>
+        <label class="lab" for="answer">내 답변</label>
+        <textarea id="answer" rows="9" spellcheck="false"></textarea>
+        <div class="row">
+          <span id="ansInfo" class="mute"></span>
+          <button class="primary" id="run" type="button">점검하기</button>
+        </div>
+        <details class="policy" open>
+          <summary>회사 정책 (답변은 이대로만)</summary>
+          <ul id="policy"></ul>
+        </details>
+      </div>
+      <div class="pane result" id="result" aria-live="polite"></div>
+    </div>
+
+    <section class="hist" aria-labelledby="histTitle">
+      <div class="hist-h"><h2 id="histTitle">연습 기록</h2><button class="link-btn" id="clearHist" type="button">기록 지우기</button></div>
+      <div class="hist-body" id="hist"></div>
+    </section>
+  </section>
+
+  <section id="p-book" role="tabpanel" aria-labelledby="tab-book" hidden>
+    <div class="book-h">
+      <div>
+        <h2>신입 교육 자료</h2>
+        <p>항목마다 우리 팀의 <b>실제 우수 응답</b>에서 그 항목을 잘 지킨 문장을 예시로 붙였어요. AI가 만든 모범 답안은 쓰지 않아요.</p>
+      </div>
+      <div class="book-btns">
+        <button class="ghost-btn" id="copyBook" type="button">텍스트로 복사</button>
+        <button class="dark" id="print" type="button">인쇄 · PDF</button>
+      </div>
+    </div>
+    <ol class="cards" id="cards"></ol>
+    <details class="excluded" id="excluded"></details>
+  </section>
+
+  <p class="fine">이 데모의 회사·정책·상담원·고객은 모두 가상입니다. 회사 정책은 예시로 정한 사내 기준이며 법령 기준이 아닙니다.</p>
+</main>
+
+<footer class="foot">AI 빌더랩 직장인 AX 트랙 · 문의정리반 목표 모델 · 점검 Claude API (실패 시 규칙) · 우수 응답 분석 · 교육 자료</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

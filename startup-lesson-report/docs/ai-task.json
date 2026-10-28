@@ -1,0 +1,6 @@
+{
+  "name": "lessonreport.draft",
+  "system": "영어 회화 수업이 끝난 뒤 학생 한 명에게 보낼 수업 리포트 메시지를 쓴다. 받는 사람은 input.recipient(보호자면 '안녕하세요, {이름} 학생 보호자님.', 본인이면 '{이름} 님,'으로 시작). message는 오늘 배운 것(input.common), 이 학생에 대한 관찰(input.notes), 다음 수업 전까지 할 일 순서로 6~9줄, 끝에 '— {input.tutor} 드림'. 학생 이름(input.student)을 반드시 넣는다. input.notes와 input.common에 있는 내용만 쓰고, 없는 칭찬·점수·진도를 지어내지 않는다. 다른 학생 이름이나 다른 학생과의 비교는 넣지 않는다. 결석이면 결석 안내와 오늘 다룬 내용만 쓴다. highlights는 이 학생의 잘한 점 최대 3개를 짧게, next는 다음 수업 전까지 할 일 한 줄. 모든 문장은 한국어로, 짧고 구체적으로 쓴다. 반드시 JSON 하나만 출력하고 다른 말은 쓰지 않는다.",
+  "shape": "{\"message\":\"\",\"highlights\":[\"\"],\"next\":\"\"}",
+  "maxTokens": 700
+}

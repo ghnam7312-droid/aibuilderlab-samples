@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>빈자리 · 도서관 좌석 이용 분석</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='2' y='2' width='32' height='32' rx='8' fill='%23B8471F'/%3E%3Crect x='8' y='8' width='6' height='6' rx='1.5' fill='%23fff'/%3E%3Crect x='15' y='8' width='6' height='6' rx='1.5' fill='%23fff'/%3E%3Crect x='22' y='8' width='6' height='6' rx='1.5' fill='%23fff' opacity='.45'/%3E%3Crect x='8' y='15' width='6' height='6' rx='1.5' fill='%23fff'/%3E%3Crect x='15' y='15' width='6' height='6' rx='1.5' fill='%23fff' opacity='.45'/%3E%3Crect x='22' y='15' width='6' height='6' rx='1.5' fill='none' stroke='%23fff' stroke-width='1.6'/%3E%3Cpath d='M8 26h20' stroke='%23fff' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="description" content="도서관 좌석 기록으로 언제·어디가 모자란지 찾고, 이 데이터로 모르는 것까지 적는 좌석 이용 분석 보고서">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=data-analyst">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 좌석 배치도, 한 칸만 비어 있다 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="2" y="2" width="32" height="32" rx="8" fill="#B8471F"/>
+      <rect x="8" y="8" width="6" height="6" rx="1.5" fill="#fff"/><rect x="15" y="8" width="6" height="6" rx="1.5" fill="#fff"/><rect x="22" y="8" width="6" height="6" rx="1.5" fill="#fff" opacity=".45"/>
+      <rect x="8" y="15" width="6" height="6" rx="1.5" fill="#fff"/><rect x="15" y="15" width="6" height="6" rx="1.5" fill="#fff" opacity=".45"/><rect x="22" y="15" width="6" height="6" rx="1.5" fill="none" stroke="#fff" stroke-width="1.6"/>
+      <path d="M8 26h20" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+    </svg>
+    <div><strong>빈자리</strong><span>언제·어디가 모자란지, 기록으로 봐요</span></div>
+  </div>
+  <div class="bar-r">
+    <p class="goal" title="1기 목표치">혼잡 시간대 <b>3개</b> · 재배치 제안 <b>채택</b></p>
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="controls" aria-label="조건">
+    <div class="seg" role="group" aria-label="기간">
+      <button type="button" data-period="exam" aria-pressed="true">시험 기간 <span>6/8–6/19</span></button>
+      <button type="button" data-period="normal" aria-pressed="false">평소 <span>5/11–5/22</span></button>
+    </div>
+    <button class="switch" id="zeroMode" type="button" role="switch" aria-checked="false"><i aria-hidden="true"></i><span>결측을 0으로 계산 <small>(이전 방식 비교)</small></span></button>
+    <div class="acts">
+      <button class="ghost-btn" id="csv" type="button">표 CSV</button>
+      <button class="dark" id="print" type="button">보고서 인쇄</button>
+    </div>
+  </section>
+
+  <section class="kpis" id="kpis" aria-label="요약 숫자"></section>
+
+  <div class="grid">
+    <div class="main-col">
+      <section class="card" aria-labelledby="hmTitle">
+        <div class="card-h">
+          <div><h2 id="hmTitle">구역 × 시각 평균 이용률</h2><p class="sub">칸을 누르면 날짜별 기록이 보여요 · 굵은 테두리는 이용률 90% 이상 · 빗금은 기록이 빠진 날이 있는 칸</p></div>
+        </div>
+        <div class="hm-wrap"><div class="hm" id="hm" role="grid" aria-label="구역별 시각별 이용률"></div></div>
+        <div class="legend" aria-hidden="true"><span>0%</span><i></i><span>100%</span><b class="lg-peak">90% 이상</b><b class="lg-miss">기록 빠짐 포함</b></div>
+        <div class="cell" id="cell" aria-live="polite"></div>
+      </section>
+
+      <section class="card" aria-labelledby="pkTitle">
+        <div class="card-h"><h2 id="pkTitle">혼잡 시간대</h2><span class="n" id="pkN"></span></div>
+        <ol class="peaks" id="peaks"></ol>
+      </section>
+    </div>
+
+    <article class="card report" aria-labelledby="rpTitle">
+      <div class="card-h"><h2 id="rpTitle">좌석 이용 분석 보고서</h2><span id="mode"></span></div>
+      <div id="report"></div>
+    </article>
+  </div>
+</main>
+
+<footer class="foot">AI 빌더랩 커리어 트랙 · 숫자읽는사람 목표 모델 · 목표치 혼잡 시간대 3개 도출, 좌석 재배치 제안서 1건 채택 · 보고서 Claude API (실패 시 규칙)</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

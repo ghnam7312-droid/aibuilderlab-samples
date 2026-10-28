@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>첫답 · 고객 문의 분류</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='3' y='6' width='30' height='24' rx='5' fill='%230E7C70'/%3E%3Cpath d='M9 14h18M9 20h10' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='27' cy='22' r='5' fill='%23FFC24B'/%3E%3C/svg%3E">
+<meta name="description" content="하루에 들어오는 고객 문의를 분류해 담당자에게 나누고 답변 초안을 붙이는 도구. 환불·보상과 안전·법률 문의는 초안 없이 사람에게 바로 넘긴다">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=cs-team">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 문의함 위에 먼저 켜지는 노란 점 = 첫 응답 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="3" y="6" width="30" height="24" rx="5" fill="#0E7C70"/>
+      <path d="M9 14h18M9 20h10" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="27" cy="22" r="5" fill="#FFC24B" stroke="#0E7C70" stroke-width="2"/>
+    </svg>
+    <div><strong>첫답</strong><span>문의는 나눠 주고, 약속은 사람이 해요</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <!-- 목표치: 포트폴리오 결과 숫자 -->
+  <section class="goals" aria-label="오늘 현황과 목표">
+    <div class="goal"><span>기다리는 문의</span><b id="gOpen">0</b><small id="gTotal">전체 0건</small></div>
+    <div class="goal warn"><span>사람 확인</span><b id="gHand">0</b><small>환불·보상 · 안전·법률</small></div>
+    <div class="goal"><span>평균 첫 응답</span><b id="gFirst">—</b><small>목표 40분 · 전에는 4시간</small></div>
+    <div class="goal"><span>배정 수정률</span><b id="gFix">0%</b><small>목표 3% · 전에는 12%</small></div>
+  </section>
+
+  <section class="split" aria-label="문의함">
+    <div class="pane inbox">
+      <div class="pane-h">
+        <h1>문의함 <span class="clock" id="clock"></span></h1>
+        <button class="primary" id="run" type="button">분류하기</button>
+      </div>
+      <div class="filters" id="cats" role="group" aria-label="분류로 거르기"></div>
+      <div class="tools">
+        <label for="who">담당</label>
+        <select id="who"></select>
+        <button class="ghost-btn" id="csv" type="button">배정표 CSV</button>
+      </div>
+      <ol class="list" id="list" aria-label="문의 목록"></ol>
+
+      <details class="add" id="addBox">
+        <summary>새 문의 넣어 보기</summary>
+        <form id="addForm">
+          <label for="aSub">제목</label>
+          <input id="aSub" required maxlength="60" placeholder="예: 배송비 환불 되나요?">
+          <label for="aBody">내용</label>
+          <textarea id="aBody" required rows="3" maxlength="600" placeholder="고객이 남긴 글을 그대로 붙여 넣으세요. 전화번호·이메일은 자동으로 가려져요."></textarea>
+          <div class="add-row">
+            <label for="aCh" class="sr">채널</label>
+            <select id="aCh"><option>채팅</option><option>이메일</option><option>게시판</option></select>
+            <button class="primary sm" type="submit">문의함에 넣기</button>
+          </div>
+        </form>
+      </details>
+    </div>
+
+    <div class="pane detail" id="detail" aria-live="polite"></div>
+  </section>
+
+  <p class="fine">이 데모의 고객·주문은 모두 가상입니다. 이름·연락처·이메일은 화면 목록, AI에 보내는 글, CSV에서 가려집니다. 환불·보상과 안전·법률 문의는 AI가 답을 쓰지 않고 담당자가 직접 답합니다.</p>
+</main>
+
+<footer class="foot">AI 빌더랩 직장인 AX 트랙 · 문의정리반 목표 모델 · 분류 Claude API (실패 시 규칙) · 답변 템플릿 · CSV</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

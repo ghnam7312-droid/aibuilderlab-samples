@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>아침한장 · 물류 뉴스 큐레이션</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='5' y='3' width='26' height='30' rx='4' fill='%23D9480F'/%3E%3Ccircle cx='18' cy='15' r='5' fill='%23fff'/%3E%3Cpath d='M10 25h16' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="description" content="아침에 들어온 물류 기사를 골라 3줄로 요약하고, 숫자는 원문 그대로인지 대조한 뒤 무료판·유료판 뉴스레터로 내보내는 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=newsletter">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 종이 한 장 위로 해가 뜬다 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="5" y="3" width="26" height="30" rx="4" fill="#D9480F"/>
+      <circle cx="18" cy="15" r="5" fill="#fff"/>
+      <path d="M10 25h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <div><strong>아침한장</strong><span>물류 뉴스, 아침 5분이면 충분하게</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <!-- 목표치: 포트폴리오에 적은 결과 숫자 -->
+  <ul class="goals" aria-label="1기 목표치">
+    <li><b>1,240명</b><span>구독자 (목표치)</span></li>
+    <li><b>96명</b><span>유료 · 월 5,900원</span></li>
+    <li><b>2시간 → 30분</b><span>아침 정리 시간</span></li>
+    <li><b id="numScore">—</b><span>원문과 같은 숫자</span></li>
+  </ul>
+
+  <section class="split">
+    <!-- 왼쪽: 오늘 받은 기사 -->
+    <div class="pane inbox" aria-labelledby="inboxTitle">
+      <div class="pane-h">
+        <h1 id="inboxTitle">오늘 받은 기사</h1>
+        <span class="count" id="inCount"></span>
+      </div>
+      <p class="tip">넣을 기사를 고르세요. 같은 소식을 다룬 기사는 <span class="dup-eg">같은 소식</span>으로 묶어 알려 줘요. 제목을 누르면 원문이 보여요.</p>
+      <ol class="arts" id="arts" aria-label="기사 목록"></ol>
+      <details class="add" id="addBox">
+        <summary>기사 직접 붙여 넣기</summary>
+        <form id="addForm">
+          <label for="addSrc">매체</label><input id="addSrc" maxlength="20" placeholder="예: 가상 물류일보">
+          <label for="addTitle">제목</label><input id="addTitle" required maxlength="60">
+          <label for="addBody">본문</label><textarea id="addBody" required rows="4" maxlength="1200"></textarea>
+          <button class="ghost-btn" type="submit">목록에 넣기</button>
+        </form>
+      </details>
+      <div class="in-foot">
+        <span id="pickInfo"></span>
+        <button class="primary" id="run" type="button">요약하기</button>
+      </div>
+    </div>
+
+    <!-- 오른쪽: 오늘 호 -->
+    <div class="pane issue" aria-labelledby="issueTitle">
+      <div class="pane-h">
+        <h2 class="t" id="issueTitle">오늘 호</h2>
+        <span id="modeChip"></span>
+      </div>
+      <div class="tier-row">
+        <div class="seg" role="group" aria-label="받는 사람">
+          <button type="button" data-tier="free" aria-pressed="false">무료판 <small>1,144명</small></button>
+          <button type="button" data-tier="paid" aria-pressed="true">유료판 <small>96명</small></button>
+        </div>
+        <span class="read" id="readTime"></span>
+      </div>
+      <div class="paper" id="paper" aria-live="polite"></div>
+      <div class="rejected" id="rejected" hidden></div>
+      <div class="check" id="check" role="status"></div>
+      <div class="out-tools">
+        <button class="ghost-btn" id="copyHtml" type="button">메일 HTML 복사</button>
+        <button class="ghost-btn" id="dlText" type="button">텍스트로 내려받기</button>
+        <button class="dark" id="send" type="button">발송 대기열에 올리기</button>
+      </div>
+      <details class="md" id="htmlBox" hidden><summary>복사한 HTML 보기</summary><pre id="htmlOut"></pre></details>
+    </div>
+  </section>
+  <p class="fine">기사·매체·회사·숫자는 모두 가상입니다. 이 데모는 메일을 실제로 보내지 않고 결제도 하지 않아요. 구독자 수는 1기 목표치이며, 받는 사람 주소는 화면과 내보내기 어디에도 담지 않습니다.</p>
+</main>
+
+<footer class="foot">AI 빌더랩 창업 트랙 · 업계한장 목표 모델 · 요약 Claude API (실패 시 원문 문장 고르기) · 숫자 원문 대조</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>미리봄 · 코칭 사전 진단</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='3' y='3' width='30' height='30' rx='9' fill='%237442B8'/%3E%3Cpath d='M8 18c3-5 7-7 10-7s7 2 10 7c-3 5-7 7-10 7s-7-2-10-7z' fill='%23fff'/%3E%3Ccircle cx='18' cy='18' r='3.6' fill='%237442B8'/%3E%3C/svg%3E">
+<meta name="description" content="상담 전에 받은 설문과 이력서로 사전 진단을 만들고, 상담 메모를 고객용 요약 리포트로 바꾸는 커리어 코치용 도구. 이력서는 본인과 담당 코치만 열 수 있다.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=career-coach">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 상담 전에 미리 보는 눈 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="3" y="3" width="30" height="30" rx="9" fill="#7442B8"/>
+      <path d="M8 18c3-5 7-7 10-7s7 2 10 7c-3 5-7 7-10 7s-7-2-10-7z" fill="#fff"/>
+      <circle cx="18" cy="18" r="3.6" fill="#7442B8"/>
+    </svg>
+    <div><strong>미리봄</strong><span>상담 전 10분이면 고객이 보여요</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <ul class="goals" aria-label="1기 목표치">
+    <li><b>50분 → 10분</b><span>상담 1건 준비 시간</span></li>
+    <li><b>37명</b><span>유료 고객 (회당 8만 원)</span></li>
+    <li class="g-note">1기 목표치 · 화면의 고객은 모두 가상 인물</li>
+  </ul>
+
+  <div class="clients" id="clients" role="group" aria-label="이번 주 상담 고객"></div>
+
+  <section class="split" aria-label="사전 진단">
+    <form class="pane in-pane" id="form" autocomplete="off">
+      <div class="pane-h"><h1>사전 설문 · 이력서</h1><span class="lock" title="이력서는 본인과 담당 코치만 열 수 있어요">본인·담당 코치만</span></div>
+      <label class="fld" for="target">희망 직무</label>
+      <select id="target"></select>
+      <label class="fld" for="worry">고객이 남긴 고민</label>
+      <textarea id="worry" rows="3"></textarea>
+      <label class="fld" for="resume">이력서 (붙여 넣은 글)</label>
+      <textarea id="resume" rows="11" spellcheck="false"></textarea>
+      <p class="tip">경력 줄은 <code>2018.03 - 현재 회사 · 직무</code>, 업무는 그 아래 <code>- </code>로 읽어요. Claude에게는 이름·연락처를 가린 뒤 보냅니다.</p>
+      <div class="foot-row"><span id="inInfo"></span><button class="primary" id="run" type="submit">사전 진단 만들기</button></div>
+    </form>
+    <div class="pane out-pane" id="out" aria-live="polite"></div>
+  </section>
+
+  <section class="after">
+    <article class="card-box" aria-labelledby="memoH">
+      <div class="box-h"><h2 id="memoH">상담 메모 → 요약 리포트</h2>
+        <div class="tools"><button class="ghost-btn" id="copy" type="button">리포트 복사</button><button class="dark" id="print" type="button">인쇄</button></div></div>
+      <p class="tip"><code>→</code>로 시작하면 다음 할 일, <code>#</code>으로 시작하면 코치만 보는 줄(리포트에서 빠짐)이에요.</p>
+      <div class="memo-grid">
+        <div><label class="fld" for="memo">상담 메모 (코치용)</label><textarea id="memo" rows="9"></textarea></div>
+        <div><span class="fld" id="repL">고객에게 보낼 리포트</span><pre class="report" id="report" aria-labelledby="repL"></pre></div>
+      </div>
+    </article>
+
+    <article class="card-box" aria-labelledby="aclH">
+      <div class="box-h"><h2 id="aclH">이력서 파일 권한</h2></div>
+      <p class="tip">예전에는 누구나 여는 주소로 저장됐어요. 지금은 본인과 담당 코치에게만 <b>10분 뒤 만료되는 주소</b>를 만들어 줍니다.</p>
+      <fieldset class="viewers" id="viewers"><legend class="fld">누구로 열어 볼까요</legend></fieldset>
+      <div class="acl-actions"><button class="primary sm" id="open" type="button">이력서 파일 열기</button><button class="ghost-btn" id="later" type="button">11분 뒤 같은 주소로 열기</button></div>
+      <div class="acl-res" id="aclRes" role="status" aria-live="polite"></div>
+      <ol class="acl-log" id="aclLog" aria-label="열람 기록"></ol>
+    </article>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 창업 트랙 · 이직나침반 목표 모델 · 사전 진단 Claude API (실패 시 규칙) · 파일 권한은 실제 버전에서 Supabase Storage 서명 주소</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

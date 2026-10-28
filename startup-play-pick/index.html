@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>오늘놀이 · 월령별 놀이 추천</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='10' fill='%23E2583A'/%3E%3Ccircle cx='18' cy='19' r='8' fill='none' stroke='%23fff' stroke-width='3'/%3E%3Cpath d='M18 4v7' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="description" content="아이 월령·시간·집에 있는 재료를 고르면 놀이 3개를 추천하고, 안전 기준 목록(작은 부품·끈·풍선 등)으로 한 번 더 거르는 부모용 서비스">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=parenting-edu">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 해가 떠오르는 동그라미 = '오늘' 하루의 놀이 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect width="36" height="36" rx="10" fill="#E2583A"/>
+      <circle cx="18" cy="20" r="7.5" fill="none" stroke="#fff" stroke-width="3"/>
+      <path d="M18 5v5M7.5 9.5l3.2 3.2M28.5 9.5l-3.2 3.2" stroke="#FFD9A8" stroke-width="2.6" stroke-linecap="round"/>
+    </svg>
+    <div><strong>오늘놀이</strong><span>‘오늘 아이랑 뭐 하지?’ 1분 만에, 안전 기준을 거쳐서</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="split" aria-label="놀이 추천">
+    <!-- 왼쪽: 우리 아이 조건 -->
+    <form class="pane ask" id="ask" novalidate>
+      <h1>우리 아이</h1>
+      <div class="months">
+        <label for="months">월령</label>
+        <div class="m-row">
+          <input type="range" id="monthsR" min="6" max="72" step="1" aria-label="월령 조절">
+          <span class="m-num"><input type="number" id="months" min="6" max="72" inputmode="numeric">개월</span>
+        </div>
+        <p class="m-hint" id="mHint"></p>
+      </div>
+      <fieldset class="seg-f">
+        <legend>놀 수 있는 시간</legend>
+        <div class="seg" id="minutes" role="group" aria-label="놀 수 있는 시간"></div>
+      </fieldset>
+      <fieldset class="seg-f">
+        <legend>장소</legend>
+        <div class="seg" id="place" role="group" aria-label="장소"></div>
+      </fieldset>
+      <fieldset>
+        <legend>집에 있는 것 <small>고른 재료로만 추천해요</small></legend>
+        <div class="mats" id="mats"></div>
+      </fieldset>
+      <label class="lbl" for="note">요즘 걱정되는 점 <small>선택 · AI에 보내지 않아요</small></label>
+      <textarea id="note" rows="2" maxlength="200" placeholder="예: 밖에 나가고 싶어 하는데 비가 와요"></textarea>
+      <div class="triage" id="triage" role="alert" hidden></div>
+      <button class="primary" id="run" type="submit">오늘 놀이 추천받기</button>
+    </form>
+
+    <!-- 오른쪽: 추천 결과 -->
+    <div class="pane out" id="out" aria-live="polite"></div>
+  </section>
+
+  <section class="lower">
+    <article class="card-box" aria-labelledby="logH">
+      <div class="box-h"><h2 id="logH">이번 주 놀이 기록</h2><span class="sub" id="logSum"></span></div>
+      <p class="sub">‘했어요’를 누르면 쌓여요. 덜 한 영역의 놀이가 먼저 추천돼요.</p>
+      <div class="bars" id="bars"></div>
+      <ul class="log" id="log"></ul>
+    </article>
+    <article class="card-box" aria-labelledby="chkH">
+      <h2 id="chkH">놀이 아이디어 안전 검사</h2>
+      <p class="sub">인터넷에서 본 놀이를 적으면 지금 월령 기준으로 검사해요.</p>
+      <label class="sr" for="idea">놀이 아이디어</label>
+      <div class="idea-in">
+        <input id="idea" maxlength="80" autocomplete="off" placeholder="예: 쌀 촉감 놀이">
+        <button class="ghost-btn" id="ideaBtn" type="button">검사</button>
+      </div>
+      <div id="ideaOut" aria-live="polite"></div>
+      <details class="rules">
+        <summary>안전 기준 목록 보기</summary>
+        <table class="rt"><thead><tr><th>기준</th><th>뺄 월령</th><th>찾는 낱말</th></tr></thead><tbody id="rules"></tbody></table>
+        <p class="fine">강사가 검토한 서비스 자체 기준이에요. 법적 기준이 아니며, 의심되면 빼는 쪽으로 정했어요.</p>
+      </details>
+    </article>
+    <article class="card-box goal" aria-labelledby="goalH">
+      <h2 id="goalH">1기 목표치</h2>
+      <dl>
+        <div><dt>가입 부모</dt><dd>530명</dd></div>
+        <div><dt>월 구독</dt><dd>74명</dd></div>
+        <div><dt>구독료</dt><dd>월 4,900원</dd></div>
+      </dl>
+      <p class="fine">가상의 수강생 ‘놀이처방전’이 목표로 둔 숫자예요. 실제 실적이 아닙니다.</p>
+    </article>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 창업 트랙 · 놀이처방전 목표 모델 · 추천 Claude API (실패 시 강사 놀이 목록) · 안전 기준 목록으로 항상 한 번 더 거름</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

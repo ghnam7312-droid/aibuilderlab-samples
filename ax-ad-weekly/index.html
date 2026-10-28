@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>광고한장 · 채널별 광고 주간 리포트</title>
+<meta name="description" content="광고 채널 4곳의 성과를 전환 기준부터 맞춘 뒤 합산해 주간 리포트 한 장으로 만드는 도구">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='3' y='3' width='30' height='30' rx='8' fill='%230D7C72'/%3E%3Cpath d='M10 25V18M16 25V12M22 25V15M28 25V9' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=marketing-team">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 높이가 다른 막대 넷이 한 장 위에 나란히 선다 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="3" y="3" width="30" height="30" rx="8" fill="#0D7C72"/>
+      <path d="M10 25V18M16 25V12M22 25V15M28 25V9" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <path d="M8 28.5h20" stroke="#9BE3D8" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <div><strong>광고한장</strong><span>채널 4곳, 기준부터 맞추고 한 장으로</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="goal" title="1기 목표치">목표 <s>3시간</s> <b>20분</b></span>
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <div class="grid">
+    <!-- 왼쪽: 원본 숫자와 전환 기준표 -->
+    <section class="panel" aria-labelledby="srcTitle">
+      <h1 id="srcTitle">채널 원본 <small>이번 주 내려받은 숫자</small></h1>
+      <div class="tabs" role="tablist" aria-label="광고 채널" id="chTabs"></div>
+      <div class="raw-wrap" role="tabpanel" id="rawPanel">
+        <table class="raw" id="raw"></table>
+      </div>
+      <p class="err" id="rawErr" role="alert" hidden></p>
+
+      <h2 class="h2" id="stdTitle">전환 기준표</h2>
+      <p class="tip">채널마다 ‘전환’으로 세는 것이 다릅니다. 리포트에 넣을 기준을 위에서 고르면, 채널마다 그 기준에 맞는 숫자만 다시 세어 더합니다.</p>
+      <div class="std-wrap"><table class="std" id="std" aria-labelledby="stdTitle"></table></div>
+      <ul class="legend" aria-label="기준표 읽는 법">
+        <li><i class="lg both"></i>기준대로 셈</li>
+        <li><i class="lg extra"></i>채널만 셈 → 합산에서 뺌</li>
+        <li><i class="lg missing"></i>자료 없음 → 0건</li>
+      </ul>
+    </section>
+
+    <!-- 오른쪽: 리포트 한 장 -->
+    <section class="sheet" aria-labelledby="repTitle">
+      <div class="sheet-h">
+        <div>
+          <p class="kicker">하루살림 온라인몰 · 마케팅팀</p>
+          <h2 id="repTitle">주간 광고 리포트</h2>
+          <p class="sub" id="repSub"></p>
+        </div>
+        <div class="acts">
+          <button class="ghost-btn" id="copy" type="button">메일 본문 복사</button>
+          <button class="ghost-btn" id="csv" type="button">CSV 내려받기</button>
+          <button class="primary" id="publish" type="button">이번 주 발행</button>
+        </div>
+      </div>
+      <div class="kpis" id="kpis" aria-live="polite"></div>
+      <div class="gap" id="gap"></div>
+      <div class="tbl-wrap"><table class="ch" id="chTable"></table></div>
+      <ul class="warn" id="warn" hidden></ul>
+
+      <div class="sum-h">
+        <h3>이번 주 요약</h3>
+        <span id="mode"></span>
+        <button class="link-btn" id="rewrite" type="button">요약 다시 쓰기</button>
+      </div>
+      <ol class="sum" id="sum" aria-live="polite"></ol>
+      <p class="action" id="action"></p>
+      <details class="md" id="mdBox" hidden>
+        <summary>복사한 메일 본문 보기</summary>
+        <pre id="mdOut"></pre>
+      </details>
+    </section>
+  </div>
+
+  <section class="log-wrap" aria-labelledby="logTitle">
+    <div class="log-h">
+      <h2 id="logTitle">발행 기록</h2>
+      <p id="streak"></p>
+    </div>
+    <ol class="weeks" id="weeks" aria-label="최근 8주 발행 여부"></ol>
+    <ul class="log" id="log"></ul>
+    <p class="fine">실제 버전은 구글 시트 + Apps Script가 매주 월요일 09:00에 채널 파일을 모아 발행합니다. 이 데모는 같은 계산을 브라우저에서 하고, 발행은 기록에만 남깁니다.</p>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 직장인 AX 트랙 · 보고서는자동 목표 모델 · 가상의 쇼핑몰 ‘하루살림’ 데이터 · 요약 Claude API (실패 시 규칙)</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

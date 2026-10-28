@@ -1,0 +1,11 @@
+{
+  "name": "ppyeodae",
+  "version": "1.0.0",
+  "private": true,
+  "description": "뼈대 — 화면 기준으로 테이블을 줄인 캡스톤 기술 설계서 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

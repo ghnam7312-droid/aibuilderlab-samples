@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>맞춤사례 · 교육 전 사전 진단</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='2' y='2' width='32' height='32' rx='9' fill='%236A4BD6'/%3E%3Cpath d='M10 12h16M10 18h10' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='25' cy='24' r='5' fill='%23FFD166'/%3E%3C/svg%3E">
+<meta name="description" content="사전 설문으로 고객사의 고민을 진단하고, 공개 정보와 설문 요약만 써서 업종에 맞는 강의 사례 초안을 만드는 도구 (AI 빌더랩 1기 목표 모델 예시)">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=corp-trainer">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 강의 노트 두 줄과, 그 회사에만 맞는 노란 점 하나 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="2" y="2" width="32" height="32" rx="9" fill="#6A4BD6"/>
+      <path d="M10 12h16M10 18h10" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="25" cy="24" r="5" fill="#FFD166"/>
+    </svg>
+    <div><strong>맞춤사례</strong><span>회사마다 다른 사례로 강의를 준비해요</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <p class="goal" aria-label="1기 목표치"><b>1기 목표치</b><span>맞춤 사례 준비 3시간 → 40분</span><span>교육 만족도 4.1 → 4.6</span></p>
+
+  <div class="cos" role="tablist" aria-label="고객사" id="cos"></div>
+
+  <div class="grid">
+    <div class="col">
+      <!-- ① 사전 설문 진단 -->
+      <section class="card" aria-labelledby="dgTitle">
+        <div class="card-h"><h2 id="dgTitle"><span class="step">1</span>사전 설문 진단</h2><span class="meta" id="dgMeta"></span></div>
+        <div id="diag"></div>
+      </section>
+
+      <!-- ② 자료 기준 검사 -->
+      <section class="card" aria-labelledby="mtTitle">
+        <div class="card-h"><h2 id="mtTitle"><span class="step">2</span>AI에 넣을 자료 · 기준 검사</h2><span class="meta" id="mtMeta"></span></div>
+        <p class="rule">기준: <b>공개 정보</b>와 <b>설문 요약</b>만 넣어요. 대외비·실적·인사 정보·직원 실명·연락처는 빼고, 금액·비율 수치는 공개 출처를 사람이 확인해야 넣어요.</p>
+        <ul class="mats" id="mats"></ul>
+        <form class="add" id="addForm">
+          <div class="add-row">
+            <label class="sr" for="mTitle">자료 이름</label>
+            <input id="mTitle" placeholder="자료 이름 (예: 보도자료)" required maxlength="40">
+            <label class="sr" for="mSrc">출처</label>
+            <select id="mSrc"><option value="public">공개 정보</option><option value="survey">설문 요약</option><option value="internal">회사 내부 자료</option></select>
+          </div>
+          <label class="sr" for="mText">자료 내용</label>
+          <textarea id="mText" rows="2" placeholder="담당자에게 받은 내용을 붙여 넣으면 넣기 전에 바로 검사해요" required maxlength="600"></textarea>
+          <div class="add-foot"><span id="mPreview" class="pv" aria-live="polite"></span><button class="ghost-btn" type="submit">자료 추가</button></div>
+        </form>
+        <details class="sent">
+          <summary>AI에 실제로 보내는 내용 보기</summary>
+          <pre id="sent"></pre>
+        </details>
+      </section>
+    </div>
+
+    <!-- ③ 맞춤 사례 -->
+    <section class="card out" aria-labelledby="csTitle">
+      <div class="card-h">
+        <h2 id="csTitle"><span class="step">3</span>맞춤 사례 초안</h2>
+        <button class="primary" id="run" type="button">사례 초안 만들기</button>
+      </div>
+      <div id="plan" aria-live="polite"></div>
+      <div class="out-tools">
+        <button class="ghost-btn" id="copy" type="button">강의 노트 복사</button>
+        <button class="dark" id="print" type="button">인쇄</button>
+      </div>
+      <details class="md" id="mdBox" hidden><summary>복사한 강의 노트 보기</summary><pre id="mdOut"></pre></details>
+      <p class="fine">사례는 초안이에요. 강사가 고객사 담당자와 사실관계를 확인한 뒤 강의에 씁니다. 회사 내부 자료는 이 화면 밖으로 나가지 않아요.</p>
+    </section>
+  </div>
+</main>
+
+<footer class="foot">AI 빌더랩 창업 트랙 · 교육효과측정소 목표 모델 · 사례 초안 Claude API (실패 시 규칙) · 자료 검사는 브라우저에서</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

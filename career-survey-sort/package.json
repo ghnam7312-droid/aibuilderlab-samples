@@ -1,0 +1,11 @@
+{
+  "name": "gallae",
+  "version": "1.0.0",
+  "private": true,
+  "description": "갈래 — 설문 서술형 응답 분류 · 사람 검수 일치율 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

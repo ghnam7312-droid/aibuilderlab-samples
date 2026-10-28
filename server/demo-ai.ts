@@ -2,6 +2,7 @@ import "server-only";
 import { createHash } from "crypto";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendDemoAiAlert } from "@/lib/demo-ai-alert";
+import { GALLERY_TASKS } from "@/lib/demo-ai-tasks-gallery";
 
 /**
  * 예시 서비스(/demo/*)가 함께 쓰는 Claude 호출.
@@ -110,6 +111,8 @@ export const TASKS: Record<string, Task> = {
     shape: `{"leading":false,"reason":"","rewrite":""}`,
     maxTokens: 300,
   },
+  // 빌더 갤러리 예시 서비스 51개 (lib/demo-ai-tasks-gallery.ts)
+  ...GALLERY_TASKS,
 };
 
 async function usageOk(hash: string): Promise<boolean> {

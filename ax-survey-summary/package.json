@@ -1,0 +1,11 @@
+{
+  "name": "ppajimeopsi",
+  "version": "1.0.0",
+  "private": true,
+  "description": "빠짐없이 — 교육 만족도 서술형 응답 요약, 3명 이상 의견은 모두 남김 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

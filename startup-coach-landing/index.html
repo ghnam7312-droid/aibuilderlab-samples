@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다음걸음 · 코칭 상품 · 랜딩 문구 실험</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='3' y='3' width='30' height='30' rx='9' fill='%231B7F5A'/%3E%3Cpath d='M9 25h6v-5h6v-5h6' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta name="description" content="1회 상담 다음의 4주 패키지를 구성하고, 랜딩 문구를 A/B로 실험하는 도구. 과장 표현을 검사해 실제 후기로 바꾼다.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=career-coach">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 한 칸씩 올라가는 계단 = 다음 걸음 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="3" y="3" width="30" height="30" rx="9" fill="#1B7F5A"/>
+      <path d="M9 25h6v-5h6v-5h6" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div><strong>다음걸음</strong><span>한 번 상담 다음 걸음까지 설계해요</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <ul class="goals" aria-label="1기 목표치">
+    <li><b>4주 패키지</b><span>출시</span></li>
+    <li><b>2.1% → 4.4%</b><span>랜딩 신청 전환율</span></li>
+    <li class="g-note">1기 목표치 · 후기와 숫자는 가상</li>
+  </ul>
+
+  <ol class="journey" id="journey" aria-label="고객 여정"></ol>
+
+  <section class="grid">
+    <form class="panel" id="prodForm" aria-labelledby="prodH" autocomplete="off">
+      <h2 id="prodH">상품 구성</h2>
+      <div class="two">
+        <div><label class="fld" for="sessions">회차 (주 1회)</label><input type="number" id="sessions" min="1" max="12" inputmode="numeric"></div>
+        <div><label class="fld" for="price">패키지 가격 (원)</label><input type="number" id="price" min="0" step="10000" inputmode="numeric"></div>
+      </div>
+      <fieldset class="incl" id="incl"><legend class="fld">포함 항목</legend></fieldset>
+      <div class="math" id="math" aria-live="polite"></div>
+    </form>
+
+    <section class="panel" aria-labelledby="copyH">
+      <div class="panel-h"><h2 id="copyH">B안 문구</h2><span class="mode" id="mode" data-mode="rule">규칙 기반</span></div>
+      <label class="fld" for="headline">제목</label><input type="text" id="headline" data-k="headline">
+      <label class="fld" for="sub">부제</label><input type="text" id="sub" data-k="sub">
+      <label class="fld" for="bullets">항목 (한 줄에 하나)</label><textarea id="bullets" rows="4" data-k="bullets"></textarea>
+      <label class="fld" for="cta">버튼</label><input type="text" id="cta" data-k="cta">
+      <ul class="lint" id="lint" aria-live="polite"></ul>
+      <div class="btns"><button class="primary" id="gen" type="button">새 문구 만들기</button><button class="ghost-btn" id="clean" type="button">과장 빼고 후기로 바꾸기</button></div>
+      <ul class="replaced" id="replaced"></ul>
+    </section>
+
+    <section class="panel" aria-labelledby="pvH">
+      <div class="panel-h"><h2 id="pvH">미리보기</h2>
+        <div class="seg" role="group" aria-label="보기 안"><button type="button" data-v="A" aria-pressed="false">A안 (기존)</button><button type="button" data-v="B" aria-pressed="true">B안</button></div></div>
+      <article class="preview" id="preview" aria-live="polite"></article>
+      <div class="check" id="check"></div>
+      <div class="btns"><button class="dark" id="publish" type="button">B안 게시</button><button class="ghost-btn" id="copy" type="button">문구 복사</button></div>
+    </section>
+  </section>
+
+  <section class="grid2">
+    <article class="panel" aria-labelledby="abH">
+      <h2 id="abH">A/B 실험 결과</h2>
+      <p class="tip">같은 기간 방문자를 반씩 나눠 보여 준 결과예요. 숫자를 바꾸면 판단도 바뀌어요.</p>
+      <table class="ab" id="ab"></table>
+      <p class="verdict" id="verdict" role="status"></p>
+      <p class="fine">두 비율 차이 검정(z)은 참고용이에요. 방문이 적을 때는 판단하지 않아요.</p>
+    </article>
+    <article class="panel" aria-labelledby="rvH">
+      <h2 id="rvH">실제 후기</h2>
+      <p class="tip">게시 동의를 받은 후기만 문구에 써요. 이름은 성만 남기고 가려요.</p>
+      <ul class="reviews" id="reviews"></ul>
+    </article>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 창업 트랙 · 이직나침반 목표 모델 · 문구 Claude API (실패 시 규칙) · 과장 표현 검사는 항상 규칙</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

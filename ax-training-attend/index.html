@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>이수함 · 교육 신청·출결 취합</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='4' y='4' width='28' height='28' rx='7' fill='%230D8A72'/%3E%3Cpath d='M11 13h14M11 19h8M11 25h5' stroke='%23fff' stroke-width='2.6' stroke-linecap='round'/%3E%3Cpath d='M20 24l3 3 6-7' fill='none' stroke='%23FFD66B' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta name="description" content="교육 신청 목록과 QR 출석 기록을 사번 기준으로 합쳐 회차별 출결·이수 현황과 결과 보고 문장을 만드는 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=hr-edu">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 출석부 줄 끝에 이수 체크 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="4" y="4" width="28" height="28" rx="7" fill="#0D8A72"/>
+      <path d="M11 13h14M11 19h8M11 25h5" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M20 24l3 3 6-7" fill="none" stroke="#FFD66B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div><strong>이수함</strong><span>신청·출석·이수를 사번 하나로 맞춰요</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="course" aria-label="교육 설정">
+    <label class="f grow"><span>과정</span><input id="course" type="text" autocomplete="off"></label>
+    <label class="f"><span>회차</span><select id="sessions"><option>3</option><option selected>4</option><option>5</option><option>6</option></select></label>
+    <label class="f"><span>이수 기준</span><select id="passRate"><option value="100">전 회차</option><option value="75" selected>출석 75% 이상</option><option value="50">출석 50% 이상</option></select></label>
+    <label class="f"><span>시작 시각</span><input id="start" type="time" value="14:00"></label>
+    <p class="goal"><b>목표치</b> 회차당 취합 3시간 → 30분 · 연 40회 교육 적용</p>
+  </section>
+
+  <section class="split" aria-label="취합">
+    <div class="pane src-pane">
+      <div class="tabs" role="tablist" aria-label="원본 자료">
+        <button type="button" role="tab" id="tabApp" aria-selected="true" aria-controls="srcBox">신청 목록 <em id="nApp"></em></button>
+        <button type="button" role="tab" id="tabAtt" aria-selected="false" aria-controls="srcBox">출석 기록 (QR) <em id="nAtt"></em></button>
+      </div>
+      <p class="tip" id="tip"></p>
+      <div id="srcBox" role="tabpanel">
+        <label class="sr" for="src">원본 내용</label>
+        <textarea id="src" spellcheck="false"></textarea>
+      </div>
+      <div class="src-foot">
+        <span id="srcInfo"></span>
+        <button class="primary" id="run" type="button">사번 기준으로 취합</button>
+      </div>
+    </div>
+
+    <div class="pane out-pane" id="out" aria-live="polite"></div>
+  </section>
+
+  <section class="roster-wrap" aria-labelledby="rosterTitle">
+    <div class="roster-h">
+      <div>
+        <h2 id="rosterTitle">이수 현황</h2>
+        <p>○ 출석 · △ 지각(시작 10분 뒤) · 빈칸 결석. 사번은 화면과 내보내기에서 가려 보여요.</p>
+      </div>
+      <div class="tools">
+        <div class="seg" role="group" aria-label="거르기" id="filter">
+          <button type="button" data-f="all" aria-pressed="true">전체</button>
+          <button type="button" data-f="fail" aria-pressed="false">미이수</button>
+          <button type="button" data-f="flag" aria-pressed="false">확인 표시</button>
+        </div>
+        <button class="ghost-btn" id="csv" type="button">CSV 내보내기</button>
+        <button class="dark" id="notice" type="button">미이수 안내 문구 복사</button>
+      </div>
+    </div>
+    <div class="table-scroll"><table class="roster" id="roster"></table></div>
+    <details class="md" id="noticeBox" hidden><summary>복사한 안내 문구 보기</summary><pre id="noticeOut"></pre></details>
+    <p class="fine">실제 버전은 사내 신청 폼 응답 시트와 QR 출석 시트를 바로 읽고, 미이수 예정자에게 메신저 알림을 보냅니다. 이 데모는 붙여 넣은 표로 동작하며, AI에는 이름·사번 없이 집계 숫자만 보냅니다.</p>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 직장인 AX 트랙 · 출결은알아서 목표 모델 · 가상의 회사 온결물산 교육 데이터</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "ttoryeot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "또렷 — 키오스크 접근성 점검과 개선 제안서 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

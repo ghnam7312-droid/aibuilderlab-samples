@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>사실먼저 · 노무 상담 사전 접수</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='5' y='4' width='26' height='29' rx='5' fill='%230F766E'/%3E%3Cpath d='M11 13h14M11 19h14M11 25h8' stroke='%23fff' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="description" content="노무 상담 전에 의뢰인이 쓴 상황 설명에서 근무 기간·임금·근무 시간·계약서 유무 같은 사실관계만 정리하고, 판단은 노무사 상담으로 넘기는 사전 접수 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=labor-office">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 접수 서류철 위의 정리된 세 줄 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="5" y="4" width="26" height="29" rx="5" fill="#0F766E"/>
+      <rect x="12" y="1.5" width="12" height="6" rx="3" fill="#0B4F4A"/>
+      <path d="M11 14h14M11 20h14M11 26h8" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
+    </svg>
+    <div><strong>사실먼저</strong><span>상담 전에 사실관계부터 정리해요</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <div class="goal">
+    <p><b>목표치</b> 접수 정리 <s>40분</s> → <em>8분</em> · 월 상담 <s>18건</s> → <em>34건</em></p>
+    <p class="line"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5 2.5 4v4c0 3.2 2.3 5.7 5.5 6.5 3.2-.8 5.5-3.3 5.5-6.5V4z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>이 도구와 AI는 <b>사실만 정리</b>합니다. 받을 수 있는지·위반인지 같은 판단은 <b>노무사 상담에서 확인</b>합니다.</p>
+  </div>
+
+  <div class="layout">
+    <aside class="list-pane" aria-labelledby="listTitle">
+      <div class="pane-h"><h2 id="listTitle">접수 목록</h2><button class="ghost-btn sm" id="newIntake" type="button">+ 새 접수</button></div>
+      <ul class="intakes" id="intakes"></ul>
+      <p class="fine">이름은 목록·메모에서 가려서 보여요. 연락처는 이 브라우저에도 저장하지 않아요.</p>
+    </aside>
+
+    <section class="pane in-pane" aria-labelledby="inTitle">
+      <div class="pane-h">
+        <h1 id="inTitle">의뢰인 설명</h1>
+        <div class="seg" role="group" aria-label="보기 방식">
+          <button type="button" id="modeEdit" aria-pressed="false">고치기</button>
+          <button type="button" id="modeSent" aria-pressed="true">문장 보기</button>
+        </div>
+      </div>
+      <div class="who-row">
+        <label>이름 <input id="fName" autocomplete="off" maxlength="20"></label>
+        <label>연락처 <input id="fPhone" autocomplete="off" inputmode="tel" maxlength="20" placeholder="010-0000-0000"></label>
+        <div class="seg side" role="group" aria-label="요청자">
+          <button type="button" data-side="근로자" aria-pressed="true">근로자</button>
+          <button type="button" data-side="사업주" aria-pressed="false">사업주</button>
+        </div>
+      </div>
+      <label class="sr" for="story">상황 설명</label>
+      <textarea id="story" spellcheck="false" hidden placeholder="언제부터 어디서 일했는지, 얼마를 받았는지, 무엇이 궁금한지 편하게 적어 주세요."></textarea>
+      <ol class="sents" id="sents" aria-label="문장별 원문"></ol>
+      <div class="in-foot">
+        <span id="inInfo"></span>
+        <button class="primary" id="run" type="button">사실 정리하기</button>
+      </div>
+    </section>
+
+    <section class="pane out-pane" id="out" aria-live="polite" aria-label="사실 정리 결과"></section>
+  </div>
+
+  <section class="guard-box" aria-labelledby="guardTitle">
+    <div>
+      <h2 id="guardTitle">판단 문장 검사</h2>
+      <p>AI가 정리 결과에 쓴 문장은 모두 이 검사를 거쳐요. 판단으로 읽히는 문장은 결과에서 빼고 ‘노무사 상담에서 확인’으로 옮깁니다. 직접 넣어 보세요.</p>
+    </div>
+    <div class="guard-try">
+      <label class="sr" for="gIn">검사할 문장</label>
+      <input id="gIn" autocomplete="off" maxlength="120" value="이 경우 퇴직금을 받을 수 있습니다.">
+      <div id="gOut" role="status" aria-live="polite"></div>
+      <div class="g-ex" role="group" aria-label="예시 문장">
+        <button type="button" data-g="입사일은 2025-03-04입니다.">사실 문장</button>
+        <button type="button" data-g="계약서를 쓰지 않은 것은 위반입니다.">판단 문장</button>
+        <button type="button" data-g="퇴직금을 받을 수 있나요?">의뢰인 질문</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 스타트업 트랙 · 노무한눈 목표 모델 · 사실 정리 Claude API (실패 시 규칙) · 판단은 노무사 상담에서</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

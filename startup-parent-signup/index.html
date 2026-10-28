@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>자리있음 · 강의 신청 정리</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='10' fill='%230E8C8A'/%3E%3Cpath d='M10 24v-6a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v6' fill='none' stroke='%23fff' stroke-width='3'/%3E%3Cpath d='M15 13l3 3 6-6' fill='none' stroke='%23BFF0E9' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="description" content="전화·문자로 받은 부모 교육 강의 신청을 붙여 넣으면 명단으로 정리하고, 전화번호 기준으로 중복을 합치고, 정원·대기와 안내 문자까지 만드는 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=parenting-edu">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 의자 위의 체크 = 자리가 확정됐다 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect width="36" height="36" rx="10" fill="#0E8C8A"/>
+      <path d="M10 27v-7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v7M10 23h16" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round"/>
+      <path d="M13.5 10.5l3 3 6-6" fill="none" stroke="#BFF0E9" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div><strong>자리있음</strong><span>강의 신청 정리부터 안내 문자까지</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <!-- 강의 세 개: 누르면 아래 명단이 바뀐다 -->
+  <section class="sessions" id="sessions" role="group" aria-label="강의 고르기"></section>
+
+  <section class="split">
+    <!-- 왼쪽: 새로 들어온 신청 -->
+    <div class="pane inbox">
+      <div class="pane-h"><h1>새로 들어온 신청</h1><span id="modeBadge"></span></div>
+      <p class="tip">전화·문자로 받은 내용을 한 줄에 한 분씩 붙여 넣으세요. 신청 폼으로 들어온 분은 이미 명단에 있어요.</p>
+      <label class="sr" for="memo">전화·문자 메모</label>
+      <textarea id="memo" rows="6" spellcheck="false"></textarea>
+      <div class="row-btns">
+        <span class="sub" id="memoInfo"></span>
+        <button class="ghost-btn" id="parse" type="button">정리하기</button>
+      </div>
+      <div id="preview" aria-live="polite"></div>
+    </div>
+
+    <!-- 오른쪽: 명단 -->
+    <div class="pane roster">
+      <div class="pane-h">
+        <h2 id="rosterH">명단</h2>
+        <div class="tools">
+          <label class="sr" for="find">이름으로 찾기</label>
+          <input id="find" type="search" placeholder="이름 찾기" autocomplete="off">
+          <button class="dark" id="csv" type="button">기관 제출용 명단 (.csv)</button>
+        </div>
+      </div>
+      <p class="tip">전화번호는 가운데 네 자리를 가려 보여 주고, 내보내기에도 가린 채로 들어가요.</p>
+      <div class="tbl-wrap"><table class="rt" id="roster"></table></div>
+    </div>
+  </section>
+
+  <section class="lower">
+    <article class="card-box msg" aria-labelledby="msgH">
+      <div class="box-h">
+        <h2 id="msgH">안내 문자</h2>
+        <div class="seg" id="tplKind" role="group" aria-label="문자 종류"></div>
+      </div>
+      <label class="lbl" for="tpl">문구 <small>{이름} {강의} {기관} {일시} {장소} {대기} 칸이 채워져요</small></label>
+      <textarea id="tpl" rows="4"></textarea>
+      <p class="warn" id="tplWarn" hidden></p>
+      <div class="msgs" id="msgs"></div>
+      <div class="row-btns">
+        <span class="sub">이 데모는 실제로 문자를 보내지 않아요. 실제 버전은 문자 발송 서비스로 보냅니다.</span>
+        <button class="primary" id="copyMsg" type="button">문자 내용 복사</button>
+      </div>
+      <details class="md" id="mdBox" hidden><summary>복사한 내용 보기</summary><pre id="mdOut"></pre></details>
+    </article>
+    <article class="card-box goal" aria-labelledby="goalH">
+      <h2 id="goalH">1기 목표치</h2>
+      <dl>
+        <div><dt>명단 정리 (회당)</dt><dd>1시간 → 10분</dd></div>
+        <div><dt>강의 횟수 (월)</dt><dd>6회 → 11회</dd></div>
+      </dl>
+      <p class="fine" id="saved"></p>
+      <p class="fine">가상의 수강생 ‘놀이처방전’이 목표로 둔 숫자예요. 실제 실적이 아닙니다. 신청자·기관은 모두 가상입니다.</p>
+    </article>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 창업 트랙 · 놀이처방전 목표 모델 · 메모 정리 Claude API (실패 시 규칙) · 중복 확인은 전화번호 기준 · 번호는 가려서 처리</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

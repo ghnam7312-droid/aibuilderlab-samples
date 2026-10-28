@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>말해봄 · 말하기 숙제 첨삭</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='10' fill='%23E5533D'/%3E%3Crect x='14' y='7' width='8' height='14' rx='4' fill='%23fff'/%3E%3Cpath d='M10 17a8 8 0 0 0 16 0M18 25v4' fill='none' stroke='%23fff' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="description" content="학생이 영어 말하기 숙제를 녹음하거나 받아쓴 문장을 올리면, 한 번에 고칠 점 2개와 다시 말하기 대본을 돌려주는 튜터용 첨삭 서비스">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=english-tutor">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 마이크 = 말한 것을 그대로 받는다 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect width="36" height="36" rx="10" fill="#E5533D"/>
+      <rect x="14" y="7" width="8" height="14" rx="4" fill="#fff"/>
+      <path d="M10 17a8 8 0 0 0 16 0M18 25v4" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
+    </svg>
+    <div><strong>말해봄</strong><span>말하기 숙제, 고칠 점은 딱 두 개</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hw" aria-labelledby="hwTitle">
+    <div>
+      <p class="eyebrow" id="hwWeek">이번 주 숙제</p>
+      <h1 id="hwTitle">지난 주말에 한 일을 30초 동안 말해 보세요</h1>
+      <p class="hw-sub">목표 표현 <code>ended up -ing</code> (결국 ~하게 됐다) 를 한 번 넣어 보세요.</p>
+    </div>
+    <dl class="goal">
+      <div><dt>숙제 제출률</dt><dd><b id="rateNow">-</b><span>목표 35% → 78%</span></dd></div>
+      <div><dt>유료 수강생</dt><dd><b>41명</b><span>월 3만 원 · 1기 목표치</span></dd></div>
+    </dl>
+  </section>
+
+  <section class="split" aria-label="말하기 첨삭">
+    <div class="pane in-pane">
+      <div class="pane-h">
+        <h2>말하기 제출</h2>
+        <label class="who"><span class="sr">학생</span><select id="student" aria-label="학생 고르기"></select></label>
+      </div>
+
+      <div class="rec" id="recBox">
+        <button class="mic" id="mic" type="button" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <span id="micLabel">녹음하며 받아쓰기</span>
+        </button>
+        <span class="timer" id="timer" aria-live="off">0:00</span>
+        <p class="rec-note" id="recNote">영어로 말하면 브라우저가 받아써요. 음성 인식이 없거나 마이크가 막혀 있으면 아래에 받아쓴 문장을 직접 넣거나 샘플 녹음 대본을 고르세요.</p>
+      </div>
+
+      <div class="samples" role="group" aria-label="샘플 녹음 대본">
+        <span>샘플 녹음 대본</span>
+        <button type="button" data-sample="minseo">민서 · 중급</button>
+        <button type="button" data-sample="dohyun">도현 · 초중급</button>
+        <button type="button" data-sample="hayoon">하윤 · 초급</button>
+        <button type="button" data-sample="seoa">서아 · 상급</button>
+      </div>
+
+      <label class="lab" for="said">받아쓴 문장 <span>(영어 그대로)</span></label>
+      <textarea id="said" spellcheck="false" placeholder="Last weekend I ..."></textarea>
+      <div class="in-foot">
+        <label class="sec"><span>말한 길이</span><input id="secs" type="number" min="1" max="300" inputmode="numeric"> 초</label>
+        <span class="count" id="count"></span>
+        <button class="primary" id="run" type="button">첨삭 받기</button>
+      </div>
+    </div>
+
+    <div class="pane out-pane" id="out" aria-live="polite"></div>
+  </section>
+
+  <section class="tutor" aria-labelledby="tutorTitle">
+    <div class="tutor-h">
+      <div>
+        <h2 id="tutorTitle">튜터 화면 · 이번 주 제출</h2>
+        <p>학생을 누르면 그 학생의 제출을 위에서 열어요. 첨삭은 자동으로 2개까지만 학생에게 가고, 나머지는 여기서만 보여요.</p>
+      </div>
+      <div class="tools">
+        <div class="seg" role="group" aria-label="학생 거르기">
+          <button type="button" data-f="all" aria-pressed="true">전체</button>
+          <button type="button" data-f="todo" aria-pressed="false">미제출</button>
+          <button type="button" data-f="retry" aria-pressed="false">다시 말하기 전</button>
+        </div>
+        <button class="ghost-btn" id="nudge" type="button">미제출 알림 문구 복사</button>
+      </div>
+    </div>
+    <ul class="roster" id="roster"></ul>
+    <details class="md" id="mdBox" hidden><summary>복사한 내용 보기</summary><pre id="mdOut"></pre></details>
+    <p class="fine">녹음 파일은 저장하지 않고 받아쓴 문장만 이 브라우저에 남아요. 복사할 때 문장 속 전화번호·메일 주소는 가려져요. 학생 이름과 문장은 모두 가상의 예시예요.</p>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 창업 트랙 · 스피킹메이트 목표 모델 · 받아쓰기 Web Speech API (없으면 직접 입력) · 첨삭 Claude API (실패 시 규칙)</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

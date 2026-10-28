@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>응답대로 · 캠페인 기획서</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='4' y='3' width='24' height='30' rx='4' fill='%236A4BD8'/%3E%3Ccircle cx='27' cy='26' r='7' fill='%23F5C542'/%3E%3C/svg%3E">
+<meta name="description" content="실제 설문 응답만 근거로 페르소나와 메시지를 만들고, 근거 없는 주장은 걸러 내는 20대 신규 음료 캠페인 기획서 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=marketer">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 기획서 한 장에 붙은 응답 번호 스티커 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="4" y="3" width="24" height="30" rx="4" fill="#6A4BD8"/>
+      <path d="M9 10h14M9 15h14M9 20h8" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".85"/>
+      <circle cx="27" cy="26" r="7.5" fill="#F5C542"/>
+      <text x="27" y="29.2" text-anchor="middle" font-size="8.5" font-weight="800" fill="#24183F" font-family="sans-serif">R</text>
+    </svg>
+    <div><strong>응답대로</strong><span>실제 응답만 근거로 쓰는 캠페인 기획서</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="kpis" id="kpis" aria-label="요약"></section>
+
+  <section class="split">
+    <!-- 왼쪽: 설문 응답 -->
+    <div class="pane resp-pane">
+      <div class="pane-h"><h1>설문 응답</h1><span class="tiny" id="respCount"></span></div>
+      <p class="tip">20대에게 받은 실제 응답이에요. 기획서의 모든 숫자는 이 목록에서만 나와요. 번호를 누르면 어디에 쓰였는지 보여요.</p>
+      <div class="chips" id="respFilter" role="group" aria-label="상황별 거르기"></div>
+      <ol class="resp" id="resp" aria-label="응답 목록"></ol>
+      <details class="add" id="addBox">
+        <summary>응답 한 건 추가</summary>
+        <form id="addForm" novalidate>
+          <label>마시는 상황<select name="when" id="fWhen"></select></label>
+          <fieldset><legend>고르는 기준 (여러 개)</legend><div class="crit" id="fCrit"></div></fieldset>
+          <div class="row2">
+            <label>살 만한 가격(원)<input name="price" type="number" inputmode="numeric" min="500" max="10000" step="100" value="2000"></label>
+            <label>주로 사는 곳<select name="channel" id="fCh"></select></label>
+          </div>
+          <label>한마디 (선택)<input name="quote" maxlength="60" placeholder="예: 운동 끝나고 단 건 싫어요"></label>
+          <p class="err" id="addErr" role="alert" hidden></p>
+          <button class="primary sm" type="submit">추가하고 다시 계산</button>
+        </form>
+      </details>
+    </div>
+
+    <!-- 오른쪽: 기획서 -->
+    <article class="pane doc" id="doc" aria-live="polite">
+      <div class="doc-h">
+        <div><p class="eyebrow">수업 과제 · 20대 대상 신규 음료 캠페인</p><h2 id="docTitle"></h2><p class="meta" id="docMeta"></p></div>
+        <div class="doc-tools">
+          <span id="planMode"></span>
+          <button class="ghost-btn" id="rewrite" type="button">기획서 다시 쓰기</button>
+          <button class="ghost-btn" id="copyMd" type="button">마크다운 복사</button>
+          <button class="ghost-btn" id="print" type="button">인쇄</button>
+        </div>
+      </div>
+      <h3>1. 타깃 페르소나</h3>
+      <div class="personas" id="personas"></div>
+      <h3>2. 메시지 안 <span class="sub">평가표: 근거 · 타깃 · 길이 · 과장 없음 (각 5점)</span></h3>
+      <div class="tbl-wrap"><table class="msgs" id="msgs"></table></div>
+      <p class="hand" id="hand" hidden></p>
+      <h3>3. 근거 검사</h3>
+      <div class="audit-tools" role="group" aria-label="검사 대상">
+        <button type="button" data-audit="plan" aria-pressed="true">지금 기획서</button>
+        <button type="button" data-audit="draft" aria-pressed="false">AI 첫 초안 (지어낸 설문 결과)</button>
+      </div>
+      <ul class="audit" id="audit"></ul>
+      <details class="md" id="mdBox" hidden><summary>복사한 내용 보기</summary><pre id="mdOut"></pre></details>
+    </article>
+  </section>
+  <p class="fine">목표치(1기): 페르소나 3개, 메시지 4안, 실제 설문 52명 반영. 제품 ‘톡차’와 응답은 모두 가상입니다. 응답자는 번호로만 다루고 이름·연락처는 받지 않아요. 효능·건강 표현은 AI가 판단하지 않고 담당 교수·법무 확인으로 넘겨요.</p>
+</main>
+
+<footer class="foot">AI 빌더랩 커리어 트랙 · 전환율장인 목표 모델 · 기획 초안 Claude API (실패 시 규칙) · 숫자는 응답에서만 계산</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

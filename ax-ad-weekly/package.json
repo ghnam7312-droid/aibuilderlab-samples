@@ -1,0 +1,11 @@
+{
+  "name": "gwanggo-hanjang",
+  "version": "1.0.0",
+  "private": true,
+  "description": "광고한장 — 채널별 광고 성과를 전환 기준부터 맞춘 뒤 합산하는 주간 리포트 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

@@ -1,6 +1,6 @@
 # server — 예시 서비스가 함께 쓰는 AI 서버
 
-9개 서비스의 AI 기능은 모두 이 서버를 거쳐 Claude를 부릅니다. 운영 중인 사본은 aibuilderlab.kr(Next.js · Vercel · Supabase)에 들어 있고, 이 폴더는 공개용 사본입니다.
+60개 서비스의 AI 기능은 모두 이 서버를 거쳐 Claude를 부릅니다. 운영 중인 사본은 aibuilderlab.kr(Next.js · Vercel · Supabase)에 들어 있고, 이 폴더는 공개용 사본입니다.
 
 ```mermaid
 flowchart LR
@@ -14,7 +14,8 @@ flowchart LR
 
 | 파일 | 하는 일 |
 |---|---|
-| `demo-ai.ts` | 작업(task) 11개의 지시문과 JSON 출력 형식, 방문자·일일 한도, Claude 호출 |
+| `demo-ai.ts` | 작업(task) 62개(기본 11 + 갤러리 51)의 지시문과 JSON 출력 형식, 방문자·일일 한도, Claude 호출 |
+| `demo-ai-tasks-gallery.ts` | 갤러리 서비스 51개의 작업 정의 — 각 서비스 `docs/ai-task.json`에서 생성 |
 | `api/demo/ai/route.ts` | `GET` 켜짐 여부 · `POST {task, input}` |
 | `api/demo/room/[room]/route.ts` | 한마디함 실시간 방: 폰에서 남긴 글 저장·조회(방 코드를 아는 사람만, 2일 뒤 삭제) |
 | `schema.sql` | Supabase 테이블 |

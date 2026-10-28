@@ -1,0 +1,11 @@
+{
+  "name": "chaenggim",
+  "version": "1.0.0",
+  "private": true,
+  "description": "챙김 — 후속 메일 초안(고객에게 보낼 내용만) · 약속 기한 알림 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

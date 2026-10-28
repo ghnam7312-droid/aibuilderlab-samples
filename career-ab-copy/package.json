@@ -1,0 +1,11 @@
+{
+  "name": "dumunjang",
+  "version": "1.0.0",
+  "private": true,
+  "description": "두문장 — 행사 홍보 문구 A/B 테스트, 중복 뺀 클릭률로 이긴 문구만 남기기 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

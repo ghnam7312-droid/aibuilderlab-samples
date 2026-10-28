@@ -1,9 +1,9 @@
 # AI 빌더랩 1기 목표 모델 · 예시 서비스
 
-[![test](https://github.com/ghnam7312-droid/aibuilderlab-samples/actions/workflows/test.yml/badge.svg)](https://github.com/ghnam7312-droid/aibuilderlab-samples/actions/workflows/test.yml) ![서비스 9개](https://img.shields.io/badge/서비스-9개-7c3aed) ![테스트 138개](https://img.shields.io/badge/테스트-138개_통과-16a34a) ![Claude API](https://img.shields.io/badge/AI-Claude_API-d97706) ![빌드 없음](https://img.shields.io/badge/빌드-없음-64748b)
+[![test](https://github.com/ghnam7312-droid/aibuilderlab-samples/actions/workflows/test.yml/badge.svg)](https://github.com/ghnam7312-droid/aibuilderlab-samples/actions/workflows/test.yml) ![서비스 60개](https://img.shields.io/badge/서비스-60개-7c3aed) ![테스트 772개](https://img.shields.io/badge/테스트-772개_통과-16a34a) ![Claude API](https://img.shields.io/badge/AI-Claude_API-d97706) ![빌드 없음](https://img.shields.io/badge/빌드-없음-64748b)
 
 [AI 빌더랩](https://aibuilderlab.kr) 트랙을 수료할 때 **이 정도는 만들어 배포한다**는 목표를 실제로 동작하는 서비스로 보여 주는 저장소입니다.
-트랙마다 가상의 수강생 한 명이 8~10주 동안 만드는 프로젝트 3개를 담았습니다. 모든 서비스는 브라우저에서 바로 열어 써 볼 수 있습니다.
+가상의 수강생 20명(커리어 6 · 창업 9 · 직장인 AX 5)이 8~10주 동안 만드는 프로젝트 3개씩, 서비스 60개를 담았습니다. 모든 서비스는 브라우저에서 바로 열어 써 볼 수 있습니다.
 
 > 1기 목표 모델 예시입니다. 등장하는 사람·회사·학원과 숫자는 모두 가상이며, 수료생 실적이 아닙니다.
 > 서비스는 샘플 데이터로 시작합니다. AI 기능은 [공용 서버](server)를 거쳐 Claude API로 동작하고, AI를 쓸 수 없을 때는 브라우저 규칙으로 바꿔 처리합니다. 어느 쪽으로 분석했는지는 화면에 항상 표시됩니다.
@@ -38,6 +38,152 @@ AI 포트폴리오가 없던 취업 준비생이 8주 동안 기획 → 자동�
 | <img src="startup-wrong-answer/screenshot.png" width="220" alt="오답지도 화면"> | **[오답지도](startup-wrong-answer)** | 학생 답만 넣으면 반 전체 오답을 지도로 칠하고 유형을 나누는 도구 | [데모](https://aibuilderlab.kr/demo/startup-wrong-answer/index.html) |
 | <img src="startup-interview-board/screenshot.png" width="220" alt="들어보니 화면"> | **[들어보니](startup-interview-board)** | 인터뷰 근거를 태그하면 가설이 검증됨·반증됨으로 바뀌는 고객 인터뷰 보드 | [데모](https://aibuilderlab.kr/demo/startup-interview-board/index.html) |
 
+## 직무·분야별 포트폴리오 (17명 × 3개)
+
+홈페이지 [빌더 갤러리](https://aibuilderlab.kr/home/gallery.html)의 가상 수강생 17명이 만드는 서비스입니다. 이름을 누르면 그 사람의 포트폴리오가 열립니다.
+
+### 커리어 트랙
+
+**[전환율장인](https://aibuilderlab.kr/home/portfolio.html?p=marketer)** · 마케팅 · 경영학 · 퍼포먼스 마케터 지원
+
+| | 서비스 | 하는 일 | 열어 보기 |
+|---|---|---|---|
+| <img src="career-ab-copy/screenshot.png" width="220" alt="두문장 화면"> | **[두문장](career-ab-copy)** | 두 문구를 겨뤄 숫자로 이긴 쪽만 남겨요 | [데모](https://aibuilderlab.kr/demo/career-ab-copy/index.html) |
+| <img src="career-sns-report/screenshot.png" width="220" alt="곁눈 화면"> | **[곁눈](career-sns-report)** | 경쟁 브랜드 SNS를 매주 한 장으로 | [데모](https://aibuilderlab.kr/demo/career-sns-report/index.html) |
+| <img src="career-campaign-plan/screenshot.png" width="220" alt="응답대로 화면"> | **[응답대로](career-campaign-plan)** | 실제 응답만 근거로 쓰는 캠페인 기획서 | [데모](https://aibuilderlab.kr/demo/career-campaign-plan/index.html) |
+
+**[숫자읽는사람](https://aibuilderlab.kr/home/portfolio.html?p=data-analyst)** · 데이터 분석 · 통계학 · 데이터 분석가 지원
+
+| | 서비스 | 하는 일 | 열어 보기 |
+|---|---|---|---|
+| <img src="career-district-dash/screenshot.png" width="220" alt="자리판 화면"> | **[자리판](career-district-dash)** | 가게 자리, 숫자로 먼저 봐요 | [데모](https://aibuilderlab.kr/demo/career-district-dash/index.html) |
+| <img src="career-survey-sort/screenshot.png" width="220" alt="갈래 화면"> | **[갈래](career-survey-sort)** | 서술형 응답, 같은 기준으로 나눠요 | [데모](https://aibuilderlab.kr/demo/career-survey-sort/index.html) |
+| <img src="career-library-seat/screenshot.png" width="220" alt="빈자리 화면"> | **[빈자리](career-library-seat)** | 언제·어디가 모자란지, 기록으로 봐요 | [데모](https://aibuilderlab.kr/demo/career-library-seat/index.html) |
+
+**[픽셀산책](https://aibuilderlab.kr/home/portfolio.html?p=ux-designer)** · UX·UI 디자인 · 시각디자인 · UX/UI 디자이너 지원
+
+| | 서비스 | 하는 일 | 열어 보기 |
+|---|---|---|---|
+| <img src="career-clinic-booking/screenshot.png" width="220" alt="천천예약 화면"> | **[천천예약](career-clinic-booking)** | 한 화면에 한 가지씩, 끝까지 가는 병원 예약 | [데모](https://aibuilderlab.kr/demo/career-clinic-booking/index.html) |
+| <img src="career-design-review/screenshot.png" width="220" alt="모아닫기 화면"> | **[모아닫기](career-design-review)** | 흩어진 시안 피드백을 모아서, 하나씩 끝까지 닫아요 | [데모](https://aibuilderlab.kr/demo/career-design-review/index.html) |
+| <img src="career-kiosk-a11y/screenshot.png" width="220" alt="또렷 화면"> | **[또렷](career-kiosk-a11y)** | 키오스크 접근성 점검과 개선 제안서 | [데모](https://aibuilderlab.kr/demo/career-kiosk-a11y/index.html) |
+
+**[배움설계자](https://aibuilderlab.kr/home/portfolio.html?p=edu-content)** · 교육 콘텐츠 기획 · 교육학 · 에듀테크 콘텐츠 기획자 지원
+
+| | 서비스 | 하는 일 | 열어 보기 |
+|---|---|---|---|
+| <img src="career-fraction-quiz/screenshot.png" width="220" alt="분수콕 화면"> | **[분수콕](career-fraction-quiz)** | 점수 말고, 왜 틀렸는지를 봐요 | [데모](https://aibuilderlab.kr/demo/career-fraction-quiz/index.html) |
+| <img src="career-quiz-maker/screenshot.png" width="220" alt="차곡퀴즈 화면"> | **[차곡퀴즈](career-quiz-maker)** | 수업 자료에서 근거 달린 확인 퀴즈를 | [데모](https://aibuilderlab.kr/demo/career-quiz-maker/index.html) |
+| <img src="career-microlearning/screenshot.png" width="220" alt="십분설계 화면"> | **[십분설계](career-microlearning)** | 목표 한 줄, 평가 한 줄, 10분 한 차시 | [데모](https://aibuilderlab.kr/demo/career-microlearning/index.html) |
+
+**[커밋하는곰](https://aibuilderlab.kr/home/portfolio.html?p=junior-dev)** · 주니어 개발 · 기계공학 · 주니어 웹 개발자 지원
+
+| | 서비스 | 하는 일 | 열어 보기 |
+|---|---|---|---|
+| <img src="career-lab-booking/screenshot.png" width="220" alt="장비표 화면"> | **[장비표](career-lab-booking)** | 실험실 장비, 겹치지 않게 예약해요 | [데모](https://aibuilderlab.kr/demo/career-lab-booking/index.html) |
+| <img src="career-devlog/screenshot.png" width="220" alt="커밋일지 화면"> | **[커밋일지](career-devlog)** | 깃허브 활동이 주간 개발 일지가 돼요 | [데모](https://aibuilderlab.kr/demo/career-devlog/index.html) |
+| <img src="career-tech-spec/screenshot.png" width="220" alt="뼈대 화면"> | **[뼈대](career-tech-spec)** | 화면부터 말고, 화면이 쓰는 데이터부터 | [데모](https://aibuilderlab.kr/demo/career-tech-spec/index.html) |
+
+### 창업 트랙
+
+**[스피킹메이트](https://aibuilderlab.kr/home/portfolio.html?p=english-tutor)** · 외국어 튜터링 · 영어 회화 튜터 6년 차
+
+| | 서비스 | 하는 일 | 열어 보기 |
+|---|---|---|---|
+| <img src="startup-speaking-coach/screenshot.png" width="220" alt="말해봄 화면"> | **[말해봄](startup-speaking-coach)** | 말하기 숙제, 고칠 점은 딱 두 개 | [데모](https://aibuilderlab.kr/demo/startup-speaking-coach/index.html) |
+| <img src="startup-lesson-report/screenshot.png" width="220" alt="오늘수업 화면"> | **[오늘수업](startup-lesson-report)** | 수업 끝, 학생별 리포트를 확인하고 보내요 | [데모](https://aibuilderlab.kr/demo/startup-lesson-report/index.html) |
+| <img src="startup-price-test/screenshot.png" width="220" alt="값찾기 화면"> | **[값찾기](startup-price-test)** | 말이 아니라 결제로 가격을 정해요 | [데모](https://aibuilderlab.kr/demo/startup-price-test/index.html) |
+
+**[이직나침반](https://aibuilderlab.kr/home/portfolio.html?p=career-coach)** · 커리어 코칭 · 전 HR 담당자 · 커리어 코치
+
+| | 서비스 | 하는 일 | 열어 보기 |
+|---|---|---|---|
+| <img src="startup-coach-brief/screenshot.png" width="220" alt="미리봄 화면"> | **[미리봄](startup-coach-brief)** | 상담 전 10분이면 고객이 보여요 | [데모](https://aibuilderlab.kr/demo/startup-coach-brief/index.html) |
+| <img src="startup-coach-booking/screenshot.png" width="220" alt="한자리 화면"> | **[한자리](startup-coach-booking)** | 예약 · 결제 · 안내 메일을 한자리에서 | [데모](https://aibuilderlab.kr/demo/startup-coach-booking/index.html) |
+| <img src="startup-coach-landing/screenshot.png" width="220" alt="다음걸음 화면"> | **[다음걸음](startup-coach-landing)** | 한 번 상담 다음 걸음까지 설계해요 | [데모](https://aibuilderlab.kr/demo/startup-coach-landing/index.html) |
+
+**[그림한스푼](https://aibuilderlab.kr/home/portfolio.html?p=online-class)** · 온라인 클래스 · 일러스트 작가 · 온라인 클래스 운영
+
+| | 서비스 | 하는 일 | 열어 보기 |
+|---|---|---|---|
+| <img src="startup-class-feedback/screenshot.png" width="220" alt="한줄더 화면"> | **[한줄더](startup-class-feedback)** | AI는 초안까지, 마지막 한 줄은 작가가 | [데모](https://aibuilderlab.kr/demo/startup-class-feedback/index.html) |
+| <img src="startup-class-faq/screenshot.png" width="220" alt="답해둠 화면"> | **[답해둠](startup-class-faq)** | 같은 질문은 한 번만 답해요 | [데모](https://aibuilderlab.kr/demo/startup-class-faq/index.html) |
+| <img src="startup-class-pricing/screenshot.png" width="220" alt="값매김 화면"> | **[값매김](startup-class-pricing)** | 수수료까지 빼고, 남는 가격을 정해요 | [데모](https://aibuilderlab.kr/demo/startup-class-pricing/index.html) |
+
+**[노무한눈](https://aibuilderlab.kr/home/portfolio.html?p=labor-office)** · 전문 서비스 · 공인노무사 · 1인 사무소 개업 준비
+
+| | 서비스 | 하는 일 | 열어 보기 |
+|---|---|---|---|
+| <img src="startup-labor-intake/screenshot.png" width="220" alt="사실먼저 화면"> | **[사실먼저](startup-labor-intake)** | 상담 전에 사실관계부터 정리해요 | [데모](https://aibuilderlab.kr/demo/startup-labor-intake/index.html) |
+| <img src="startup-labor-notice/screenshot.png" width="220" alt="안내한장 화면"> | **[안내한장](startup-labor-notice)** | 개정 하나, 고객사마다 맞춘 안내문 한 장 | [데모](https://aibuilderlab.kr/demo/startup-labor-notice/index.html) |
+| <img src="startup-labor-check/screenshot.png" width="220" alt="열두칸 화면"> | **[열두칸](startup-labor-check)** | 사장님이 끝까지 답하는 노무 진단표 | [데모](https://aibuilderlab.kr/demo/startup-labor-check/index.html) |
+
+**[업계한장](https://aibuilderlab.kr/home/portfolio.html?p=newsletter)** · 콘텐츠·뉴스레터 · 물류 업계 7년 차 · 뉴스레터 운영
+
+| | 서비스 | 하는 일 | 열어 보기 |
+|---|---|---|---|
+| <img src="startup-news-digest/screenshot.png" width="220" alt="아침한장 화면"> | **[아침한장](startup-news-digest)** | 물류 뉴스, 아침 5분이면 충분하게 | [데모](https://aibuilderlab.kr/demo/startup-news-digest/index.html) |
+| <img src="startup-news-insight/screenshot.png" width="220" alt="끝까지 화면"> | **[끝까지](startup-news-insight)** | 클릭 말고, 끝까지 읽힌 글을 봐요 | [데모](https://aibuilderlab.kr/demo/startup-news-insight/index.html) |
+| <img src="startup-news-b2b/screenshot.png" width="220" alt="팀한장 화면"> | **[팀한장](startup-news-b2b)** | 기업 구독, 인원만큼 공정하게 | [데모](https://aibuilderlab.kr/demo/startup-news-b2b/index.html) |
+
+**[놀이처방전](https://aibuilderlab.kr/home/portfolio.html?p=parenting-edu)** · 부모 교육 · 유아교육 전공 · 부모 교육 강사
+
+| | 서비스 | 하는 일 | 열어 보기 |
+|---|---|---|---|
+| <img src="startup-play-pick/screenshot.png" width="220" alt="오늘놀이 화면"> | **[오늘놀이](startup-play-pick)** | ‘오늘 아이랑 뭐 하지?’ 1분 만에, 안전 기준을 거쳐서 | [데모](https://aibuilderlab.kr/demo/startup-play-pick/index.html) |
+| <img src="startup-parent-signup/screenshot.png" width="220" alt="자리있음 화면"> | **[자리있음](startup-parent-signup)** | 강의 신청 정리부터 안내 문자까지 | [데모](https://aibuilderlab.kr/demo/startup-parent-signup/index.html) |
+| <img src="startup-parent-proposal/screenshot.png" width="220" alt="효과먼저 화면"> | **[효과먼저](startup-parent-proposal)** | 강사 소개 말고, 기관이 얻는 것부터 | [데모](https://aibuilderlab.kr/demo/startup-parent-proposal/index.html) |
+
+**[공간한컷](https://aibuilderlab.kr/home/portfolio.html?p=interior)** · 디자인 스튜디오 · 인테리어 디자이너 · 1인 스튜디오
+
+| | 서비스 | 하는 일 | 열어 보기 |
+|---|---|---|---|
+| <img src="startup-moodboard-quote/screenshot.png" width="220" alt="첫그림 화면"> | **[첫그림](startup-moodboard-quote)** | 상담한 날, 무드보드와 견적 초안을 같이 보내요 | [데모](https://aibuilderlab.kr/demo/startup-moodboard-quote/index.html) |
+| <img src="startup-site-log/screenshot.png" width="220" alt="오늘공정 화면"> | **[오늘공정](startup-site-log)** | 현장 사진이 그날의 공정 일지가 돼요 | [데모](https://aibuilderlab.kr/demo/startup-site-log/index.html) |
+| <img src="startup-small-package/screenshot.png" width="220" alt="작은집 화면"> | **[작은집](startup-small-package)** | 작은 공사도 남는 구조로, 리모델링 패키지 기획 | [데모](https://aibuilderlab.kr/demo/startup-small-package/index.html) |
+
+**[교육효과측정소](https://aibuilderlab.kr/home/portfolio.html?p=corp-trainer)** · 기업 교육 · 기업교육 강사 10년 차
+
+| | 서비스 | 하는 일 | 열어 보기 |
+|---|---|---|---|
+| <img src="startup-training-report/screenshot.png" width="220" alt="당일결과 화면"> | **[당일결과](startup-training-report)** | 교육 끝난 날, 윗선에 올릴 리포트 | [데모](https://aibuilderlab.kr/demo/startup-training-report/index.html) |
+| <img src="startup-training-prep/screenshot.png" width="220" alt="맞춤사례 화면"> | **[맞춤사례](startup-training-prep)** | 회사마다 다른 사례로 강의를 준비해요 | [데모](https://aibuilderlab.kr/demo/startup-training-prep/index.html) |
+| <img src="startup-training-followup/screenshot.png" width="220" alt="이어감 화면"> | **[이어감](startup-training-followup)** | 강의 뒤 3개월을 상품으로 | [데모](https://aibuilderlab.kr/demo/startup-training-followup/index.html) |
+
+### 직장인 AX 트랙
+
+**[미팅기록왕](https://aibuilderlab.kr/home/portfolio.html?p=sales)** · 영업 · 영업팀 과장
+
+| | 서비스 | 하는 일 | 열어 보기 |
+|---|---|---|---|
+| <img src="ax-meeting-crm/screenshot.png" width="220" alt="적어줌 화면"> | **[적어줌](ax-meeting-crm)** | 미팅 메모를 붙여 넣으면 CRM 칸이 채워져요 | [데모](https://aibuilderlab.kr/demo/ax-meeting-crm/index.html) |
+| <img src="ax-followup-mail/screenshot.png" width="220" alt="챙김 화면"> | **[챙김](ax-followup-mail)** | 약속한 자료, 메일 초안과 알림으로 챙겨요 | [데모](https://aibuilderlab.kr/demo/ax-followup-mail/index.html) |
+| <img src="ax-sales-quarterly/screenshot.png" width="220" alt="분기판 화면"> | **[분기판](ax-sales-quarterly)** | 분기 영업 리포트, 팀 누구나 같은 양식으로 | [데모](https://aibuilderlab.kr/demo/ax-sales-quarterly/index.html) |
+
+**[보고서는자동](https://aibuilderlab.kr/home/portfolio.html?p=marketing-team)** · 마케팅 · 마케팅팀 주임
+
+| | 서비스 | 하는 일 | 열어 보기 |
+|---|---|---|---|
+| <img src="ax-ad-weekly/screenshot.png" width="220" alt="광고한장 화면"> | **[광고한장](ax-ad-weekly)** | 채널 4곳, 기준부터 맞추고 한 장으로 | [데모](https://aibuilderlab.kr/demo/ax-ad-weekly/index.html) |
+| <img src="ax-review-sort/screenshot.png" width="220" alt="고객말 화면"> | **[고객말](ax-review-sort)** | 리뷰 800건에서 고칠 것만 골라 상품팀으로 | [데모](https://aibuilderlab.kr/demo/ax-review-sort/index.html) |
+| <img src="ax-ai-guide/screenshot.png" width="220" alt="프롬서랍 화면"> | **[프롬서랍](ax-ai-guide)** | 팀 6명이 같은 방식으로 AI를 쓰는 가이드 | [데모](https://aibuilderlab.kr/demo/ax-ai-guide/index.html) |
+
+**[문의정리반](https://aibuilderlab.kr/home/portfolio.html?p=cs-team)** · 고객지원 · 고객지원팀 매니저
+
+| | 서비스 | 하는 일 | 열어 보기 |
+|---|---|---|---|
+| <img src="ax-ticket-triage/screenshot.png" width="220" alt="첫답 화면"> | **[첫답](ax-ticket-triage)** | 문의는 나눠 주고, 약속은 사람이 해요 | [데모](https://aibuilderlab.kr/demo/ax-ticket-triage/index.html) |
+| <img src="ax-voc-weekly/screenshot.png" width="220" alt="같은말 화면"> | **[같은말](ax-voc-weekly)** | 되풀이되는 불만을 매주 상품팀에 | [데모](https://aibuilderlab.kr/demo/ax-voc-weekly/index.html) |
+| <img src="ax-cs-checklist/screenshot.png" width="220" alt="본보기 화면"> | **[본보기](ax-cs-checklist)** | 우리 팀의 실제 모범으로 배우는 상담 | [데모](https://aibuilderlab.kr/demo/ax-cs-checklist/index.html) |
+
+**[출결은알아서](https://aibuilderlab.kr/home/portfolio.html?p=hr-edu)** · 인사·교육 · 인사팀 교육 담당 사원
+
+| | 서비스 | 하는 일 | 열어 보기 |
+|---|---|---|---|
+| <img src="ax-training-attend/screenshot.png" width="220" alt="이수함 화면"> | **[이수함](ax-training-attend)** | 신청·출석·이수를 사번 하나로 맞춰요 | [데모](https://aibuilderlab.kr/demo/ax-training-attend/index.html) |
+| <img src="ax-survey-summary/screenshot.png" width="220" alt="빠짐없이 화면"> | **[빠짐없이](ax-survey-summary)** | 서술형 의견, 세 명이 말했으면 요약에 남아요 | [데모](https://aibuilderlab.kr/demo/ax-survey-summary/index.html) |
+| <img src="ax-onboarding-kit/screenshot.png" width="220" alt="첫주노트 화면"> | **[첫주노트](ax-onboarding-kit)** | 신입이 첫 주에 볼 최신 자료와 답을 한 장에 | [데모](https://aibuilderlab.kr/demo/ax-onboarding-kit/index.html) |
+
 ## 결과물만이 아니라 과정까지
 
 8주 동안 어떻게 만들었는지가 저장소에 그대로 남아 있습니다. 서비스 폴더마다 같은 구성입니다.
@@ -48,7 +194,7 @@ AI 포트폴리오가 없던 취업 준비생이 8주 동안 기획 → 자동�
 | 개발할 때 쓴 프롬프트와, 서비스가 실제로 Claude에 보내는 지시문 | `docs/PROMPTS.md` |
 | 화면 ↔ 서버 ↔ Claude 흐름과 AI가 멈췄을 때의 대체 경로 | `docs/ARCHITECTURE.md` |
 | 버전별 변경 기록 | `CHANGELOG.md` |
-| 핵심 로직 자동 테스트 (서비스당 12~18개, 총 138개) | `tests/` → push마다 GitHub Actions가 실행 |
+| 핵심 로직 자동 테스트 (서비스당 10~18개, 총 772개) | `tests/` → push마다 GitHub Actions가 실행 |
 
 ## 써 볼 만한 장면
 

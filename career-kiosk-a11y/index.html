@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>또렷 · 키오스크 접근성 개선 제안서</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='2' y='2' width='32' height='32' rx='8' fill='%23161616'/%3E%3Cpath d='M7 18c3-5.5 7-8 11-8s8 2.5 11 8c-3 5.5-7 8-11 8s-8-2.5-11-8z' fill='%23FFD60A'/%3E%3Ccircle cx='18' cy='18' r='4.2' fill='%23161616'/%3E%3C/svg%3E">
+<meta name="description" content="학교 식당 키오스크를 현장에서 관찰하고, 명도 대비·버튼 크기·시간 제한을 공식 지침과 대조해 개선 제안서를 만드는 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=ux-designer">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 검정 바탕 위 노란 눈 — 또렷하게 보이는 화면 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="2" y="2" width="32" height="32" rx="8" fill="#161616"/>
+      <path d="M7 18c3-5.5 7-8 11-8s8 2.5 11 8c-3 5.5-7 8-11 8s-8-2.5-11-8z" fill="#FFD60A"/>
+      <circle cx="18" cy="18" r="4.2" fill="#161616"/>
+    </svg>
+    <div><strong>또렷</strong><span>키오스크 접근성 점검과 개선 제안서</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="sum" id="sum" aria-label="점검 요약"></section>
+
+  <div class="grid">
+    <!-- 왼쪽: 키오스크 화면과 측정 -->
+    <section class="card kiosk-card" aria-labelledby="kTitle">
+      <div class="card-h">
+        <h1 id="kTitle">학생식당 주문기 화면</h1>
+        <div class="seg" role="group" aria-label="화면 버전">
+          <button type="button" data-ver="before" aria-pressed="true">지금 화면</button>
+          <button type="button" data-ver="after" aria-pressed="false">개선안</button>
+        </div>
+      </div>
+      <p class="hint">화면의 요소를 누르면 아래에서 색·글자 크기·버튼 크기를 바꿔 볼 수 있어요. 측정은 바로 다시 계산돼요.</p>
+      <div class="kiosk-wrap"><div class="kiosk" id="kiosk" role="group" aria-label="키오스크 화면 미리보기"></div></div>
+      <form class="editor" id="editor" aria-label="요소 고치기"></form>
+      <table class="audit" id="audit"></table>
+    </section>
+
+    <!-- 오른쪽: 관찰 → 제안 -->
+    <section class="card" aria-labelledby="oTitle">
+      <div class="card-h">
+        <h2 id="oTitle">현장에서 관찰한 문제 <span class="n" id="obsN"></span></h2>
+        <div class="who" id="whoChips" role="group" aria-label="이용자 거르기"></div>
+      </div>
+      <ol class="obs" id="obs"></ol>
+      <details class="add-box">
+        <summary>관찰 더하기</summary>
+        <form class="add" id="addForm">
+          <label>분류<select id="aCat"></select></label>
+          <label>누가<select id="aWho"><option>어르신</option><option>저시력</option><option>휠체어</option><option>처음 이용</option><option>모든 이용자</option></select></label>
+          <label>심각도<select id="aSev"><option value="3">3 주문 못 함</option><option value="2" selected>2 헤맴</option><option value="1">1 불편</option></select></label>
+          <label>빈도<select id="aFreq"><option value="3">3 자주</option><option value="2" selected>2 가끔</option><option value="1">1 드묾</option></select></label>
+          <label class="wide">관찰 내용<input id="aText" maxlength="120" placeholder="예: 메뉴 사진만 있고 이름이 작아 고르기 어려움"></label>
+          <button class="primary sm" type="submit">더하기</button>
+        </form>
+      </details>
+
+      <div class="prop-h">
+        <h2>개선 제안서</h2>
+        <span id="modeChip"></span>
+      </div>
+      <div class="prop-tools">
+        <button class="primary" id="run" type="button">제안서 만들기</button>
+        <button class="ghost-btn" id="copy" type="button">마크다운 복사</button>
+        <button class="ghost-btn" id="print" type="button">인쇄 · PDF</button>
+      </div>
+      <div class="doc" id="doc" aria-live="polite"></div>
+    </section>
+  </div>
+
+  <!-- AI가 준 기준을 공식 지침과 대조 -->
+  <section class="card verify" aria-labelledby="vTitle">
+    <div class="card-h">
+      <h2 id="vTitle">AI가 말한 기준 · 공식 지침과 대조</h2>
+      <span class="src-note">대조 기준: W3C WCAG 2.2 (2023년 10월 권고안)</span>
+    </div>
+    <p class="hint">처음에 AI가 알려 준 기준 중 일부는 예전 버전 내용이었어요. 수치마다 공식 지침표와 비교해 ‘일치 · 다름 · 사람이 확인’으로 표시해요. 법적 의무 여부는 여기서 판단하지 않아요.</p>
+    <table class="vt" id="verify"></table>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 커리어 트랙 · 픽셀산책 목표 모델 · 제안 Claude API (실패 시 규칙) · 명도 대비 WCAG 공식 계산</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>차곡퀴즈 · 차시별 확인 퀴즈</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='9' fill='%236A4CE0'/%3E%3Crect x='8' y='22' width='20' height='5' rx='2' fill='%23fff'/%3E%3Crect x='8' y='15' width='20' height='5' rx='2' fill='%23fff' opacity='.75'/%3E%3Cpath d='M12 11.5l2.6 2.6L20 8.6' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="description" content="수업 자료를 붙여 넣으면 차시별 확인 퀴즈를 정답 근거 문장과 함께 만들고, 사람이 검토표에서 통과·고치기·제외하는 도구 (AI 빌더랩 1기 목표 모델 예시)">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=edu-content">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 차곡차곡 쌓인 차시 위에 체크 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect width="36" height="36" rx="9" fill="#6A4CE0"/>
+      <rect x="8" y="22" width="20" height="5" rx="2" fill="#fff"/>
+      <rect x="8" y="15" width="20" height="5" rx="2" fill="#fff" opacity=".75"/>
+      <path d="M12 11.5l2.6 2.6L20 8.6" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div><strong>차곡퀴즈</strong><span>수업 자료에서 근거 달린 확인 퀴즈를</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="split" aria-label="퀴즈 만들기">
+    <div class="pane src-pane">
+      <div class="pane-h"><h1>수업 자료</h1><span class="cnt" id="srcInfo"></span></div>
+      <p class="tip">차시는 <code>## 1차시 제목</code> 줄로 나눠요. “○○을 □□라고 한다”, “□□는 ○○이다” 문장에서 문항을 만들고, 그 문장을 정답 근거로 붙여요.</p>
+      <label class="sr" for="src">수업 자료 내용</label>
+      <textarea id="src" spellcheck="false"></textarea>
+      <div class="src-foot">
+        <div class="per" role="group" aria-label="차시당 문항 수">
+          <span>차시당</span>
+          <button type="button" data-per="3" aria-pressed="false">3</button>
+          <button type="button" data-per="4" aria-pressed="true">4</button>
+          <button type="button" data-per="5" aria-pressed="false">5</button>
+          <span>문항</span>
+        </div>
+        <button class="primary" id="run" type="button">퀴즈 만들기</button>
+      </div>
+    </div>
+
+    <div class="pane out-pane">
+      <div class="pane-h"><h2 class="t" id="outTitle">검토표</h2><span id="modeChip"></span></div>
+      <div class="sum" id="sum" aria-live="polite"></div>
+      <div class="lessons" id="lessons" role="group" aria-label="차시 고르기"></div>
+      <ol class="qs" id="qs"></ol>
+    </div>
+  </section>
+
+  <section class="exports" aria-label="내보내기">
+    <div>
+      <h2>내보내기</h2>
+      <p>통과·고쳐서 통과한 문항만 나가요. 제외한 문항과 검토하지 않은 문항은 빠져요.</p>
+    </div>
+    <div class="ex-tools">
+      <button class="ghost-btn" id="copyStudent" type="button">학생용 복사 (정답 없음)</button>
+      <button class="ghost-btn" id="csv" type="button">교사용 CSV (정답·근거)</button>
+      <button class="dark" id="print" type="button">학생용 인쇄</button>
+    </div>
+    <details class="md" id="mdBox" hidden><summary>복사한 내용 보기</summary><pre id="mdOut"></pre></details>
+  </section>
+  <p class="fine">자동 확인은 근거 문장이 자료에 있는지, 근거에 정답이 있는지, 다른 선지도 근거에 나오는지만 봅니다. 문항이 맞는지는 선생님이 근거를 읽고 정해요.</p>
+</main>
+
+<!-- 인쇄용 학생지 -->
+<div class="print-sheet" id="printSheet" aria-hidden="true"></div>
+
+<footer class="foot">AI 빌더랩 커리어 트랙 · 배움설계자 목표 모델 · 문항 생성 Claude API (실패 시 규칙) · 정답 근거 자동 확인 + 사람 검토</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

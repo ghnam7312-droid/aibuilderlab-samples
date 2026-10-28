@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>작은집 · 소형 평수 리모델링 패키지</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='2' y='2' width='32' height='32' rx='8' fill='%236A4BA8'/%3E%3Cpath d='M9 18l9-8 9 8v9H9z' fill='%23fff'/%3E%3Crect x='15' y='20' width='6' height='7' fill='%236A4BA8'/%3E%3C/svg%3E">
+<meta name="description" content="원룸·투룸 리모델링을 패키지로 팔 때 최신 단가로 원가·이익·마진을 계산하고 소개 문구를 만드는 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=interior">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 작은 집 한 채 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="2" y="2" width="32" height="32" rx="8" fill="#6A4BA8"/>
+      <path d="M9 18l9-8 9 8v9H9z" fill="#fff"/>
+      <rect x="15" y="20" width="6" height="7" fill="#6A4BA8"/>
+    </svg>
+    <div><strong>작은집</strong><span>작은 공사도 남는 구조로, 리모델링 패키지 기획</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <p class="goal"><b>1기 목표치</b> 원룸·투룸 패키지 <em>3종</em> · 첫 달 문의 <em>26건</em></p>
+
+  <!-- 단가 기준: 작년 단가로 계산하던 실수를 화면에서 바로 보이게 -->
+  <section class="basis" aria-labelledby="basisTitle">
+    <div class="basis-l">
+      <h1 id="basisTitle" class="sr">단가 기준</h1>
+      <div class="seg" role="group" aria-label="단가 기준일">
+        <button type="button" data-basis="last">작년 단가</button>
+        <button type="button" data-basis="now">최신 단가</button>
+      </div>
+      <p id="basisMsg" aria-live="polite"></p>
+    </div>
+    <div class="knobs">
+      <label for="target">목표 마진 <b id="targetOut"></b></label>
+      <input id="target" type="range" min="10" max="35" step="1">
+      <label for="oh">관리비 <b id="ohOut"></b></label>
+      <input id="oh" type="range" min="5" max="15" step="1">
+    </div>
+  </section>
+
+  <section class="pkgs" id="pkgs" aria-label="패키지 3종"></section>
+
+  <div class="grid">
+    <section class="card" aria-labelledby="detailTitle">
+      <div class="card-h"><h2 id="detailTitle">패키지 구성</h2><span class="tag">가상의 샘플 단가 · 부가세 별도</span></div>
+      <div id="detail"></div>
+    </section>
+
+    <section class="card" aria-labelledby="pitchTitle">
+      <div class="card-h"><h2 id="pitchTitle">소개 문구</h2><span id="modeChip"></span></div>
+      <div id="pitch" aria-live="polite"></div>
+      <div class="row-btns">
+        <button class="primary" id="write" type="button">소개 문구 쓰기</button>
+        <button class="ghost-btn" id="copy" type="button">문구 복사</button>
+      </div>
+    </section>
+  </div>
+
+  <section class="card prices" aria-labelledby="priceTitle">
+    <div class="card-h"><h2 id="priceTitle">단가표</h2>
+      <div class="row-btns"><button class="ghost-btn" id="csv" type="button">패키지 비교 CSV</button></div>
+    </div>
+    <p class="tip">최신 단가를 고치면 기준일이 오늘로 바뀌고 세 패키지가 바로 다시 계산돼요. 작년 단가는 비교용으로만 남겨 둬요.</p>
+    <div class="tbl-wrap"><table class="pt" id="priceTable"></table></div>
+  </section>
+  <p class="fine">이 데모의 단가·인건비는 모두 <b>가상의 샘플 단가</b>이고 실제 시세가 아니에요. 도배 수량은 바닥 면적 × 2.6으로 추정해요.</p>
+</main>
+
+<footer class="foot">AI 빌더랩 창업 트랙 · 공간한컷 목표 모델 · 소개 문구 Claude API (실패 시 규칙) · 금액은 규칙 계산만 사용</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

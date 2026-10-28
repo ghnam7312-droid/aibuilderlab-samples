@@ -1,0 +1,11 @@
+{
+  "name": "daeumgeoleum-coach-landing",
+  "version": "1.0.0",
+  "private": true,
+  "description": "다음걸음 — 직무 전환 코칭 상품 구성 · 랜딩 문구 A/B 실험 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

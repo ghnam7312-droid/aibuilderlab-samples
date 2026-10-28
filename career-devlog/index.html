@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>커밋일지 · 주간 개발 일지</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='7' y='3' width='25' height='30' rx='4' fill='%236A4BD6'/%3E%3Cpath d='M3 10h8M3 18h8M3 26h8' stroke='%236A4BD6' stroke-width='2.6' stroke-linecap='round'/%3E%3Ccircle cx='11' cy='10' r='3' fill='%23fff' stroke='%236A4BD6' stroke-width='2'/%3E%3Cpath d='M17 12h10M17 18h10M17 24h6' stroke='%23fff' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="description" content="팀의 깃허브 활동을 모아 주간 개발 일지를 써 주는 도구. 공개할 저장소만 골라 비공개 저장소 내용은 일지에 섞이지 않게 한다">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=junior-dev">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 커밋 점들이 한 장의 일지가 된다 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="9" y="3" width="24" height="30" rx="4" fill="#6A4BD6"/>
+      <path d="M5 4v28" stroke="#C9BDF5" stroke-width="2.4" stroke-linecap="round"/>
+      <circle cx="5" cy="10" r="3" fill="#6A4BD6"/><circle cx="5" cy="18" r="3" fill="#6A4BD6"/><circle cx="5" cy="26" r="3" fill="#6A4BD6"/>
+      <path d="M15 11h12M15 18h12M15 25h7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+    </svg>
+    <div><strong>커밋일지</strong><span>깃허브 활동이 주간 개발 일지가 돼요</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="stats" id="stats" aria-label="현황"></section>
+
+  <div class="layout">
+    <aside class="side">
+      <section class="card" aria-labelledby="repoTitle">
+        <h2 id="repoTitle">내보낼 저장소</h2>
+        <p class="hint">일지에 무엇을 넣을지 먼저 정해요. 비공개 저장소는 <b>내용을 넣을 수 없고</b> 건수만 셀 수 있어요. 목록에 없는 저장소는 자동으로 빠져요.</p>
+        <ul class="repos" id="repos"></ul>
+      </section>
+      <section class="card" aria-labelledby="weekTitle">
+        <h2 id="weekTitle">쌓인 일지 <span class="n" id="weekN"></span></h2>
+        <ol class="weeks" id="weeks"></ol>
+      </section>
+    </aside>
+
+    <section class="card log" aria-labelledby="logTitle">
+      <div class="log-h">
+        <div>
+          <h1 id="logTitle">주간 개발 일지</h1>
+          <p class="range" id="range"></p>
+        </div>
+        <div class="log-tools">
+          <button class="ghost-btn" id="rewrite" type="button">다시 쓰기</button>
+          <button class="ghost-btn" id="copy" type="button">복사</button>
+          <button class="dark" id="download" type="button">.md 내려받기</button>
+        </div>
+      </div>
+      <div class="sub-h">
+        <div class="people" id="people" role="group" aria-label="사람 고르기"></div>
+        <div class="seg" role="group" aria-label="보기 방식">
+          <button type="button" data-view="pretty" aria-pressed="true">미리보기</button>
+          <button type="button" data-view="md" aria-pressed="false">마크다운</button>
+        </div>
+      </div>
+      <div class="guard" id="guard" role="note"></div>
+      <div id="out" aria-live="polite"></div>
+    </section>
+  </div>
+
+  <details class="card raw" id="rawBox">
+    <summary>원본 활동 기록 <small>깃허브에서 가져온 커밋·PR·이슈 (샘플)</small></summary>
+    <p class="hint">한 줄에 하나: <code>날짜 저장소 @이름 내용</code>. 내용은 <code>feat: …</code>, <code>PR #14 병합: …</code>, <code>이슈 #9 닫음: …</code> 형식을 읽어요. 고친 뒤 ‘다시 읽기’를 누르세요.</p>
+    <label class="sr" for="src">활동 기록</label>
+    <textarea id="src" spellcheck="false"></textarea>
+    <div class="raw-foot"><span id="srcInfo"></span><button class="primary" id="reread" type="button">다시 읽기</button></div>
+  </details>
+</main>
+
+<footer class="foot">AI 빌더랩 커리어 트랙 · 커밋하는곰 목표 모델 · 요약 Claude API (실패 시 규칙) · 활동 GitHub API (데모는 샘플) · Markdown</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "dapaedum-class-faq",
+  "version": "1.0.0",
+  "private": true,
+  "description": "답해둠 — 수강 문의 자동 응답 · 자주 묻는 질문 정리 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

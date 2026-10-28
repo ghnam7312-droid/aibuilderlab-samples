@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>첫그림 · 상담용 무드보드와 견적 초안</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='2' y='2' width='32' height='32' rx='8' fill='%23B4532F'/%3E%3Crect x='8' y='8' width='9' height='9' rx='2' fill='%23F3E3D3'/%3E%3Crect x='19' y='8' width='9' height='9' rx='2' fill='%23D9A47E'/%3E%3Crect x='8' y='19' width='20' height='9' rx='2' fill='%23fff'/%3E%3C/svg%3E">
+<meta name="description" content="첫 상담 자리에서 메모와 면적을 넣으면 무드보드(색·재질 견본)와 견적 초안, 고객 회신 문장이 함께 나오는 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=interior">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 액자 안에 색 견본 세 장 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="2" y="2" width="32" height="32" rx="8" fill="#B4532F"/>
+      <rect x="8" y="8" width="9" height="9" rx="2" fill="#F3E3D3"/>
+      <rect x="19" y="8" width="9" height="9" rx="2" fill="#D9A47E"/>
+      <rect x="8" y="19" width="20" height="9" rx="2" fill="#fff"/>
+    </svg>
+    <div><strong>첫그림</strong><span>상담한 날, 무드보드와 견적 초안을 같이 보내요</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <p class="goal"><b>1기 목표치</b> 견적 회신 <s>3일</s> → <em>당일</em> · 상담→계약 <s>18%</s> → <em>31%</em></p>
+
+  <div class="grid">
+    <!-- 왼쪽: 상담 입력 -->
+    <form class="card form" id="form" aria-labelledby="formTitle" novalidate>
+      <div class="card-h"><h1 id="formTitle">상담 메모</h1><span class="hint">상담 중에 바로 적어요</span></div>
+      <div class="samples" role="group" aria-label="샘플 고객">
+        <span>샘플</span>
+        <button type="button" data-sample="0">아파트 34평</button>
+        <button type="button" data-sample="1">빌라 59㎡</button>
+        <button type="button" data-sample="2">작은 카페</button>
+      </div>
+
+      <label class="f" for="name">고객 이름 <small>회신·인쇄에는 가려서 나와요</small></label>
+      <input id="name" autocomplete="off">
+
+      <div class="row2">
+        <div>
+          <label class="f" for="space">공간</label>
+          <select id="space"></select>
+        </div>
+        <div>
+          <label class="f" for="area">면적</label>
+          <div class="area">
+            <input id="area" inputmode="decimal" aria-describedby="areaConv">
+            <div class="seg" role="group" aria-label="면적 단위" id="unit">
+              <button type="button" data-u="평">평</button>
+              <button type="button" data-u="㎡">㎡</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="conv" id="areaConv" aria-live="polite"></p>
+      <div class="warns" id="areaWarn" aria-live="polite"></div>
+
+      <fieldset class="scope">
+        <legend class="f">공사 범위</legend>
+        <div id="scope"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend class="f">자재 등급</legend>
+        <div class="seg wide" role="group" aria-label="자재 등급" id="grade"></div>
+      </fieldset>
+
+      <label class="f" for="memo">상담 메모 <small>연락처는 AI로 보내기 전에 지워요</small></label>
+      <textarea id="memo" rows="6" spellcheck="false"></textarea>
+
+      <button class="primary" id="make" type="submit">무드보드 · 견적 만들기</button>
+    </form>
+
+    <!-- 오른쪽: 결과 -->
+    <div class="out">
+      <section class="card mood" aria-labelledby="moodTitle">
+        <div class="card-h">
+          <h2 id="moodTitle">무드보드</h2>
+          <span id="modeChip"></span>
+        </div>
+        <div class="styles" id="styles" role="group" aria-label="스타일 직접 고르기"></div>
+        <div class="mood-body" id="mood" aria-live="polite"></div>
+      </section>
+
+      <section class="card quote" aria-labelledby="quoteTitle">
+        <div class="card-h"><h2 id="quoteTitle">견적 초안</h2><span class="tag">가상의 샘플 단가</span></div>
+        <div id="quote"></div>
+      </section>
+
+      <section class="card reply" aria-labelledby="replyTitle">
+        <div class="card-h"><h2 id="replyTitle">고객 회신</h2>
+          <div class="tools">
+            <button class="ghost-btn" id="print" type="button">견적서 인쇄</button>
+            <button class="dark" id="copy" type="button">회신 복사</button>
+          </div>
+        </div>
+        <pre class="reply-txt" id="reply" tabindex="0" aria-label="고객에게 보낼 회신 문장"></pre>
+      </section>
+    </div>
+  </div>
+  <p class="fine">이 데모의 단가는 모두 <b>가상의 샘플 단가</b>이고 실제 자재·시공 가격이 아니에요. 도배 면적은 바닥 면적 × 2.6으로 추정합니다. 무드보드 견본은 사진이 아닌 색·재질 견본 그림이에요.</p>
+</main>
+
+<footer class="foot">AI 빌더랩 창업 트랙 · 공간한컷 목표 모델 · 스타일 정리 Claude API (실패 시 규칙) · 견적은 규칙 계산만 사용</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

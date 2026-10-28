@@ -1,0 +1,11 @@
+{
+  "name": "bonbogi",
+  "version": "1.0.0",
+  "private": true,
+  "description": "본보기 — 우리 팀 실제 우수 응답으로 만든 상담 품질 체크리스트 · 신입 교육 자료 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

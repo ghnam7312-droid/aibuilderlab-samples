@@ -1,0 +1,11 @@
+{
+  "name": "dangil-gyeolgwa",
+  "version": "1.0.0",
+  "private": true,
+  "description": "당일결과 — 교육 설문 → 익명 집계 만족도·효과 리포트 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

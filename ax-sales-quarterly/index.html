@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>분기판 · 분기 영업 리포트</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='3' y='3' width='30' height='30' rx='6' fill='%23C23B52'/%3E%3Crect x='9' y='19' width='4' height='8' fill='%23fff'/%3E%3Crect x='16' y='14' width='4' height='13' fill='%23fff'/%3E%3Crect x='23' y='9' width='4' height='18' fill='%23fff'/%3E%3C/svg%3E">
+<meta name="description" content="거래 목록을 점검해 팀 누구나 같은 양식의 분기 영업 리포트를 만들고, 요약 문장의 숫자는 계산과 대조하는 도구. 1장짜리 사용 가이드 포함">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=sales">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 네 칸(분기) 판 위의 막대 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="3" y="3" width="30" height="30" rx="6" fill="#C23B52"/>
+      <path d="M18 3v30M3 18h30" stroke="#E98A9A" stroke-width="1.2"/>
+      <rect x="8" y="22" width="5" height="7" rx="1" fill="#fff"/>
+      <rect x="15.5" y="16" width="5" height="13" rx="1" fill="#fff"/>
+      <rect x="23" y="9" width="5" height="20" rx="1" fill="#fff"/>
+    </svg>
+    <div><strong>분기판</strong><span>분기 영업 리포트, 팀 누구나 같은 양식으로</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="goal">목표 · 리포트 <s>이틀</s> <b>반나절</b> · 영업본부 3개 팀</span>
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="controls" aria-label="팀과 분기">
+    <div class="teams" id="teams" role="group" aria-label="팀 고르기"></div>
+    <div class="ctl">
+      <label for="quarter">분기</label>
+      <select id="quarter"></select>
+      <label for="target">목표</label>
+      <input id="target" inputmode="numeric" autocomplete="off">
+    </div>
+  </section>
+
+  <div class="grid">
+    <!-- 리포트 (같은 양식) -->
+    <article class="report" id="report" aria-labelledby="repTitle">
+      <div class="rep-h">
+        <div><p class="kicker" id="repKicker"></p><h1 id="repTitle"></h1></div>
+        <div class="rep-tools">
+          <button class="ghost-btn" id="copyMd" type="button">마크다운 복사</button>
+          <button class="dark" id="printRep" type="button">리포트 인쇄</button>
+        </div>
+      </div>
+      <div class="kpis" id="kpis"></div>
+      <section class="sum" aria-labelledby="sumTitle">
+        <div class="sum-h"><h2 id="sumTitle">요약</h2><span id="modeChip"></span></div>
+        <ol id="sumLines" aria-live="polite"></ol>
+        <div class="sum-f"><span class="check" id="numCheck"></span><button class="primary sm" id="rewrite" type="button">요약 다시 쓰기</button></div>
+      </section>
+      <div class="two">
+        <section aria-labelledby="ownTitle"><h2 id="ownTitle">담당별</h2><table class="mini" id="owners"></table></section>
+        <section aria-labelledby="topTitle"><h2 id="topTitle">큰 수주 3건</h2><ol class="top" id="top"></ol></section>
+      </div>
+      <p class="rep-foot" id="repFoot"></p>
+    </article>
+
+    <!-- 거래 입력 + 양식 점검 -->
+    <section class="deals" aria-labelledby="dealTitle">
+      <div class="deal-h">
+        <h2 id="dealTitle">거래 목록</h2>
+        <button class="ghost-btn sm" id="addRow" type="button">+ 행 추가</button>
+      </div>
+      <div class="issues" id="issues" role="status" aria-live="polite"></div>
+      <div class="tbl-wrap">
+        <table class="dt" id="dealTable">
+          <thead><tr><th>담당</th><th>고객사</th><th>단계</th><th class="r">금액</th><th>날짜</th><th><span class="sr">지우기</span></th></tr></thead>
+          <tbody id="dealBody"></tbody>
+        </table>
+      </div>
+      <p class="fine">금액은 3,200만 · 1.2억처럼 써도 돼요. 빨간 줄은 리포트 계산에서 빠져요. 진행 중 거래는 다음 분기 날짜를 넣어요.</p>
+    </section>
+  </div>
+
+  <!-- 1장짜리 사용 가이드 -->
+  <section class="guide" id="guide" aria-labelledby="guideTitle">
+    <div class="guide-h">
+      <div><h2 id="guideTitle">처음 쓰는 팀원을 위한 1장 가이드</h2><p>화면 그대로 따라 하면 반나절 안에 리포트가 끝나요.</p></div>
+      <button class="ghost-btn" id="printGuide" type="button">가이드만 인쇄</button>
+    </div>
+    <ol class="steps" id="steps"></ol>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 직장인 AX 트랙 · 미팅기록왕 목표 모델 · 등장하는 회사와 사람, 숫자는 모두 가상입니다</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

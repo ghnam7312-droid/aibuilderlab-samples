@@ -1,0 +1,11 @@
+{
+  "name": "miribom-coach-brief",
+  "version": "1.0.0",
+  "private": true,
+  "description": "미리봄 — 코칭 사전 진단 · 상담 요약 리포트 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

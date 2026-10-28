@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>십분설계 · 마이크로러닝 과정 설계서</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='9' fill='%23D2541F'/%3E%3Ccircle cx='18' cy='19' r='10' fill='none' stroke='%23fff' stroke-width='2.4'/%3E%3Cpath d='M18 19V12.5M18 19l-5.6 3.2' stroke='%23fff' stroke-width='2.4' stroke-linecap='round'/%3E%3Crect x='15' y='5' width='6' height='3' rx='1.2' fill='%23fff'/%3E%3C/svg%3E">
+<meta name="description" content="직장인 학습자용 10분 차시 설계서. 학습 목표를 행동 동사로 바꾸고 평가 문항과 짝을 맞추며, 차시 분량을 10분 안으로 관리하는 도구 (AI 빌더랩 1기 목표 모델 예시)">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=edu-content">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 10분 타이머 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect width="36" height="36" rx="9" fill="#D2541F"/>
+      <circle cx="18" cy="19" r="10" fill="none" stroke="#fff" stroke-width="2.4"/>
+      <path d="M18 19V12.5M18 19l-5.6 3.2" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+      <rect x="15" y="5" width="6" height="3" rx="1.2" fill="#fff"/>
+    </svg>
+    <div><strong>십분설계</strong><span>목표 한 줄, 평가 한 줄, 10분 한 차시</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="course" aria-labelledby="courseTitle">
+    <div class="course-h">
+      <div>
+        <p class="kicker">마이크로러닝 과정 설계서</p>
+        <h1 id="courseTitle">신임 파트장을 위한 1:1 면담 기술</h1>
+        <p class="aud" id="aud"></p>
+      </div>
+      <div class="tools">
+        <button class="ghost-btn" id="copyMd" type="button">설계서 복사 (마크다운)</button>
+        <button class="dark" id="print" type="button">인쇄</button>
+      </div>
+    </div>
+    <div class="kpis" id="kpis" aria-live="polite"></div>
+    <p class="goal"><span class="goal-k">1기 목표치</span> 10분 단위 차시 <b>8개</b> · 학습 목표·평가 문항 <b>짝 맞춤</b></p>
+  </section>
+
+  <div class="grid">
+    <section class="sheet" aria-labelledby="listTitle">
+      <div class="sheet-h">
+        <h2 id="listTitle">차시 8개</h2>
+        <label class="sw"><input type="checkbox" id="onlyIssue"><span>확인할 차시만</span></label>
+      </div>
+      <ol class="lessons" id="lessons"></ol>
+      <p class="legend"><i class="sg v"></i>영상 <i class="sg p"></i>실습 <i class="sg q"></i>퀴즈 · 막대 끝 선이 10분</p>
+    </section>
+
+    <aside class="sheet editor" id="editor" aria-label="차시 고치기"></aside>
+  </div>
+
+  <details class="md" id="mdBox" hidden><summary>복사한 설계서 보기</summary><pre id="mdOut"></pre></details>
+  <p class="fine">행동 동사 목록과 평가 짝은 이 서비스가 쓰는 기준입니다. 기관의 교수설계 지침이 있으면 그 기준을 따르세요. Claude 제안도 검사를 통과해야 보이고, 적용은 사람이 누릅니다.</p>
+</main>
+
+<footer class="foot">AI 빌더랩 커리어 트랙 · 배움설계자 목표 모델 · 목표 다듬기 Claude API (실패 시 규칙) · 행동 동사–평가 짝 검사</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

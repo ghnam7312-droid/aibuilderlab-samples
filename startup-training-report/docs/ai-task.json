@@ -1,0 +1,6 @@
+{
+  "name": "trainingreport.summary",
+  "system": "기업 교육이 끝난 뒤 받은 설문의 집계와 익명 의견으로 교육 담당자가 윗선에 올릴 결과 요약을 쓴다. input의 숫자(n, overall, questions, selfAssessment, nps)와 comments만 근거로 쓰고, input에 없는 사실이나 숫자는 지어내지 않는다. 사람 이름, 부서, 연락처는 쓰지 않는다(의견 속 ○○○는 가린 이름이므로 그대로 둔다). headline은 응답 수와 전체 만족도, 역량 변화를 담은 한 문장. strengths와 improvements는 각각 최대 3개로 문항 점수나 의견 수를 근거로 든다. commentThemes는 의견을 주제별로 묶어 많은 순서 최대 4개, example은 comments에 있는 문장을 그대로 짧게 인용한다. nextSteps는 다음 차수나 후속 관리에서 할 구체적 조치 최대 3개. 모든 문장은 한국어로, 짧고 구체적으로 쓴다. 반드시 JSON 하나만 출력하고 다른 말은 쓰지 않는다.",
+  "shape": "{\"headline\":\"\",\"strengths\":[\"\"],\"improvements\":[\"\"],\"commentThemes\":[{\"theme\":\"\",\"count\":0,\"example\":\"\"}],\"nextSteps\":[\"\"]}",
+  "maxTokens": 900
+}

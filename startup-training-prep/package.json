@@ -1,0 +1,11 @@
+{
+  "name": "matchum-sarye",
+  "version": "1.0.0",
+  "private": true,
+  "description": "맞춤사례 — 사전 설문 진단 + 공개 정보만 쓰는 맞춤 사례 초안 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

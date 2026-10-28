@@ -1,0 +1,11 @@
+{
+  "name": "gateunmal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "같은말 — 주간 문의 동향 리포트, 개인정보를 지우고 상품팀에 매주 발송 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

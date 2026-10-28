@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>분수콕 · 분수 오개념 진단</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='9' fill='%2312866A'/%3E%3Cpath d='M18 7a11 11 0 0 1 11 11H18z' fill='%23fff'/%3E%3Ccircle cx='18' cy='18' r='11' fill='none' stroke='%23fff' stroke-width='2.4'/%3E%3C/svg%3E">
+<meta name="description" content="초등 분수 10문항에서 아이가 고른 오답으로 오개념 유형 5가지를 바로 분류하고, 교사에게 지도 활동을 제안하는 진단 퀴즈 (AI 빌더랩 1기 목표 모델 예시)">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=edu-content">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 원의 1/4 에 콕 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect width="36" height="36" rx="9" fill="#12866A"/>
+      <path d="M18 7a11 11 0 0 1 11 11H18z" fill="#fff"/>
+      <circle cx="18" cy="18" r="11" fill="none" stroke="#fff" stroke-width="2.4"/>
+    </svg>
+    <div><strong>분수콕</strong><span>점수 말고, 왜 틀렸는지를 봐요</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<nav class="tabs" role="tablist" aria-label="화면 고르기">
+  <button role="tab" id="tabT" aria-controls="vTeacher" aria-selected="true" type="button">교사 화면</button>
+  <button role="tab" id="tabS" aria-controls="vSolve" aria-selected="false" type="button">학생 풀이 화면</button>
+</nav>
+
+<main class="page">
+  <!-- 교사 화면: 이름은 여기에만 보인다 -->
+  <section id="vTeacher" role="tabpanel" aria-labelledby="tabT">
+    <div class="goal" aria-label="목표치">
+      <span class="goal-k">1기 목표치</span>
+      <span>학생 <b>63명</b> 사용</span><span>오개념 유형 <b>5개</b> 자동 분류</span><span>채점 <b>1시간 → 즉시</b></span>
+    </div>
+    <div class="stats" id="stats"></div>
+
+    <div class="grid">
+      <div class="sheet">
+        <div class="sheet-h">
+          <div>
+            <h1>4학년 2반 · 분수 진단</h1>
+            <p class="lead">유형을 누르면 그 오개념이 있는 학생만 보여요. ● 같은 유형 오답 2번 이상, ○ 1번.</p>
+          </div>
+          <div class="tools">
+            <label class="sw"><input type="checkbox" id="hideNames"><span>이름 가리기 (화면 공유용)</span></label>
+            <button class="ghost-btn" id="csv" type="button">CSV 내보내기 (번호만)</button>
+          </div>
+        </div>
+        <div class="types" id="types" role="group" aria-label="오개념 유형으로 거르기"></div>
+        <div class="tbl-wrap">
+          <table class="mx" id="mx" aria-label="학생별 오개념">
+            <thead id="mxHead"></thead>
+            <tbody id="mxBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <aside class="sheet detail" id="detail" aria-live="polite"></aside>
+    </div>
+    <p class="fine">진단 결과는 지도를 돕는 참고 자료입니다. 학습 부진이나 지원 필요 여부는 선생님이 아이와 이야기해 보고 판단해요. CSV와 Claude에 보내는 내용에는 이름이 들어가지 않아요.</p>
+  </section>
+
+  <!-- 학생 풀이 화면: 주소에는 번호만 -->
+  <section id="vSolve" role="tabpanel" aria-labelledby="tabS" hidden>
+    <div class="solve sheet">
+      <div class="solve-h">
+        <div>
+          <h1>분수 진단 퀴즈 <span class="sub">10문항 · 약 10분</span></h1>
+          <p class="lead">정답을 모르면 가장 그럴듯한 것을 골라요. 점수보다 생각을 보려는 퀴즈예요.</p>
+        </div>
+        <div class="who">
+          <label for="solveNo">내 번호</label>
+          <select id="solveNo"></select>
+        </div>
+      </div>
+      <p class="addr" id="addr"></p>
+      <form id="quiz" novalidate></form>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 커리어 트랙 · 배움설계자 목표 모델 · 채점·분류 규칙 즉시 · 설명 Claude API (실패 시 규칙)</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>끝까지 · 뉴스레터 반응 분석</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='3' y='3' width='30' height='30' rx='8' fill='%236741D9'/%3E%3Cpath d='M10 12h16M10 18h16M10 24h9' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='25' cy='24' r='3' fill='%23FFD43B'/%3E%3C/svg%3E">
+<meta name="description" content="뉴스레터 글별 클릭과 끝까지 읽은 비율을 함께 보고, 낚시성 제목을 걸러 낸 뒤 다음 호 주제를 추천하는 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=newsletter">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 글 세 줄 끝에 찍힌 점 = 끝까지 읽음 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="3" y="3" width="30" height="30" rx="8" fill="#6741D9"/>
+      <path d="M10 12h16M10 18h16M10 24h9" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="25" cy="24" r="3" fill="#FFD43B"/>
+    </svg>
+    <div><strong>끝까지</strong><span>클릭 말고, 끝까지 읽힌 글을 봐요</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="top">
+    <div class="card trend" aria-labelledby="trendTitle">
+      <div class="card-h"><h2 id="trendTitle">호별 열람률 · 유료 전환율</h2><span class="legend"><i class="lg-o"></i>열람률 <i class="lg-c"></i>전환율</span></div>
+      <div class="chart" id="chart" role="img"></div>
+    </div>
+    <ul class="goals" aria-label="목표치와 최근 호">
+      <li><span>열람률 (목표치)</span><b>38% → 51%</b><em id="nowOpen"></em></li>
+      <li><span>유료 전환 (목표치)</span><b>1.2% → 3.4%</b><em id="nowConv"></em></li>
+    </ul>
+  </section>
+
+  <section class="card" aria-labelledby="rankTitle">
+    <div class="card-h">
+      <div><h1 id="rankTitle">글 순위</h1><p class="sub">클릭률 = 클릭 ÷ 그 호 열람자 · 완독률 = 끝까지 읽음 ÷ 클릭 · 완독 점수 = 열람자 100명당 끝까지 읽은 사람</p></div>
+      <div class="tools">
+        <div class="seg" role="group" aria-label="순위 기준">
+          <button type="button" data-by="clicks" aria-pressed="false">클릭 수</button>
+          <button type="button" data-by="score" aria-pressed="true">완독 반영</button>
+        </div>
+        <div class="seg" role="group" aria-label="기간">
+          <button type="button" data-n="4" aria-pressed="false">최근 4호</button>
+          <button type="button" data-n="8" aria-pressed="true">8호 전체</button>
+        </div>
+        <button class="ghost-btn" id="csvOut" type="button">CSV 내려받기</button>
+      </div>
+    </div>
+    <p class="note" id="rankNote" aria-live="polite"></p>
+    <div class="tbl-wrap"><table class="rank" id="rank"></table></div>
+    <details class="data" id="dataBox">
+      <summary>데이터 바꾸기 (글별 합계 CSV)</summary>
+      <p class="sub">한 줄에 <code>호,제목,주제,클릭,끝까지읽음</code>. 구독자 개인 기록은 넣지 않아요. 열람자 수는 호별 기록을 써요(41~48호).</p>
+      <label class="sr" for="csvIn">글별 합계 CSV</label>
+      <textarea id="csvIn" rows="8" spellcheck="false"></textarea>
+      <div class="data-foot"><span id="csvMsg" role="status"></span><button class="ghost-btn" id="csvApply" type="button">적용</button></div>
+    </details>
+  </section>
+
+  <section class="two">
+    <div class="card" aria-labelledby="recTitle">
+      <div class="card-h"><h2 id="recTitle">다음 호 주제 추천</h2><span id="modeChip"></span></div>
+      <p class="sub">주제별 평균 완독 점수로 고르고, 낚시 의심 글이 많은 주제는 따로 알려요.</p>
+      <ol class="recs" id="recs" aria-live="polite"></ol>
+      <p class="caution" id="caution" hidden></p>
+      <button class="primary" id="run" type="button">추천 받기</button>
+    </div>
+    <div class="card" aria-labelledby="chkTitle">
+      <div class="card-h"><h2 id="chkTitle">다음 호 제목 점검</h2></div>
+      <p class="sub">보내기 전에 제목을 넣어 보세요. 지난 호에서 클릭만 많고 끝까지 읽히지 않은 표현이 있으면 알려 줘요.</p>
+      <label class="sr" for="titleIn">점검할 제목</label>
+      <input id="titleIn" maxlength="80" value="택배 단가 인상, 모르면 손해 보는 대응 꿀팁">
+      <div class="verdict" id="verdict" role="status"></div>
+      <h3 class="mini-h">주제별 평균</h3>
+      <table class="topics" id="topics"></table>
+    </div>
+  </section>
+  <p class="fine">뉴스레터 이름·글·숫자는 모두 가상입니다. 열람·클릭은 글마다 합계만 쓰고, 누가 무엇을 읽었는지는 다루지 않아요.</p>
+</main>
+
+<footer class="foot">AI 빌더랩 창업 트랙 · 업계한장 목표 모델 · 추천 Claude API (실패 시 완독 점수 규칙) · 클릭 + 완독률</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

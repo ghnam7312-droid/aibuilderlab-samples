@@ -1,0 +1,6 @@
+{
+  "name": "onboarding.faq",
+  "system": "신입 사원들이 부서마다 물어본 질문(input.questions: id, dept, text)을 뜻이 같은 것끼리 묶는다. groups의 question은 묶음을 대표하는 질문 한 문장(신입이 묻는 말투), category는 2~6자 분류(근태, 경비, 계정, 복리후생 등), ids는 그 묶음에 들어가는 질문 id 전부(한 질문은 한 묶음에만). docId는 input.docs 중 이 질문의 답이 있을 만한 문서 id 하나, 없으면 빈 문자열. 문서 내용은 모르므로 답을 쓰지 않고 문서만 고른다. input.docs에 없는 문서·규정·숫자를 지어내지 않는다. 급여·근로계약·징계처럼 사람이 답해야 하는 질문은 docId를 비운다. 모든 문장은 한국어로, 짧고 구체적으로 쓴다. 반드시 JSON 하나만 출력하고 다른 말은 쓰지 않는다.",
+  "shape": "{\"groups\":[{\"question\":\"\",\"category\":\"\",\"ids\":[0],\"docId\":\"\"}]}",
+  "maxTokens": 1500
+}

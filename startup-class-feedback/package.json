@@ -1,0 +1,11 @@
+{
+  "name": "hanjulde-class-feedback",
+  "version": "1.0.0",
+  "private": true,
+  "description": "한줄더 — 수강생 과제 피드백 보조 도구 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

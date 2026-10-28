@@ -1,0 +1,11 @@
+{
+  "name": "bungipan",
+  "version": "1.0.0",
+  "private": true,
+  "description": "분기판 — 같은 양식의 분기 영업 리포트 · 숫자 검산 · 1장 가이드 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

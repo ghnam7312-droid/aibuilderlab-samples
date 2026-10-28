@@ -1,0 +1,11 @@
+{
+  "name": "moadatgi",
+  "version": "1.0.0",
+  "private": true,
+  "description": "모아닫기 — 흩어진 디자인 리뷰 코멘트를 모아 합치고 끝까지 닫는 도구 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

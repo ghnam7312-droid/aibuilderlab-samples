@@ -22,6 +22,57 @@ jobs:
           - startup-academy-report
           - startup-wrong-answer
           - startup-interview-board
+          - career-ab-copy
+          - career-sns-report
+          - career-campaign-plan
+          - career-district-dash
+          - career-survey-sort
+          - career-library-seat
+          - career-clinic-booking
+          - career-design-review
+          - career-kiosk-a11y
+          - career-fraction-quiz
+          - career-quiz-maker
+          - career-microlearning
+          - career-lab-booking
+          - career-devlog
+          - career-tech-spec
+          - startup-speaking-coach
+          - startup-lesson-report
+          - startup-price-test
+          - startup-coach-brief
+          - startup-coach-booking
+          - startup-coach-landing
+          - startup-class-feedback
+          - startup-class-faq
+          - startup-class-pricing
+          - startup-labor-intake
+          - startup-labor-notice
+          - startup-labor-check
+          - startup-news-digest
+          - startup-news-insight
+          - startup-news-b2b
+          - startup-play-pick
+          - startup-parent-signup
+          - startup-parent-proposal
+          - startup-moodboard-quote
+          - startup-site-log
+          - startup-small-package
+          - startup-training-report
+          - startup-training-prep
+          - startup-training-followup
+          - ax-meeting-crm
+          - ax-followup-mail
+          - ax-sales-quarterly
+          - ax-ad-weekly
+          - ax-review-sort
+          - ax-ai-guide
+          - ax-ticket-triage
+          - ax-voc-weekly
+          - ax-cs-checklist
+          - ax-training-attend
+          - ax-survey-summary
+          - ax-onboarding-kit
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

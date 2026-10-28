@@ -1,0 +1,6 @@
+{
+  "name": "cschecklist.review",
+  "system": "신입 상담원이 쓴 고객 응대 답변(input.answer)을 상담 품질 체크리스트 항목(input.items)마다 점검한다. 고객 문의는 input.inquiry, 회사 정책은 input.policy. items에는 input.items의 id마다 하나씩, 그 항목을 지켰으면 pass를 true로 둔다. evidence는 판단 근거가 된 문장을 답변에서 글자 그대로 옮기고, 해당 문장이 없으면 빈 문자열로 둔다. tip은 지키지 못한 항목에 대해 고칠 방향 한 문장(60자 이내). 모범 답안이나 고쳐 쓴 전체 답변은 쓰지 않는다. 정책 판단은 input.policy에 있는 내용만 기준으로 하고, 답변에 없는 말을 근거로 지어내지 않는다. 모든 문장은 한국어로, 짧고 구체적으로 쓴다. 반드시 JSON 하나만 출력하고 다른 말은 쓰지 않는다.",
+  "shape": "{\"items\":[{\"id\":\"\",\"pass\":true,\"evidence\":\"\",\"tip\":\"\"}]}",
+  "maxTokens": 1200
+}

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>자리판 · 우리 동네 상권 분석</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='2' y='2' width='32' height='32' rx='8' fill='%230B7F6E'/%3E%3Cpath d='M9 26V17M15 26V11M21 26V15M27 26V8' stroke='%23fff' stroke-width='3.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="description" content="업종 하나와 구를 고르면 행정동별 점포 수·경쟁·폐업률·매출을 바로 비교하는 상권 분석 대시보드">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=data-analyst">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 동네 블록 위에 올라선 막대 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="2" y="2" width="32" height="32" rx="8" fill="#0B7F6E"/>
+      <path d="M9 26V17M15 26V11M21 26V15M27 26V8" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/>
+    </svg>
+    <div><strong>자리판</strong><span>가게 자리, 숫자로 먼저 봐요</span></div>
+  </div>
+  <div class="bar-r">
+    <p class="goal" title="1기 목표치">분석 요청 <s>1일</s> <b>즉시</b></p>
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="controls" aria-label="조건">
+    <div class="ctl">
+      <label for="biz">업종</label>
+      <select id="biz"></select>
+    </div>
+    <div class="ctl">
+      <span class="lab" id="guLab">구</span>
+      <div class="chips" id="gus" role="group" aria-labelledby="guLab"></div>
+    </div>
+    <div class="ctl map-ctl">
+      <span class="lab">행정동 이름</span>
+      <button class="switch" id="useMap" type="button" role="switch" aria-checked="true"><i aria-hidden="true"></i><span>옛 이름·새 이름 대응표 적용</span></button>
+    </div>
+    <p class="data-note">데이터: 가상의 공공데이터 형식 · 2026년 1·2분기 · 행 <b id="rowCount">0</b>개</p>
+  </section>
+
+  <!-- 이름이 안 맞아 빠진 행 -->
+  <section class="warn" id="warn" role="region" aria-label="이름이 맞지 않는 행" hidden></section>
+
+  <section class="kpis" id="kpis" aria-label="요약 숫자"></section>
+
+  <div class="grid">
+    <div class="main-col">
+      <section class="card brief" aria-labelledby="briefTitle">
+        <div class="card-h"><h2 id="briefTitle">한눈 요약</h2><span id="mode"></span></div>
+        <div id="brief" aria-live="polite"></div>
+      </section>
+
+      <section class="card" aria-labelledby="tableTitle">
+        <div class="card-h">
+          <div><h2 id="tableTitle">행정동 순위</h2><p class="sub">머리글을 눌러 정렬 · 동을 3곳까지 골라 비교해요</p></div>
+          <button class="ghost-btn" id="csv" type="button">CSV 내보내기</button>
+        </div>
+        <div class="tbl-wrap"><table class="rank" id="rank"></table></div>
+        <details class="how">
+          <summary>참고 점수는 이렇게 계산해요</summary>
+          <p>고른 동끼리 비교한 상대 점수예요. <b>경쟁 적음 40%</b>(유동인구 1만 명당 점포가 적을수록) + <b>폐업률 낮음 30%</b> + <b>점포당 월매출 30%</b>. 임대료·시간대별 유동인구는 이 데이터에 없어서 점수에 들어가지 않아요.</p>
+        </details>
+      </section>
+    </div>
+
+    <aside class="side-col">
+      <section class="card" aria-labelledby="cmpTitle">
+        <div class="card-h"><h2 id="cmpTitle">동 비교</h2><button class="link-btn" id="cmpClear" type="button">비우기</button></div>
+        <div id="cmp"></div>
+      </section>
+
+      <section class="card" aria-labelledby="chkTitle">
+        <div class="card-h"><h2 id="chkTitle">표본 검산</h2><button class="primary sm" id="verify" type="button">10건 다시 세기</button></div>
+        <p class="sub">집계 결과에서 동 10곳을 무작위로 골라, 원본 행을 처음부터 다시 세어 맞는지 봐요.</p>
+        <div id="chk" aria-live="polite"></div>
+      </section>
+
+      <section class="card" aria-labelledby="mapTitle">
+        <div class="card-h"><h2 id="mapTitle">행정동 대응표</h2><span class="n" id="mapN"></span></div>
+        <ul class="maplist" id="maplist"></ul>
+      </section>
+    </aside>
+  </div>
+</main>
+
+<footer class="foot">AI 빌더랩 커리어 트랙 · 숫자읽는사람 목표 모델 · 목표치 3개 구 · 업종 20개 비교, 조회 410회 · 요약 Claude API (실패 시 규칙)</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>한줄더 · 과제 피드백 보조</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='10' fill='%23E2553C'/%3E%3Cpath d='M8 13h20M8 19h14' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M8 26c4-3 7 2 11-1s6-2 9 0' fill='none' stroke='%23FFD9CF' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="description" content="수강생 과제 그림을 분석하고, 작가가 직접 쓴 피드백 예시 30개만 보고 초안을 만든 뒤 마지막 한 줄은 작가가 쓰는 피드백 보조 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=online-class">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 인쇄된 두 줄 아래, 손으로 그은 마지막 한 줄 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect width="36" height="36" rx="10" fill="#E2553C"/>
+      <path d="M8 13h20M8 19h14" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <path d="M8 26c4-3 7 2 11-1s6-2 9 0" fill="none" stroke="#FFD9CF" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <div><strong>한줄더</strong><span>AI는 초안까지, 마지막 한 줄은 작가가</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="stats" id="stats" aria-label="피드백 대기 현황"></section>
+  <p class="goal">1기 목표치 · 수강생 212명 · 피드백 대기 <b>5일 → 1일</b> · 완강률 <b>41% → 63%</b></p>
+
+  <section class="desk" aria-label="과제 피드백">
+    <!-- 대기열: 오래 기다린 과제부터 -->
+    <aside class="queue">
+      <div class="q-h">
+        <h1>대기 중인 과제</h1>
+        <label class="only"><input type="checkbox" id="onlyLate"> 3일 넘은 것만</label>
+      </div>
+      <ol id="queue" class="q-list" aria-label="과제 목록"></ol>
+    </aside>
+
+    <!-- 과제 보기 + 그림 분석 -->
+    <section class="work" id="work" aria-live="polite"></section>
+
+    <!-- 초안 + 작가의 마지막 한 줄 -->
+    <section class="draft" id="draft"></section>
+  </section>
+
+  <section class="lower">
+    <div class="sent-box">
+      <div class="sec-h">
+        <h2>보낸 피드백</h2>
+        <button class="ghost-btn" id="csv" type="button">기록 내보내기 (.csv)</button>
+      </div>
+      <ul id="sent" class="sent"></ul>
+      <p class="fine">내보내기에는 닉네임과 피드백 본문이 들어가지 않아요. 과제 번호·항목·대기일만 남겨 대기 시간을 재는 데 써요.</p>
+    </div>
+    <details class="lib" id="lib">
+      <summary>초안의 기준 · 내가 쓴 피드백 예시 30개</summary>
+      <p class="fine">AI도 규칙도 이 예시만 보고 초안을 써요. 초안 아래 <code>E07</code> 같은 번호를 누르면 여기서 그 문장을 찾을 수 있어요.</p>
+      <div id="libList" class="lib-list"></div>
+    </details>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 스타트업 트랙 · 그림한스푼 목표 모델 · 그림 분석 Canvas · 초안 Claude API (실패 시 예시 규칙)</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

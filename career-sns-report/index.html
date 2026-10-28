@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>곁눈 · 경쟁 브랜드 SNS 주간 리포트</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Cpath d='M3 18c4-7 9-10 15-10s11 3 15 10c-4 7-9 10-15 10S7 25 3 18z' fill='%230E8A7E'/%3E%3Ccircle cx='22' cy='18' r='5' fill='%23fff'/%3E%3C/svg%3E">
+<meta name="description" content="경쟁 브랜드 게시물을 시트에서 붙여 넣으면 섞인 날짜 형식을 하나로 맞추고, 원문 링크가 붙은 주간 리포트를 만드는 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=marketer">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 옆으로 흘겨보는 눈 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <path d="M3 18c4-7 9-10 15-10s11 3 15 10c-4 7-9 10-15 10S7 25 3 18z" fill="#0E8A7E"/>
+      <circle cx="22" cy="18" r="5.5" fill="#fff"/>
+      <circle cx="23.5" cy="18" r="2.6" fill="#13201E"/>
+    </svg>
+    <div><strong>곁눈</strong><span>경쟁 브랜드 SNS를 매주 한 장으로</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <ol class="flow" id="flow" aria-label="처리 단계"></ol>
+
+  <section class="split">
+    <!-- 왼쪽: 시트 붙여넣기 + 날짜 맞추기 -->
+    <div class="pane src-pane">
+      <div class="pane-h">
+        <h1>게시물 시트</h1>
+        <div class="seg" role="group" aria-label="보기">
+          <button type="button" id="tabDates" aria-pressed="true">날짜 맞추기</button>
+          <button type="button" id="tabRaw" aria-pressed="false">원본 붙여넣기</button>
+        </div>
+      </div>
+      <p class="tip" id="srcTip"></p>
+      <div id="datesBox">
+        <div class="tbl-wrap"><table class="dates" id="dates"></table></div>
+      </div>
+      <div id="rawBox" hidden>
+        <label class="sr" for="raw">시트에서 복사한 표 (탭으로 나뉜 칸)</label>
+        <textarea id="raw" spellcheck="false" rows="16"></textarea>
+        <div class="src-foot"><span class="tiny">칸 순서: 브랜드 · 날짜 · 채널 · 내용 · 좋아요 · 댓글 · 링크</span><button class="primary sm" id="reread" type="button">다시 읽기</button></div>
+      </div>
+    </div>
+
+    <!-- 오른쪽: 주간 리포트 -->
+    <article class="pane report" id="report" aria-live="polite">
+      <div class="rep-h">
+        <div class="week-nav">
+          <button type="button" class="nav" id="prevWk" aria-label="앞 주">‹</button>
+          <h2 id="repTitle">주간 리포트</h2>
+          <button type="button" class="nav" id="nextWk" aria-label="다음 주">›</button>
+        </div>
+        <div class="rep-tools">
+          <button class="ghost-btn" id="copyMd" type="button">마크다운 복사</button>
+          <button class="ghost-btn" id="print" type="button">인쇄</button>
+          <button class="primary sm" id="publish" type="button">발행</button>
+        </div>
+      </div>
+      <div class="sum-h"><h3>요약</h3><span id="sumMode"></span><button class="link-btn" id="again" type="button">요약 다시 쓰기</button></div>
+      <ol class="sum" id="sum"></ol>
+      <p class="watch" id="watch" hidden></p>
+      <h3>브랜드별</h3>
+      <div class="tbl-wrap"><table class="brands" id="brands"></table></div>
+      <div class="tl-h"><h3>게시물 <span id="tlCount"></span></h3>
+        <label class="naive"><input type="checkbox" id="naive"> 날짜 맞추기 전 정렬로 보기</label></div>
+      <div class="chips" id="chips" role="group" aria-label="브랜드 거르기"></div>
+      <ol class="tl" id="tl"></ol>
+      <details class="md" id="mdBox" hidden><summary>복사한 내용 보기</summary><pre id="mdOut"></pre></details>
+    </article>
+  </section>
+
+  <section class="issues" aria-labelledby="issTitle">
+    <div class="iss-h"><h2 id="issTitle">발행 기록</h2><span id="streak"></span></div>
+    <ol class="iss" id="iss"></ol>
+  </section>
+  <p class="fine">목표치(1기): 주간 정리 3시간 → 25분, 리포트 8주 연속 발행. 요약 문장은 원문 게시물 링크가 하나 이상 있어야 리포트에 들어가요. 브랜드 게시물은 공개 게시물만 다루고 댓글 작성자 정보는 모으지 않아요.</p>
+</main>
+
+<footer class="foot">AI 빌더랩 커리어 트랙 · 전환율장인 목표 모델 · 요약 Claude API (실패 시 규칙) · 실제 버전은 구글 시트 + Apps Script</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

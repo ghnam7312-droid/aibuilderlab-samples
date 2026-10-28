@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>뼈대 · 캡스톤 기술 설계서</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Cpath d='M11 10v8h14M11 18v8h14' fill='none' stroke='%23C2541B' stroke-width='2.4'/%3E%3Crect x='4' y='4' width='14' height='9' rx='2.5' fill='%23C2541B'/%3E%3Crect x='20' y='14' width='13' height='8' rx='2.5' fill='%23C2541B'/%3E%3Crect x='20' y='24' width='13' height='8' rx='2.5' fill='%23C2541B' opacity='.55'/%3E%3C/svg%3E">
+<meta name="description" content="화면에 필요한 데이터만으로 테이블을 줄이고, ERD·API 명세·리뷰 체크리스트와 판단 근거를 한 장의 설계서로 만드는 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=junior-dev">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 테이블 세 개가 선으로 이어진 뼈대 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <path d="M11 12v6h9M11 18v8h9" fill="none" stroke="#C2541B" stroke-width="2.4"/>
+      <rect x="4" y="4" width="14" height="9" rx="2.5" fill="#C2541B"/>
+      <rect x="20" y="14" width="13" height="8" rx="2.5" fill="#C2541B"/>
+      <rect x="20" y="24" width="13" height="8" rx="2.5" fill="#C2541B" opacity=".55"/>
+    </svg>
+    <div><strong>뼈대</strong><span>화면부터 말고, 화면이 쓰는 데이터부터</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <div class="proj">
+    <div><p class="eyebrow">캡스톤 2팀 기술 설계서</p><h1>스터디로그 <small>스터디 모임 출석·과제 앱</small></h1></div>
+    <div class="tools"><button class="ghost-btn" id="print" type="button">인쇄</button><button class="dark" id="download" type="button">설계서 .md 내려받기</button></div>
+  </div>
+  <section class="stats" id="stats" aria-label="설계 현황"></section>
+
+  <section class="card" aria-labelledby="mxTitle">
+    <div class="sec-h">
+      <div><h2 id="mxTitle">화면 × 테이블</h2><p>AI가 제안한 테이블 13개 중, 화면이 실제로 쓰는 것에 체크해요. 아무 화면도 쓰지 않는 테이블은 빠지고, 남은 테이블이 참조하는 테이블은 같이 남아요.</p></div>
+      <form class="add" id="addForm"><label class="sr" for="newScreen">새 화면 이름</label><input id="newScreen" placeholder="새 화면 이름" autocomplete="off" maxlength="20"><button class="ghost-btn" type="submit">화면 추가</button></form>
+    </div>
+    <div class="mx-wrap"><table class="mx" id="mx"></table></div>
+    <p class="legend"><span class="st screen">화면</span> 화면이 씀 <span class="st fk">참조</span> 다른 테이블이 참조해서 남김 <span class="st manual">사람</span> 이유를 적어 남김 <span class="st off">뺌</span> 쓰는 화면 없음</p>
+  </section>
+
+  <div class="two">
+    <section class="card" aria-labelledby="whyTitle">
+      <div class="sec-h">
+        <div><h2 id="whyTitle">판단 기록</h2><p id="whyMeta"></p></div>
+        <button class="ghost-btn" id="aiWrite" type="button">근거 다시 쓰기</button>
+      </div>
+      <p class="summary" id="summary" hidden></p>
+      <div id="reasons" aria-live="polite"></div>
+    </section>
+    <section class="card" aria-labelledby="ckTitle">
+      <h2 id="ckTitle">리뷰 체크리스트</h2>
+      <ul class="checks" id="checks"></ul>
+      <div class="risks" id="risks" hidden></div>
+    </section>
+  </div>
+
+  <section class="card" aria-labelledby="erdTitle">
+    <div class="sec-h"><div><h2 id="erdTitle">ERD</h2><p>남긴 테이블과 컬럼. <span class="b pk">PK</span> 기본 키 <span class="b fk">FK</span> 참조 <span class="b pii">개인정보</span></p></div></div>
+    <div class="erd" id="erd"></div>
+  </section>
+
+  <section class="card" aria-labelledby="apiTitle">
+    <div class="sec-h"><div><h2 id="apiTitle">API 명세</h2><p id="apiMeta"></p></div></div>
+    <div class="api-wrap"><table class="api" id="api"></table></div>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 커리어 트랙 · 커밋하는곰 목표 모델 · 판단 근거 Claude API (실패 시 규칙) · ERD · API 명세 · 리뷰 체크리스트</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

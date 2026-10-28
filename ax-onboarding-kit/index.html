@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>첫주노트 · 온보딩 자료 정리</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='6' y='4' width='22' height='28' rx='4' fill='%23D9601A'/%3E%3Cpath d='M11 12h12M11 17h12M11 22h7' stroke='%23fff' stroke-width='2.4' stroke-linecap='round'/%3E%3Ccircle cx='27' cy='27' r='6' fill='%231F2A44'/%3E%3Cpath d='M24.5 27l1.8 1.8 3.3-3.6' fill='none' stroke='%23fff' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta name="description" content="부서마다 다른 온보딩 자료를 개정일 기준 최신본만 남기고, 신입 질문을 공통 질문으로 묶고, 부서별 확산 계획을 관리하는 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=hr-edu">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 한 장으로 정리된 노트에 확인 표시 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="6" y="4" width="22" height="28" rx="4" fill="#D9601A"/>
+      <path d="M11 12h12M11 17h12M11 22h7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+      <circle cx="27" cy="27" r="6" fill="#1F2A44"/>
+      <path d="M24.5 27l1.8 1.8 3.3-3.6" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div><strong>첫주노트</strong><span>신입이 첫 주에 볼 최신 자료와 답을 한 장에</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="course" aria-label="진행 현황">
+    <div class="meter" id="meter" aria-live="polite"></div>
+    <label class="f"><span>공통 질문 기준</span><select id="minDepts"><option value="2" selected>2개 부서 이상</option><option value="3">3개 부서 이상</option></select></label>
+    <p class="goal"><b>목표치</b> 공통 질문 30개 정리 · 4개 부서 적용</p>
+  </section>
+
+  <section class="split" aria-label="자료 정리">
+    <div class="pane src-pane">
+      <div class="tabs" role="tablist" aria-label="원본 자료">
+        <button type="button" role="tab" id="tabDocs" aria-selected="true" aria-controls="srcBox">자료 목록 <em id="nDocs"></em></button>
+        <button type="button" role="tab" id="tabQs" aria-selected="false" aria-controls="srcBox">신입 질문 <em id="nQs"></em></button>
+      </div>
+      <p class="tip" id="tip"></p>
+      <div id="srcBox" role="tabpanel">
+        <label class="sr" for="src">원본 내용</label>
+        <textarea id="src" spellcheck="false"></textarea>
+      </div>
+      <div class="src-foot">
+        <span id="srcInfo"></span>
+        <button class="primary" id="run" type="button">최신본으로 정리</button>
+      </div>
+    </div>
+    <div class="pane out-pane" id="docsOut" aria-live="polite"></div>
+  </section>
+
+  <section class="block" aria-labelledby="qTitle">
+    <div class="block-h">
+      <div><h2 id="qTitle"><span class="step">2</span>공통 질문</h2><p>여러 부서 신입이 같은 걸 물었다면 공통 질문입니다. 답은 최신본 자료로만 연결해요.</p></div>
+      <span id="qMode"></span>
+    </div>
+    <div class="card" id="qOut"></div>
+  </section>
+
+  <section class="block" aria-labelledby="pTitle">
+    <div class="block-h">
+      <div><h2 id="pTitle"><span class="step">3</span>팀 확산 계획</h2><p>칸을 누르면 예정 → 진행 → 완료로 바뀌어요. 네 단계를 모두 마친 부서가 ‘적용’입니다.</p></div>
+      <button class="dark" id="copyKit" type="button">온보딩 키트 복사 (마크다운)</button>
+    </div>
+    <div class="card"><div class="plan-scroll"><table class="plan" id="plan"></table></div></div>
+    <details class="md" id="kitBox" hidden><summary>복사한 키트 보기</summary><pre id="kitOut"></pre></details>
+    <p class="fine">실제 버전은 부서 공유 드라이브의 파일 목록과 개정일을 읽습니다. 이 데모는 붙여 넣은 목록으로 동작하며, 자료 본문은 읽지 않고 문서 이름·개정일만 다룹니다.</p>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 직장인 AX 트랙 · 출결은알아서 목표 모델 · 가상의 회사 온결물산 4개 부서 자료</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

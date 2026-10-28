@@ -1,0 +1,11 @@
+{
+  "name": "gapchatgi",
+  "version": "1.0.0",
+  "private": true,
+  "description": "값찾기 — 유도형 인터뷰 질문 검사 + 가격 3안 선결제 실험 정리 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

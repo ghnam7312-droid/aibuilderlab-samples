@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>천천예약 · 동네 병원 예약 시제품</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='3' y='5' width='30' height='27' rx='7' fill='%230B7A75'/%3E%3Cpath d='M10 3v6M26 3v6' stroke='%230B7A75' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M11 20l5 5 9-10' fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta name="description" content="50~60대가 중간에 포기하던 동네 병원 예약 화면을 다시 설계하고, 눌러 보는 시제품과 사용성 테스트 기록으로 검증하는 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=ux-designer">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 달력 위의 큰 체크 — 한 번에 끝나는 예약 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="3" y="5" width="30" height="27" rx="7" fill="#0B7A75"/>
+      <path d="M10 3v6M26 3v6" stroke="#0B7A75" stroke-width="3" stroke-linecap="round"/>
+      <path d="M11 20l5 5 9-10" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div><strong>천천예약</strong><span>한 화면에 한 가지씩, 끝까지 가는 병원 예약</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <!-- 왼쪽: 눌러 보는 시제품 -->
+  <section class="proto" aria-labelledby="protoTitle">
+    <div class="sec-h">
+      <h1 id="protoTitle">눌러 보는 시제품</h1>
+      <p>처음 시안과 고친 시안을 같은 휴대폰 폭에서 바꿔 가며 눌러 보세요.</p>
+    </div>
+    <div class="tools">
+      <div class="seg" role="group" aria-label="시안">
+        <button type="button" data-ver="v1" aria-pressed="false">처음 시안</button>
+        <button type="button" data-ver="v2" aria-pressed="true">고친 시안</button>
+      </div>
+      <div class="seg" role="group" aria-label="휴대폰 폭">
+        <button type="button" data-w="320" aria-pressed="false">320</button>
+        <button type="button" data-w="375" aria-pressed="true">375</button>
+        <button type="button" data-w="430" aria-pressed="false">430</button>
+      </div>
+      <div class="seg" role="group" aria-label="글자 크기">
+        <button type="button" data-s="1" aria-pressed="true">보통 글자</button>
+        <button type="button" data-s="1.3" aria-pressed="false">크게</button>
+      </div>
+    </div>
+    <div class="phone-wrap">
+      <div class="phone" id="phone" aria-label="병원 예약 시제품 화면" role="region">
+        <div class="ph-top"><b>느티나무의원</b><span id="phStep"></span></div>
+        <div class="ph-prog" aria-hidden="true"><i id="phBar"></i></div>
+        <div class="ph-body" id="screen" aria-live="polite"></div>
+        <div class="ph-bar" id="phNav"></div>
+      </div>
+    </div>
+    <!-- 배치 점검: 버튼 겹침을 폭·글자 크기별로 계산 -->
+    <div class="check" id="check" aria-live="polite"></div>
+  </section>
+
+  <!-- 오른쪽: 사용성 테스트 -->
+  <section class="lab" aria-labelledby="labTitle">
+    <div class="sec-h">
+      <h2 id="labTitle">사용성 테스트 · 50~60대 5명</h2>
+      <p>목표치: 예약 완료율 <b>54% → 86%</b> (1기 목표 모델)</p>
+    </div>
+    <div class="stats" id="stats"></div>
+    <table class="funnel" id="funnel"></table>
+
+    <form class="add" id="addForm" aria-label="테스트 기록 추가">
+      <label>참가자<select id="fPid"></select></label>
+      <label>시안<select id="fVer"><option value="v1">처음 시안</option><option value="v2" selected>고친 시안</option></select></label>
+      <label>결과<select id="fRes"><option value="done">끝까지 예약</option></select></label>
+      <label class="wide">관찰 메모<input id="fMemo" maxlength="200" placeholder="예: 시간 칸이 작아 옆 칸이 눌림 (이름·연락처는 적지 않아요)"></label>
+      <button class="primary sm" type="submit">기록 추가</button>
+    </form>
+
+    <div class="list-h">
+      <h3>테스트 기록 <span class="n" id="trialN"></span></h3>
+      <div class="seg sm" role="group" aria-label="기록 거르기">
+        <button type="button" data-f="all" aria-pressed="true">전체</button>
+        <button type="button" data-f="v1" aria-pressed="false">처음</button>
+        <button type="button" data-f="v2" aria-pressed="false">고친</button>
+      </div>
+    </div>
+    <ul class="trials" id="trials"></ul>
+
+    <div class="sum-h">
+      <h3>막힌 곳 정리</h3>
+      <div class="sum-tools">
+        <label class="sr" for="sumVer">정리할 시안</label>
+        <select id="sumVer"><option value="v1">처음 시안 기록</option><option value="v2">고친 시안 기록</option></select>
+        <button class="dark" id="runSum" type="button">메모 정리하기</button>
+        <button class="ghost-btn" id="csv" type="button">CSV 내보내기</button>
+      </div>
+    </div>
+    <div class="issues" id="issues" aria-live="polite"></div>
+    <p class="fine">시제품의 예약은 이 브라우저 안에서만 저장되고, 이름은 가린 값으로만 남아요. 진료과 선택이 어려운 분은 접수처 전화로 넘기며, 어느 과로 갈지 AI가 판단하지 않아요.</p>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 커리어 트랙 · 픽셀산책 목표 모델 · 메모 정리 Claude API (실패 시 규칙) · 배치 점검 규칙 계산</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

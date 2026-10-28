@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>같은말 · 주간 문의 동향</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Cpath d='M4 8a4 4 0 0 1 4-4h14a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4h-9l-5 4v-4a4 4 0 0 1-4-4z' fill='%235B45C9'/%3E%3Cpath d='M12 16a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4v4l-5-4h-7a4 4 0 0 1-4-4z' fill='%23C9BEFF'/%3E%3C/svg%3E">
+<meta name="description" content="한 주 동안 들어온 고객 문의를 주제별로 세어 늘어난 불만을 찾고, 고객 이름·연락처를 지운 리포트를 매주 상품팀에 보내는 도구">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=cs-team">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 겹쳐 쌓이는 두 말풍선 = 같은 말이 되풀이된다 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <path d="M4 8a4 4 0 0 1 4-4h14a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4h-9l-5 4v-4a4 4 0 0 1-4-4z" fill="#5B45C9"/>
+      <path d="M12 16a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4v4l-5-4h-7a4 4 0 0 1-4-4z" fill="#C9BEFF" stroke="#fff" stroke-width="1.5"/>
+    </svg>
+    <div><strong>같은말</strong><span>되풀이되는 불만을 매주 상품팀에</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="goals" aria-label="이번 리포트 숫자와 목표">
+    <div class="goal"><span>지난주 문의</span><b id="gTotal">0</b><small id="gLast"></small></div>
+    <div class="goal up"><span>늘어난 불만</span><b id="gUp">0</b><small>3건 이상 · 1.5배 이상</small></div>
+    <div class="goal"><span>지운 개인정보</span><b id="gPii">0</b><small id="gPiiSub">이름·연락처·이메일·주소</small></div>
+    <div class="goal ok"><span>상품 개선 연결</span><b id="gLink">0건</b><small>목표: 반복 불만 2건 · 전에는 전달까지 한 달</small></div>
+  </section>
+
+  <section class="split">
+    <!-- 왼쪽: 문의 데이터 -->
+    <div class="pane data" aria-labelledby="dataTitle">
+      <div class="pane-h">
+        <h1 id="dataTitle">문의 데이터 <span class="wk" id="wk"></span></h1>
+        <label class="raw"><input type="checkbox" id="showRaw"> 원문 보기</label>
+      </div>
+      <p class="tip">리포트에는 <mark class="tok">[이름]</mark> <mark class="tok">[연락처]</mark>처럼 지운 글만 들어가요. 원문은 고객지원팀 안에서만 봅니다.</p>
+      <div class="filters" id="topics" role="group" aria-label="주제로 거르기"></div>
+      <ol class="rows" id="rows" aria-label="지난주 문의"></ol>
+      <details class="add">
+        <summary>문의 한 건 더 넣어 보기</summary>
+        <form id="addForm">
+          <div class="two">
+            <div><label for="aName">고객 이름</label><input id="aName" maxlength="10" placeholder="예: 송다인"></div>
+            <div><label for="aDay">날짜</label><select id="aDay"></select></div>
+          </div>
+          <label for="aText">문의 내용</label>
+          <textarea id="aText" rows="3" required maxlength="400" placeholder="예: 러그에서 털이 계속 빠져요. 010-1234-5678로 연락 주세요"></textarea>
+          <button class="primary sm" type="submit">넣고 리포트 다시 만들기</button>
+        </form>
+      </details>
+    </div>
+
+    <!-- 오른쪽: 주간 리포트 -->
+    <div class="pane report" aria-labelledby="repTitle">
+      <div class="pane-h">
+        <h2 id="repTitle">주간 리포트</h2>
+        <button class="primary" id="run" type="button">리포트 만들기</button>
+      </div>
+      <div class="paper" id="paper" aria-live="polite"></div>
+      <div class="gate" id="gate" role="status"></div>
+      <div class="send">
+        <div class="sched"><b>매주 월요일 09:00 자동 발송</b><span id="nextSend"></span><span>받는 사람: 상품팀 · 물류팀 메일 그룹</span></div>
+        <div class="send-btns">
+          <button class="ghost-btn" id="csv" type="button">주제별 CSV</button>
+          <button class="ghost-btn" id="copy" type="button">메일 본문 복사</button>
+          <button class="dark" id="send" type="button">지금 보내기</button>
+        </div>
+      </div>
+      <details class="md" id="mailBox"><summary>보낼 메일 미리보기</summary><pre id="mailOut"></pre></details>
+      <p class="sent-log" id="sentLog"></p>
+    </div>
+  </section>
+  <p class="fine">이 데모의 고객·문의·회사는 모두 가상입니다. 실제 발송은 사내 메일 계정으로 하며, 이 화면의 ‘보내기’는 보낸 것으로 기록만 남깁니다.</p>
+</main>
+
+<footer class="foot">AI 빌더랩 직장인 AX 트랙 · 문의정리반 목표 모델 · 요약 Claude API (실패 시 규칙) · 개인정보 지우기 · 메일</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

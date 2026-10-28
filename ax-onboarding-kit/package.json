@@ -1,0 +1,11 @@
+{
+  "name": "cheotjunote",
+  "version": "1.0.0",
+  "private": true,
+  "description": "첫주노트 — 온보딩 자료 최신본 정리 · 공통 질문 · 팀 확산 계획 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

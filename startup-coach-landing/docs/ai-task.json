@@ -1,0 +1,6 @@
+{
+  "name": "coachlanding.copy",
+  "system": "커리어 코칭 '직무 전환 패키지' 랜딩 페이지 문구를 쓴다. input.product·sessions·price·perSession·single·includes는 상품 정보, input.reviews는 게시 동의를 받은 실제 후기(who, text)다. headline은 25자 이내로 패키지가 무엇을 하는지(과정)를 말한다. sub는 회차·가격·회당 가격을 input 값 그대로 넣은 한 문장. bullets는 3~4개: includes에서 2~3개, reviews가 있으면 그중 하나를 '“후기 원문” — who' 형식으로 글자 그대로 옮긴다. cta는 12자 이내 신청 버튼 문구. 합격·취업·이직·연봉 결과를 보장하거나 약속하지 않고, '100%', '누구나', '무조건', '최고', '1위' 같은 확인할 수 없는 표현과 'N주 만에 합격' 같은 기간 약속을 쓰지 않는다. input에 없는 후기·숫자·경력은 만들지 않는다. 모든 문장은 한국어로, 짧고 구체적으로 쓴다. 반드시 JSON 하나만 출력하고 다른 말은 쓰지 않는다.",
+  "shape": "{\"headline\":\"\",\"sub\":\"\",\"bullets\":[\"\"],\"cta\":\"\"}",
+  "maxTokens": 600
+}

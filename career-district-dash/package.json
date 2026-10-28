@@ -1,0 +1,11 @@
+{
+  "name": "jaripan",
+  "version": "1.0.0",
+  "private": true,
+  "description": "자리판 — 우리 동네 상권 분석 대시보드 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

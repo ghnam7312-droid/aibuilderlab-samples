@@ -1,0 +1,11 @@
+{
+  "name": "achimhanjang",
+  "version": "1.0.0",
+  "private": true,
+  "description": "아침한장 — 물류 뉴스 큐레이션 · 숫자 원문 대조 · 유료 뉴스레터 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

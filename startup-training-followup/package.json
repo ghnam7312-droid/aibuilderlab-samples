@@ -1,0 +1,11 @@
+{
+  "name": "ieogam-followup",
+  "version": "1.0.0",
+  "private": true,
+  "description": "이어감 — 구독형 교육 후속 관리 상품 기획 (인터뷰 근거 · 구성 · 가격 · 측정 약속 문구) (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}
