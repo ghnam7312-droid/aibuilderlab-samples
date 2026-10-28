@@ -1,6 +1,6 @@
 # AI 빌더랩 1기 목표 모델 · 예시 서비스
 
-[![test](https://github.com/ghnam7312-droid/aibuilderlab-samples/actions/workflows/test.yml/badge.svg)](https://github.com/ghnam7312-droid/aibuilderlab-samples/actions/workflows/test.yml) ![서비스 60개](https://img.shields.io/badge/서비스-60개-7c3aed) ![테스트 772개](https://img.shields.io/badge/테스트-772개_통과-16a34a) ![Claude API](https://img.shields.io/badge/AI-Claude_API-d97706) ![빌드 없음](https://img.shields.io/badge/빌드-없음-64748b)
+[![test](https://github.com/ghnam7312-droid/aibuilderlab-samples/actions/workflows/test.yml/badge.svg)](https://github.com/ghnam7312-droid/aibuilderlab-samples/actions/workflows/test.yml) ![서비스 60개](https://img.shields.io/badge/서비스-60개-7c3aed) ![테스트 772개](https://img.shields.io/badge/테스트-769개_통과-16a34a) ![Claude API](https://img.shields.io/badge/AI-Claude_API-d97706) ![빌드 없음](https://img.shields.io/badge/빌드-없음-64748b)
 
 [AI 빌더랩](https://aibuilderlab.kr) 트랙을 수료할 때 **이 정도는 만들어 배포한다**는 목표를 실제로 동작하는 서비스로 보여 주는 저장소입니다.
 가상의 수강생 20명(커리어 6 · 창업 9 · 직장인 AX 5)이 8~10주 동안 만드는 프로젝트 3개씩, 서비스 60개를 담았습니다. 모든 서비스는 브라우저에서 바로 열어 써 볼 수 있습니다.
@@ -126,11 +126,11 @@ AI 포트폴리오가 없던 취업 준비생이 8주 동안 기획 → 자동�
 | <img src="startup-news-insight/screenshot.png" width="220" alt="끝까지 화면"> | **[끝까지](startup-news-insight)** | 클릭 말고, 끝까지 읽힌 글을 봐요 | [데모](https://aibuilderlab.kr/demo/startup-news-insight/index.html) |
 | <img src="startup-news-b2b/screenshot.png" width="220" alt="팀한장 화면"> | **[팀한장](startup-news-b2b)** | 기업 구독, 인원만큼 공정하게 | [데모](https://aibuilderlab.kr/demo/startup-news-b2b/index.html) |
 
-**[놀이처방전](https://aibuilderlab.kr/home/portfolio.html?p=parenting-edu)** · 부모 교육 · 유아교육 전공 · 부모 교육 강사
+**[한걸음부모](https://aibuilderlab.kr/home/portfolio.html?p=parenting-edu)** · 부모 교육 · 유아교육 전공 · 부모 교육 강사
 
 | | 서비스 | 하는 일 | 열어 보기 |
 |---|---|---|---|
-| <img src="startup-play-pick/screenshot.png" width="220" alt="오늘놀이 화면"> | **[오늘놀이](startup-play-pick)** | ‘오늘 아이랑 뭐 하지?’ 1분 만에, 안전 기준을 거쳐서 | [데모](https://aibuilderlab.kr/demo/startup-play-pick/index.html) |
+| <img src="startup-parent-cards/screenshot.png" width="220" alt="집으로 화면"> | **[집으로](startup-parent-cards)** | 강의 원고 문장만 근거로, 집에서 해 볼 한 걸음 카드 | [데모](https://aibuilderlab.kr/demo/startup-parent-cards/index.html) |
 | <img src="startup-parent-signup/screenshot.png" width="220" alt="자리있음 화면"> | **[자리있음](startup-parent-signup)** | 강의 신청 정리부터 안내 문자까지 | [데모](https://aibuilderlab.kr/demo/startup-parent-signup/index.html) |
 | <img src="startup-parent-proposal/screenshot.png" width="220" alt="효과먼저 화면"> | **[효과먼저](startup-parent-proposal)** | 강사 소개 말고, 기관이 얻는 것부터 | [데모](https://aibuilderlab.kr/demo/startup-parent-proposal/index.html) |
 
@@ -194,7 +194,7 @@ AI 포트폴리오가 없던 취업 준비생이 8주 동안 기획 → 자동�
 | 개발할 때 쓴 프롬프트와, 서비스가 실제로 Claude에 보내는 지시문 | `docs/PROMPTS.md` |
 | 화면 ↔ 서버 ↔ Claude 흐름과 AI가 멈췄을 때의 대체 경로 | `docs/ARCHITECTURE.md` |
 | 버전별 변경 기록 | `CHANGELOG.md` |
-| 핵심 로직 자동 테스트 (서비스당 10~18개, 총 772개) | `tests/` → push마다 GitHub Actions가 실행 |
+| 핵심 로직 자동 테스트 (서비스당 10~18개, 총 769개) | `tests/` → push마다 GitHub Actions가 실행 |
 
 ## 써 볼 만한 장면
 

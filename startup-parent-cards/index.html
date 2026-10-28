@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>집으로 · 가정 실천 카드 구독</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='10' fill='%23C24E2A'/%3E%3Cpath d='M9 18 18 10l9 8v9H9z' fill='none' stroke='%23fff' stroke-width='2.8' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta name="description" content="부모 교육 강사의 강의 원고로 부모가 집에서 해 볼 가정 실천 카드를 만들고, 카드의 모든 문장에 근거가 된 원고 문장 번호를 붙여 근거 없는 의학·발달 조언은 버리는 구독 서비스">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="strip"><span><b>AI 빌더랩 1기 목표 모델</b> 예시 서비스 · 샘플 데이터로 동작합니다</span><a href="/home/portfolio.html?p=parenting-edu">← 포트폴리오로</a></div>
+
+<header class="bar">
+  <div class="brand">
+    <!-- 로고: 집 모양 안의 카드 한 장 = 강의 내용을 집으로 -->
+    <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+      <rect width="36" height="36" rx="10" fill="#C24E2A"/>
+      <path d="M8.5 18.5 18 10l9.5 8.5V28h-19z" fill="none" stroke="#fff" stroke-width="2.6" stroke-linejoin="round"/>
+      <rect x="14" y="19" width="8" height="6" rx="1.4" fill="#FFD7C2"/>
+    </svg>
+    <div><strong>집으로</strong><span>강의 원고 문장만 근거로, 집에서 해 볼 한 걸음 카드</span></div>
+  </div>
+  <div class="bar-r">
+    <span class="ai-state" id="aiState" data-on="wait"><i></i><span>AI 연결 확인 중</span></span>
+    <button class="link-btn" id="reset" type="button">샘플로 되돌리기</button>
+  </div>
+</header>
+
+<main class="page">
+  <section class="split" aria-label="가정 실천 카드 만들기">
+    <!-- 왼쪽: 강의 원고와 부모 질문 -->
+    <form class="pane ask" id="ask" novalidate>
+      <div class="ask-h"><h1>강의 원고</h1><span class="sub-s" id="lecPlace"></span></div>
+      <div class="tabs" id="lecTabs" role="tablist" aria-label="강의 고르기"></div>
+      <ol class="sents" id="sents" aria-label="번호 붙은 원고 문장"></ol>
+      <details class="edit" id="editBox">
+        <summary>원고 고치기 · 붙여 넣기</summary>
+        <label class="sr" for="src">강의 원고</label>
+        <textarea id="src" rows="7" maxlength="4000"></textarea>
+        <div class="edit-f"><span class="fine" id="srcCount"></span><button class="ghost-btn sm" id="reread" type="button">원고 다시 읽기</button></div>
+      </details>
+      <label class="lbl" for="question">부모가 보낸 질문 <small>선택 · 이름·전화·나이는 가리고 보내요</small></label>
+      <textarea id="question" rows="3" maxlength="300" placeholder="예: 둘이 싸울 때 뭐라고 말해야 할지 모르겠어요"></textarea>
+      <p class="masked" id="masked" hidden></p>
+      <button class="primary" id="run" type="submit">실천 카드 만들기</button>
+    </form>
+
+    <!-- 오른쪽: 카드 · 메일 미리보기 -->
+    <div class="pane out" id="out" aria-live="polite"></div>
+  </section>
+
+  <section class="lower">
+    <article class="card-box" aria-labelledby="chkH">
+      <h2 id="chkH">문장 근거 검사</h2>
+      <p class="sub">카드에 넣고 싶은 문장과 근거 번호를 적으면 지금 원고로 검사해요.</p>
+      <label class="sr" for="tryText">검사할 문장</label>
+      <textarea id="tryText" rows="2" maxlength="160"></textarea>
+      <div class="try-f">
+        <label for="tryRef">근거 번호</label>
+        <input id="tryRef" inputmode="numeric" maxlength="12" autocomplete="off">
+        <button class="ghost-btn" id="tryBtn" type="button">검사</button>
+      </div>
+      <div id="tryOut" aria-live="polite"></div>
+      <details class="rules">
+        <summary>버리는 기준 보기</summary>
+        <ul class="rule-list">
+          <li>근거 번호가 없거나 원고에 없는 번호</li>
+          <li>원고 문장과 일치 60% 미만</li>
+          <li>원고에 없는 의학·발달·약·진단 낱말 <span id="medWords"></span></li>
+          <li>원고에 없는 숫자 기준 (예: 하루 ○시간, ○개월)</li>
+        </ul>
+      </details>
+    </article>
+    <article class="card-box" aria-labelledby="qH">
+      <div class="box-h"><h2 id="qH">이번 주 발송함</h2><span class="sub-s" id="qWeek"></span></div>
+      <p class="sub">같은 주에 같은 강의 카드는 한 장만 담겨요. 월요일 아침에 나가요.</p>
+      <ul class="queue" id="queue"></ul>
+    </article>
+    <article class="card-box goal" aria-labelledby="goalH">
+      <h2 id="goalH">1기 목표치</h2>
+      <dl>
+        <div><dt>구독 부모</dt><dd>530명</dd></div>
+        <div><dt>유료 구독</dt><dd>74명 <small id="rate"></small></dd></div>
+        <div><dt>구독료</dt><dd>월 4,900원</dd></div>
+        <div><dt>월 구독료 합계</dt><dd id="monthly"></dd></div>
+        <div><dt>카드 제작</dt><dd>주 3시간 → 30분</dd></div>
+      </dl>
+      <p class="fine">가상의 수강생 ‘한걸음부모’가 목표로 둔 숫자예요. 실제 실적이 아닙니다. 강의 원고와 카드 문장도 이 예시를 위해 새로 쓴 가상의 내용이에요.</p>
+    </article>
+  </section>
+</main>
+
+<footer class="foot">AI 빌더랩 창업 트랙 · 한걸음부모 목표 모델 · 카드 다듬기 Claude API (실패 시 원고 문장 그대로) · 모든 문장은 원고 근거 검사를 거침 · 건강·발달 질문은 전문가 상담으로</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" type="button" hidden>되돌리기</button></div>
+<script src="ai-client.js"></script>
+<script src="logic.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

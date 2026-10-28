@@ -1,0 +1,11 @@
+{
+  "name": "jibeuro-parent-cards",
+  "version": "1.0.0",
+  "private": true,
+  "description": "집으로 — 강의 원고 문장만 근거로 만드는 가정 실천 카드 구독 서비스 (AI 빌더랩 1기 목표 모델 예시)",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}
