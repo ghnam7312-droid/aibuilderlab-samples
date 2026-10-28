@@ -1,6 +1,6 @@
 # AI 빌더랩 1기 목표 모델 · 예시 서비스
 
-[![test](https://github.com/ghnam7312-droid/aibuilderlab-samples/actions/workflows/test.yml/badge.svg)](https://github.com/ghnam7312-droid/aibuilderlab-samples/actions/workflows/test.yml) ![서비스 60개](https://img.shields.io/badge/서비스-60개-7c3aed) ![테스트 772개](https://img.shields.io/badge/테스트-769개_통과-16a34a) ![Claude API](https://img.shields.io/badge/AI-Claude_API-d97706) ![빌드 없음](https://img.shields.io/badge/빌드-없음-64748b)
+[![test](https://github.com/ghnam7312-droid/aibuilderlab-samples/actions/workflows/test.yml/badge.svg)](https://github.com/ghnam7312-droid/aibuilderlab-samples/actions/workflows/test.yml) ![서비스 60개](https://img.shields.io/badge/서비스-60개-7c3aed) ![테스트 769개](https://img.shields.io/badge/테스트-769개_통과-16a34a) ![Claude API](https://img.shields.io/badge/AI-Claude_API-d97706) ![빌드 없음](https://img.shields.io/badge/빌드-없음-64748b)
 
 [AI 빌더랩](https://aibuilderlab.kr) 트랙을 수료할 때 **이 정도는 만들어 배포한다**는 목표를 실제로 동작하는 서비스로 보여 주는 저장소입니다.
 가상의 수강생 20명(커리어 6 · 창업 9 · 직장인 AX 5)이 8~10주 동안 만드는 프로젝트 3개씩, 서비스 60개를 담았습니다. 모든 서비스는 브라우저에서 바로 열어 써 볼 수 있습니다.
